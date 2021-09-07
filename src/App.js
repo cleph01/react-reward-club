@@ -6,6 +6,7 @@ import * as ROUTES from "./constants/routes";
 const Home = lazy(() => import("./pages/Home.js"));
 const Store = lazy(() => import("./pages/Store.js"));
 const User = lazy(() => import("./pages/User.js"));
+const Checkin = lazy(() => import("./pages/Checkin.js"));
 
 // END Lazy Rendering functions
 
@@ -18,6 +19,7 @@ function App() {
                         <Route exact path={ROUTES.HOME} component={Home} />
                         <Route path={ROUTES.USER} component={User} />
                         <Route path={ROUTES.STORE} component={Store} />
+                        <Route path={ROUTES.CHECKIN} component={Checkin} />
                     </Switch>
                 </Suspense>
             </Router>
