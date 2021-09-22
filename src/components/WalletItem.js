@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
-// const emoji = require("emoji-dictionary");
+const emoji = require("emoji-dictionary");
 
 const Wrapper = styled.div`
     margin-top: 15px;
@@ -164,15 +164,20 @@ const Wallet_Item = (props) => {
 
                 <Body>
                     <div>Phone</div>
+                    <FontAwesomeIcon className="error-icon" icon="phone" />
 
                     <BodyCenter>
                         <div>{props.item_details.businessName}</div>
-                        {/* <div>{emoji.getUnicode(props.item_details.emoji)}</div> */}
+                        <div>{emoji.getUnicode(props.item_details.emoji)}</div>
                         <div>Emoji Here</div>
                         <div>{props.item_details.item}</div>
                     </BodyCenter>
 
                     <div>Shopping Cart</div>
+                    <FontAwesomeIcon
+                        className="error-icon"
+                        icon="shopping-cart"
+                    />
                 </Body>
 
                 <Footer>

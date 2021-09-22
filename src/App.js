@@ -2,6 +2,32 @@ import { lazy, Suspense, useReducer } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import * as ROUTES from "./constants/routes";
 
+// START FontAwesome
+import { library } from "@fortawesome/fontawesome-svg-core";
+
+import {
+    faSearch,
+    faBars,
+    faLink,
+    faExclamationTriangle,
+    faCheckCircle,
+    faSpinner,
+    faPhone,
+    faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(
+    faBars,
+    faSearch,
+    faLink,
+    faExclamationTriangle,
+    faCheckCircle,
+    faSpinner,
+    faPhone,
+    faShoppingCart
+);
+// END FontAwesome
+
 // START Lazy Rendering functions
 const Home = lazy(() => import("./pages/Home.js"));
 const Store = lazy(() => import("./pages/Store.js"));
