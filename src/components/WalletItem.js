@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
-
+import "../styles/wallet-item.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const emoji = require("emoji-dictionary");
@@ -163,19 +163,17 @@ const Wallet_Item = (props) => {
                 </Header>
 
                 <Body>
-                    <div>Phone</div>
-                    <FontAwesomeIcon className="error-icon" icon="phone" />
+                    <FontAwesomeIcon className="phone" icon="phone" />
 
                     <BodyCenter>
                         <div>{props.item_details.businessName}</div>
                         <div>{emoji.getUnicode(props.item_details.emoji)}</div>
-                        <div>Emoji Here</div>
+
                         <div>{props.item_details.item}</div>
                     </BodyCenter>
 
-                    <div>Shopping Cart</div>
                     <FontAwesomeIcon
-                        className="error-icon"
+                        className="shopping-cart"
                         icon="shopping-cart"
                     />
                 </Body>
