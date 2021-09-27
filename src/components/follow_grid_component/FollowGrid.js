@@ -1,9 +1,40 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
+import Avatar from "@mui/material/Avatar";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
+import { makeStyles } from "@material-ui/core/styles";
 
-import "../../styles/follow_grid.scss";
+import "../../styles/post_grid.scss";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        paddingTop: theme.spacing(2),
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around",
+        overflow: "hidden",
+        background: theme.palette.background.paper,
+    },
+    bigAvatar: {
+        width: 100,
+        height: 100,
+        margin: "auto",
+    },
+    itemList: {
+        width: 500,
+        height: 220,
+    },
+    tileText: {
+        textAlign: "center",
+        marginTop: 10,
+    },
+    linkStyle: {
+        textDecoration: "none",
+        color: "#000000",
+    },
+}));
 
 const itemData = [
     {
@@ -69,22 +100,35 @@ const itemData = [
 ];
 
 function FollowGrid() {
+    const classes = useStyles();
+
     return (
-        <div className="follow-grid-container">
-            <ImageList sx={{ width: 500, height: 450 }}>
-                {itemData.map((item) => (
-                    <ImageListItem key={item.img}>
-                        <img
+        <div className={classes.root}>
+            <ImageList rowHeight={160} className={classes.itemList} cols={4}>
+                {itemData.map((person) => (
+                    <ImageListItem style={{ height: 80 }} key={person.img}>
+                        {/* <img
                             src={`${item.img}?w=248&fit=crop&auto=format`}
                             srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
                             alt={item.title}
                             loading="lazy"
-                        />
-                        <ImageListItemBar
-                            title={item.title}
-                            subtitle={<span>by: {item.author}</span>}
-                            position="below"
-                        />
+                        /> */}
+                        <Link
+                            to={"/user/" + person.id}
+                            className={classes.linkStyle}
+                        >
+                            <Avatar
+                                alt={person.author}
+                                src={`${person.img}?w=248&fit=crop&auto=format`}
+                                className={classes.bigAvatar}
+                            />
+                            <ImageListItemBar
+                                title={person.name}
+                                subtitle={person.author}
+                                position="below"
+                                className={classes.tileText}
+                            />
+                        </Link>
                     </ImageListItem>
                 ))}
             </ImageList>
