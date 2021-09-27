@@ -1,5 +1,5 @@
 import React from "react";
-
+import Auth from "../components/Auth";
 import { useHistory } from "react-router-dom";
 
 import "../styles/home.scss";
@@ -12,40 +12,15 @@ function Home() {
 
     return (
         <div className="container">
-            <div className="header">
-                <div className="menu-wrapper">
-                    <ul className="menu">
-                        <li>Why?</li>
-                        <li>FAQ</li>
-                        <li>Testimonials</li>
-                    </ul>
-                </div>
-            </div>
             <div className="body-wrapper">
                 <div className="image-wrapper">
-                    <img src={logo} alt="logo" />
+                    <img className="logo" src={logo} alt="logo" />
                 </div>
 
-                <h3>Win Prizes, Trade, and Get Paid</h3>
-                <p>
-                    Socialiite's mission is to re-define how we use social
-                    media. User's get paid for creating content while also
-                    promoting local businesses.
-                </p>
-                <div className="auth-buttons">
-                    <div
-                        className="buttons"
-                        onClick={() => history.push("/login")}
-                    >
-                        Login
-                    </div>
-                    <div
-                        className="buttons"
-                        onClick={() => history.push("/signup")}
-                    >
-                        Signup
-                    </div>
-                </div>
+                <h3>Win Stuff, Trade Stuff, Share Stuff</h3>
+                <h3>and Get Paid</h3>
+
+                <Auth />
             </div>
         </div>
     );

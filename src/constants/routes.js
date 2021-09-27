@@ -1,7 +1,8 @@
 const HOME = "/";
 const STORE = "/store";
-const USER = "/user";
+const PROFILE = "/profile";
 const CHECKIN = "/checkin/:storeId/:dateToday";
 const WALLET = "/wallet";
+const MARKET = "/market";
 
-export { HOME, STORE, USER, CHECKIN, WALLET };
+export { HOME, STORE, PROFILE, CHECKIN, WALLET, MARKET };

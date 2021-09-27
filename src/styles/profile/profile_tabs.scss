@@ -1,0 +1,31 @@
+@import "../variables/variables.scss";
+
+.profile-tabs-block {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    margin: 10px 50px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid $primary;
+    border-radius: 5px;
+}
+
+.profile-tabs__list-item {
+    float: left;
+
+    div {
+        display: block;
+        color: $primary;
+        text-align: center;
+        padding: 16px;
+        text-decoration: none;
+
+        &:hover {
+            background-color: #77d5ec;
+        }
+        // &:active {
+        //     background-color: snow;
+        // }
+    }
+}

@@ -1,0 +1,11 @@
+@import "../variables/variables.scss";
+
+.profile-body__left {
+    margin: 0px 25px;
+
+    .profile-body__avatar {
+        width: 100px;
+        height: auto;
+        border-radius: 25%/50%;
+    }
+}

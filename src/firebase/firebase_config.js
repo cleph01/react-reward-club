@@ -16,10 +16,12 @@ const initFirebase = () => {
     }
 };
 
-// const db = firebaseApp.firestore();
-// const auth = firebase.auth();
-// const storage = firebase.storage();
-
 initFirebase();
 
-export default firebase;
+// export default firebase;
+
+const db = firebase.firestore();
+const auth = firebase.auth();
+const storage = firebase.storage();
+
+export { db, auth, storage, firebase };

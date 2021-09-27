@@ -1,37 +1,31 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+
 import { Link, useHistory } from "react-router-dom";
+import "../styles/wallet.scss";
+import { db } from "../firebase/firebase_config";
 
 import WalletItem from "../components/WalletItem";
 
 import logo from "../assets/images/logos/logo_white_text.png";
 
-const Nav = styled.nav`
-    width: 100%;
-    height: 50px;
-    color: #ffffff;
-    padding: 20px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    background-color: #203158;
-    position: fixed;
-    top: 0;
-    box-shadow: 0 1px 6px -2px #000;
-`;
-
-const Img = styled.img`
-    width: 75px;
-    height: auto;
-`;
-
-const Container = styled.div`
-    width: 100%;
-    margin-top: 100px;
-`;
-
 const Wallet = (props) => {
+    // State to hold post data from Firebase call
+    const [wallet, setWallet] = useState([]);
+
+    //every time a new post is added this code fires
+    useEffect(() => {
+        db.collection("user/u002/wallet").onSnapshot((snapshot) => {
+            setWallet(
+                snapshot.docs.map((doc) => ({
+                    walletItemId: doc.id,
+                    walletItem: doc.data(),
+                }))
+            );
+        });
+    }, []);
+
+    console.log("Wallet: ", wallet);
+
     const history = useHistory();
 
     //Handle Login Click
@@ -45,41 +39,38 @@ const Wallet = (props) => {
     }
 
     //Hold
-    const [wallet, setWallet] = useState([
-        {
-            walletId: 1,
-            businessName: "Papa's Gold City",
-            emoji: "ring",
-            item: "10% OFF",
-        },
-        {
-            walletId: 2,
-            businessName: "Hubba's",
-            emoji: "hotdog",
-            item: "FREE Hotdog",
-        },
-    ]);
+    // const [wallet, setWallet] = useState([
+    //     {
+    //         walletId: 1,
+    //         businessName: "Papa's Gold City",
+    //         emoji: "ring",
+    //         item: "10% OFF",
+    //     },
+    //     {
+    //         walletId: 2,
+    //         businessName: "Hubba's",
+    //         emoji: "hotdog",
+    //         item: "FREE Hotdog",
+    //     },
+    // ]);
 
     return (
         <>
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
-                <Nav>
-                    <h3>La Billetera Papà</h3>
-                    <Img src={logo} />
-                </Nav>
+            <div className="container">
+                <div className="nav">
+                    <img className="logo" src={logo} alt="logo" />
+                    <div>&#x1F4B0; Digital Wallet &#x1F4B0;</div>
+                </div>
 
-                <Container>
+                <div className="wallet-wrapper">
                     {wallet.map((item, index) => (
-                        <WalletItem key={index} item_details={item} />
+                        <WalletItem
+                            key={index}
+                            itemId={item.walletItemId}
+                            item_details={item.walletItem}
+                        />
                     ))}
-                </Container>
+                </div>
             </div>
         </>
     );

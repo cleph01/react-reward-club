@@ -4,127 +4,6 @@ import { Link, useHistory } from "react-router-dom";
 import "../styles/wallet-item.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const emoji = require("emoji-dictionary");
-
-const Wrapper = styled.div`
-    margin-top: 15px;
-    width: 100%;
-    height: 250px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 1px 6px -2px #000;
-`;
-
-const Header = styled.div`
-    background-color: #203158;
-    width: 100%;
-    height: 50px;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 25px;
-`;
-
-const Body = styled.div`
-    width: 100%;
-    height: 150px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    align-items: center;
-    border-bottom: 1px solid #f1f1f1;
-`;
-
-const BodyCenter = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    align-items: center;
-`;
-
-const Footer = styled.div`
-    height: 50px;
-`;
-
-const RedeemBtn = styled.button`
-    background-color: #15a9dc;
-    font-family: "Quicksand";
-    color: #ffffff;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    border: none;
-    font-size: 20px;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    -webkit-animation: glowing 1500ms infinite;
-    -moz-animation: glowing 1500ms infinite;
-    -o-animation: glowing 1500ms infinite;
-    animation: glowing 1500ms infinite;
-    margin-top: 9px;
-    @-webkit-keyframes glowing {
-        0% {
-            background-color: #15a9dc;
-            -webkit-box-shadow: 0 0 3px #15a9dc;
-        }
-        50% {
-            background-color: #15a9dc;
-            -webkit-box-shadow: 0 0 40px #15a9dc;
-        }
-        100% {
-            background-color: #15a9dc;
-            -webkit-box-shadow: 0 0 3px #15a9dc;
-        }
-    }
-    @-moz-keyframes glowing {
-        0% {
-            background-color: #15a9dc;
-            -moz-box-shadow: 0 0 3px #15a9dc;
-        }
-        50% {
-            background-color: #15a9dc;
-            -moz-box-shadow: 0 0 40px #15a9dc;
-        }
-        100% {
-            background-color: #15a9dc;
-            -moz-box-shadow: 0 0 3px #15a9dc;
-        }
-    }
-    @-o-keyframes glowing {
-        0% {
-            background-color: #15a9dc;
-            box-shadow: 0 0 3px #15a9dc;
-        }
-        50% {
-            background-color: #15a9dc;
-            box-shadow: 0 0 40px #15a9dc;
-        }
-        100% {
-            background-color: #15a9dc;
-            box-shadow: 0 0 3px #15a9dc;
-        }
-    }
-    @keyframes glowing {
-        0% {
-            background-color: #15a9dc;
-            box-shadow: 0 0 3px #15a9dc;
-        }
-        50% {
-            background-color: #15a9dc;
-            box-shadow: 0 0 40px #15a9dc;
-        }
-        100% {
-            background-color: #15a9dc;
-            box-shadow: 0 0 3px #15a9dc;
-        }
-    }
-`;
-
 const Wallet_Item = (props) => {
     const history = useHistory();
 
@@ -139,49 +18,53 @@ const Wallet_Item = (props) => {
     }
 
     //Hold
-    const [wallet, setWallet] = useState([
-        {
-            walletId: 1,
-            emoji: "ring",
-            item: "10% OFF",
-        },
-        {
-            walletId: 2,
-            emoji: "ring",
-            item: "10% OFF",
-        },
-    ]);
+    // const [wallet, setWallet] = useState([
+    //     {
+    //         walletId: 1,
+    //         emoji: "ring",
+    //         item: "10% OFF",
+    //     },
+    //     {
+    //         walletId: 2,
+    //         emoji: "ring",
+    //         item: "10% OFF",
+    //     },
+    // ]);
 
-    console.log(props);
+    console.log("Props at Wallet Item: ", props);
 
     return (
         <>
-            <Wrapper>
-                <Header>
-                    <span>{props.key}</span>
-                    <span>{props.item_details.walletId}</span>
-                </Header>
+            <div className="wallet-item-container">
+                <div className="item-header">
+                    <span>{props.itemId}</span>
+                    <span>{props.item_details.walletItemId}</span>
+                </div>
 
-                <Body>
+                <div className="body-wrapper">
                     <FontAwesomeIcon className="phone" icon="phone" />
 
-                    <BodyCenter>
+                    <div className="body-center">
                         <div>{props.item_details.businessName}</div>
-                        <div>{emoji.getUnicode(props.item_details.emoji)}</div>
-
-                        <div>{props.item_details.item}</div>
-                    </BodyCenter>
+                        {/* <div>{emoji.getUnicode(emojiName)};</div> */}
+                        <div>
+                            {String.fromCodePoint(
+                                props.item_details.emojiHexCode
+                            )}
+                        </div>
+                        <div>{props.item_details.itemDescription}</div>
+                    </div>
 
                     <FontAwesomeIcon
                         className="shopping-cart"
                         icon="shopping-cart"
                     />
-                </Body>
+                </div>
 
-                <Footer>
-                    <RedeemBtn>Redeem</RedeemBtn>
-                </Footer>
-            </Wrapper>
+                <div className="footer">
+                    <div className="redeem-btn">Redeem</div>
+                </div>
+            </div>
         </>
     );
 };

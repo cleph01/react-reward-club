@@ -31,9 +31,10 @@ library.add(
 // START Lazy Rendering functions
 const Home = lazy(() => import("./pages/Home.js"));
 const Store = lazy(() => import("./pages/Store.js"));
-const User = lazy(() => import("./pages/User.js"));
+const Profile = lazy(() => import("./pages/Profile.js"));
 const Checkin = lazy(() => import("./pages/Checkin.js"));
 const Wallet = lazy(() => import("./pages/Wallet.js"));
+const Market = lazy(() => import("./pages/Market.js"));
 
 // END Lazy Rendering functions
 
@@ -44,10 +45,11 @@ function App() {
                 <Suspense fallback={<p>Loading...</p>}>
                     <Switch>
                         <Route exact path={ROUTES.HOME} component={Home} />
-                        <Route path={ROUTES.USER} component={User} />
+                        <Route path={ROUTES.PROFILE} component={Profile} />
                         <Route path={ROUTES.STORE} component={Store} />
                         <Route path={ROUTES.CHECKIN} component={Checkin} />
                         <Route path={ROUTES.WALLET} component={Wallet} />
+                        <Route path={ROUTES.MARKET} component={Market} />
                     </Switch>
                 </Suspense>
             </Router>
