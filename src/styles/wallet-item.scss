@@ -2,26 +2,29 @@
 
 .wallet-item-container {
     margin-top: 15px;
-    width: 100%;
+    width: 80%;
     height: 250px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     box-shadow: 0 1px 6px -2px #000;
 
     .item-header {
-        background-color: #203158;
+        background-color: $primary;
         width: 100%;
         height: 50px;
+        border-radius: 5px;
         color: #fff;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-right: 25px;
+        padding: 10px;
     }
 
     .body-wrapper {
-        width: 100%;
+        width: 80%;
         height: 150px;
         display: flex;
         flex-direction: row;
@@ -47,6 +50,13 @@
             align-items: center;
             justify-content: center;
             align-items: center;
+
+            .wallet-item-business-name,
+            .wallet-item-emoji,
+            .wallet-item-description {
+                color: rgb(90, 90, 90);
+                font-size: 25px;
+            }
         }
     }
 
@@ -55,7 +65,7 @@
 
         .redeem-btn {
             background-color: #15a9dc;
-            font-family: "Quicksand";
+            font-family: "Roboto";
             color: #ffffff;
             -webkit-border-radius: 5px;
             border-radius: 5px;

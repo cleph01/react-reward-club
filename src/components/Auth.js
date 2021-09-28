@@ -1,41 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { firebase } from "../firebase/firebase_config";
+import { UserContext } from "../contexts/UserContext";
+import { firebase, auth } from "../firebase/firebase_config";
 
-let uiConfig = {
-    signInFlow: "popup",
-    signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-    ],
-    callbacks: {
-        signInSuccessWithAuthResult: (user) => {
-            localStorage.setItem("user", user);
-            console.log("User in Config CB: ", user);
-        },
-    },
-};
+// let uiConfig = ;
 
 function Auth() {
-    const [user, setUser] = useState();
-    const [isSignedIn, setIsSignedIn] = useState(false);
-
-    useEffect(() => {
-        firebase.auth().onAuthStateChanged((user) => {
-            setIsSignedIn(!isSignedIn);
-            setUser(user);
-        });
-
-        console.log("Did Mount Listener");
-    }, [user]);
+    const { user, setUser, isSignedIn, setIsSignedIn } =
+        useContext(UserContext);
 
     const handleSignOut = (e) => {
         e.preventDefault();
 
-        // setIsSignedIn(!isSignedIn);
+        setIsSignedIn(!isSignedIn);
 
-        firebase.auth().signOut();
+        auth.signOut();
     };
 
     console.log("User from State: ", user);
@@ -50,7 +29,20 @@ function Auth() {
                 </div>
             ) : (
                 <StyledFirebaseAuth
-                    uiConfig={uiConfig}
+                    uiConfig={{
+                        signInFlow: "popup",
+                        signInOptions: [
+                            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                            firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                            firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+                        ],
+                        callbacks: {
+                            signInSuccessWithAuthResult: (authUser) => {
+                                setUser(authUser);
+                                setIsSignedIn(!isSignedIn);
+                            },
+                        },
+                    }}
                     firebaseAuth={firebase.auth()}
                 />
             )}

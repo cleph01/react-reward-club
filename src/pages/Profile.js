@@ -5,8 +5,8 @@ import ProfileBodyLeft from "../components/profile_components/profile_body/Profi
 import ProfileBodyRight from "../components/profile_components/profile_body/ProfileBodyRight";
 import ProfileBio from "../components/profile_components/profile_bio/ProfileBio";
 import ProfileRecentActivity from "../components/profile_components/profile_recent_activity/ProfileRecentActivity.js";
-import PostGrid from "../components/post_grid_component/PostGrid";
-import FollowGrid from "../components/follow_grid_component/FollowGrid";
+import Nav from "../components/nav_bar/Nav";
+
 
 import "../styles/profile/profile.scss";
 
@@ -76,7 +76,8 @@ const itemData = [
 function Profile() {
     return (
         <div className="profile-container">
-            <ProfileHeader />
+            <Nav />
+            {/* <ProfileHeader /> */}
             <div className="profile-body-wrapper">
                 <ProfileBodyLeft />
                 <ProfileBodyRight />

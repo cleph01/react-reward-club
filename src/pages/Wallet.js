@@ -6,6 +6,8 @@ import { db } from "../firebase/firebase_config";
 
 import WalletItem from "../components/WalletItem";
 
+import Nav from "../components/nav_bar/Nav";
+
 import logo from "../assets/images/logos/logo_white_text.png";
 
 const Wallet = (props) => {
@@ -57,10 +59,11 @@ const Wallet = (props) => {
     return (
         <>
             <div className="container">
-                <div className="nav">
+                {/* <div className="nav">
                     <img className="logo" src={logo} alt="logo" />
                     <div>&#x1F4B0; Digital Wallet &#x1F4B0;</div>
-                </div>
+                </div> */}
+                <Nav />
 
                 <div className="wallet-wrapper">
                     {wallet.map((item, index) => (

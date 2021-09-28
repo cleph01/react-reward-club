@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import Auth from "../components/Auth";
 import { useHistory } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
+
+import { auth } from "../firebase/firebase_config";
 
 import "../styles/home.scss";
 
@@ -9,6 +12,15 @@ import logo_text from "../assets/images/logos/logo_white_text.png";
 
 function Home() {
     const history = useHistory();
+
+    const user = useContext(UserContext);
+
+    const handleSignOut = () => {
+        auth.signOut();
+        localStorage.removeItem("user");
+    };
+
+    console.log("Home User:", user);
 
     return (
         <div className="container">

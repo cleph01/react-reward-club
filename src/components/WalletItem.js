@@ -45,14 +45,14 @@ const Wallet_Item = (props) => {
                     <FontAwesomeIcon className="phone" icon="phone" />
 
                     <div className="body-center">
-                        <div>{props.item_details.businessName}</div>
+                        <div className="wallet-item-business-name">{props.item_details.businessName}</div>
                         {/* <div>{emoji.getUnicode(emojiName)};</div> */}
-                        <div>
+                        <div className="wallet-item-emoji">
                             {String.fromCodePoint(
                                 props.item_details.emojiHexCode
                             )}
                         </div>
-                        <div>{props.item_details.itemDescription}</div>
+                        <div className="wallet-item-description">{props.item_details.itemDescription}</div>
                     </div>
 
                     <FontAwesomeIcon

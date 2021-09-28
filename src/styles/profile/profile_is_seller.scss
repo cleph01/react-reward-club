@@ -1,0 +1,29 @@
+@import "../variables/variables";
+
+.switch-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+
+    span {
+        margin: 15px 0px;
+    }
+
+    input {
+        margin-bottom: 10px;
+    }
+}
+
+.submit-btn {
+    background-color: $primary;
+
+    height: min-content;
+    color: #ffffff;
+    border-radius: 5px;
+    border: none;
+    font-size: 15px;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+}

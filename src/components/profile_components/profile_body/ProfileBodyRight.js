@@ -1,4 +1,5 @@
 import React from "react";
+import ProfileIsSeller from "./ProfileIsSeller";
 import "../../../styles/profile/profile_body_right.scss";
 
 function ProfileBodyRight() {
@@ -9,6 +10,7 @@ function ProfileBodyRight() {
                 <div className="handle">@cleph01</div>
                 <div className="email"> email@email.com</div>
             </div>
+            <ProfileIsSeller />
             <div className="profile__follow-btn">Follow Button</div>
         </div>
     );
