@@ -1,1 +1,23 @@
 @import "../variables/variables";
+
+.btn-wrapper {
+    display: flex;
+    justify-content: center;
+
+    .submit-btn {
+        display: block;
+        position: relative;
+        width: 100px;
+        height: 40px;
+        border-radius: 25px;
+        background: $secondary;
+        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease-out;
+    }
+}

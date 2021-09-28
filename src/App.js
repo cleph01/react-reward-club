@@ -32,13 +32,14 @@ library.add(
 
 // START Lazy Rendering functions
 const Home = lazy(() => import("./pages/Home.js"));
-const Store = lazy(() => import("./pages/Store.js"));
+
 const Profile = lazy(() => import("./pages/Profile.js"));
 const Checkin = lazy(() => import("./pages/Checkin.js"));
 const Wallet = lazy(() => import("./pages/Wallet.js"));
-const Market = lazy(() => import("./pages/Market.js"));
+const MyShop = lazy(() => import("./pages/MyShop.js"));
 const EditProfile = lazy(() => import("./pages/EditProfile.js"));
-
+const AllShops = lazy(() => import("./pages/AllShops.js"));
+const Shop = lazy(() => import("./pages/Shop.js"));
 // END Lazy Rendering functions
 
 function App() {
@@ -87,13 +88,19 @@ function App() {
                     <Suspense fallback={<p>Loading...</p>}>
                         <Switch>
                             <Route exact path={ROUTES.HOME} component={Home} />
-                            <Route path={ROUTES.PROFILE} component={Profile} />
-                            <Route path={ROUTES.STORE} component={Store} />
+                            <Route
+                                exact
+                                path={ROUTES.PROFILE}
+                                component={Profile}
+                            />
+
                             <Route path={ROUTES.CHECKIN} component={Checkin} />
                             <Route path={ROUTES.WALLET} component={Wallet} />
-                            <Route path={ROUTES.MARKET} component={Market} />
+                            <Route path={ROUTES.MY_SHOPS} component={MyShop} />
+                            <Route path={ROUTES.SHOPS} component={AllShops} />
+                            <Route path={ROUTES.SHOP} component={Shop} />
                             <Route
-                                path={ROUTES.EDITPROFILE}
+                                path={ROUTES.EDIT_PROFILE}
                                 component={EditProfile}
                             />
                         </Switch>

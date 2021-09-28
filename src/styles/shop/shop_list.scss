@@ -1,0 +1,16 @@
+@import "../variables/variables";
+
+a {
+    text-decoration: none;
+    color: #3a3939;
+}
+
+.list-icons-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: -15px;
+
+    .list-icons {
+        color: #7c7c7c;
+    }
+}
