@@ -37,6 +37,7 @@ const Profile = lazy(() => import("./pages/Profile.js"));
 const Checkin = lazy(() => import("./pages/Checkin.js"));
 const Wallet = lazy(() => import("./pages/Wallet.js"));
 const Market = lazy(() => import("./pages/Market.js"));
+const EditProfile = lazy(() => import("./pages/EditProfile.js"));
 
 // END Lazy Rendering functions
 
@@ -91,6 +92,10 @@ function App() {
                             <Route path={ROUTES.CHECKIN} component={Checkin} />
                             <Route path={ROUTES.WALLET} component={Wallet} />
                             <Route path={ROUTES.MARKET} component={Market} />
+                            <Route
+                                path={ROUTES.EDITPROFILE}
+                                component={EditProfile}
+                            />
                         </Switch>
                     </Suspense>
                 </Router>
