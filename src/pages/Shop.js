@@ -6,25 +6,28 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { makeStyles } from "@mui/styles";
-import Products from "../components/products/Products";
+import Products from "../components/products/ProductsGrid";
+
+import Nav from "../components/nav_bar/Nav";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        margin: 30,
+        marginTop: "100px",
+        backgroundColor: "gainsboro",
     },
     card: {
         textAlign: "center",
-        paddingBottom: theme.spacing(2),
+        paddingBottom: "10px",
     },
     title: {
-        margin: theme.spacing(2),
-        color: theme.palette.protectedTitle,
+        margin: "10px",
+        color: "#0e0e0e",
         fontSize: "1.2em",
     },
     subheading: {
-        marginTop: theme.spacing(1),
-        color: theme.palette.openTitle,
+        marginTop: "10px",
+        color: "#0e0e0e",
     },
     bigAvatar: {
         width: 100,
@@ -32,12 +35,10 @@ const useStyles = makeStyles((theme) => ({
         margin: "auto",
     },
     productTitle: {
-        padding: `${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(
-            1
-        )}px ${theme.spacing(2)}px`,
-        color: theme.palette.openTitle,
+        padding: `25px 25px`,
+        color: "#0e0e0e",
         width: "100%",
-        fontSize: "1.2em",
+        fontSize: "3em",
     },
 }));
 
@@ -56,17 +57,22 @@ function Shop() {
         "https://firebasestorage.googleapis.com/v0/b/socialiite-instagram-clone.appspot.com/o/images%2FIMG_82B4B1E571E6-1.jpeg?alt=media&token=4db7c353-d0a5-47c9-bc8a-31cdbbdad1e9";
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} style={{ height: "100vh" }}>
+            <Nav />
             <Grid container spacing={8}>
                 <Grid item xs={4} sm={4}>
-                    <Card className={classes.card}>
+                    <Card
+                        className={classes.card}
+                        style={{ marginLeft: "50px" }}
+                    >
                         <CardContent>
                             <Typography
                                 type="headline"
                                 component="h2"
                                 className={classes.title}
                             >
-                                {shop.name}
+                                <h2>Shop</h2>
+                                El Maestro Software Engineering
                             </Typography>
                             <br />
                             <Avatar
@@ -79,21 +85,16 @@ function Shop() {
                                 component="h2"
                                 className={classes.subheading}
                             >
-                                {shop.description}
+                                Code the way yo mama likes it
                             </Typography>
+
                             <br />
                         </CardContent>
                     </Card>
                 </Grid>
                 <Grid item xs={8} sm={8}>
-                    <Card>
-                        <Typography
-                            type="title"
-                            component="h2"
-                            className={classes.productTitle}
-                        >
-                            Products
-                        </Typography>
+                    <Card style={{ marginRight: "50px" }}>
+                        <h3 style={{ marginLeft: "20px" }}>Products</h3>
                         <Products products={products} searched={false} />
                     </Card>
                 </Grid>

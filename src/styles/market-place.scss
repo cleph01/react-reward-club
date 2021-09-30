@@ -1,1 +1,20 @@
 @import "./variables/variables";
+
+.root-container-grid {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+
+    .col {
+        flex: 1;
+    }
+
+    .col1 {
+        width: 74%;
+        margin-left: 25px;
+    }
+
+    .col2 {
+        width: 24%;
+    }
+}

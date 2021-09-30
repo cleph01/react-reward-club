@@ -1,0 +1,21 @@
+@import "../variables/variables";
+
+.product-list-container {
+    width: 90%;
+    max-width: 360;
+
+    a {
+        text-decoration: none;
+        color: #3a3939;
+    }
+
+    .list-icons-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        margin-right: -15px;
+
+        .list-icons {
+            color: #7c7c7c;
+        }
+    }
+}

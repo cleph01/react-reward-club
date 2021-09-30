@@ -6,6 +6,7 @@ const PROFILE = "/profile/:Id";
 const EDIT_PROFILE = "/profile/edit/:userId"; // Private Route
 
 // Market
+const MARKET = "/market";
 const SHOPS = "/shops/all";
 const SHOP = "/shops/:shopId";
 const CART = "/cart";
@@ -34,6 +35,7 @@ export {
     USERS,
     PROFILE,
     EDIT_PROFILE,
+    MARKET,
     SHOPS,
     SHOP,
     CART,

@@ -40,6 +40,10 @@ const MyShop = lazy(() => import("./pages/MyShop.js"));
 const EditProfile = lazy(() => import("./pages/EditProfile.js"));
 const AllShops = lazy(() => import("./pages/AllShops.js"));
 const Shop = lazy(() => import("./pages/Shop.js"));
+const NewShop = lazy(() => import("./pages/NewShop.js"));
+const EditShop = lazy(() => import("./pages/EditShop.js"));
+const NewProduct = lazy(() => import("./pages/NewProduct.js"));
+const Market = lazy(() => import("./pages/Market.js"));
 // END Lazy Rendering functions
 
 function App() {
@@ -99,9 +103,22 @@ function App() {
                             <Route path={ROUTES.MY_SHOPS} component={MyShop} />
                             <Route path={ROUTES.SHOPS} component={AllShops} />
                             <Route path={ROUTES.SHOP} component={Shop} />
+                            <Route path={ROUTES.NEW_SHOP} component={NewShop} />
+                            <Route
+                                path={ROUTES.EDIT_SHOP}
+                                component={EditShop}
+                            />
+                            <Route
+                                path={ROUTES.NEW_PRODUCT}
+                                component={NewProduct}
+                            />
                             <Route
                                 path={ROUTES.EDIT_PROFILE}
                                 component={EditProfile}
+                            />
+                            <Route
+                                path={ROUTES.MARKET}
+                                component={Market}
                             />
                         </Switch>
                     </Suspense>

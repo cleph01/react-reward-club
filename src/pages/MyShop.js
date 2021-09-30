@@ -1,4 +1,5 @@
 import React, { lazy, Suspense } from "react";
+import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
@@ -37,10 +38,13 @@ function Shop() {
                             <Avatar alt="Charlie" src={imageSrc} />
                             <h3>Your Shops</h3>
                         </div>
+                        <Link to="/seller/shop/new" >
                         <div className="add-shop-btn">
+                            
                             <AddBoxIcon />
                             New Shop
                         </div>
+                        </Link>
                     </div>
                     <Suspense fallback={<div>Loading...</div>}>
                         <Shops />
