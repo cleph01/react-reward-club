@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import ProductBarView from "./ProductsBarView.js";
 
@@ -77,44 +78,50 @@ function Search(props) {
     };
     return (
         <div>
-            <Card className="card">
-                <div className="select-category-btn"     onClick={handleOpen}>
-                    Select Category
+            <Card
+                className="card-container"
+                style={{ backgroundColor: "#dcdcdc" }}
+            >
+                <div className="search-header">
+                    <div className="select-category-btn" onClick={handleOpen}>
+                        Select Category <ArrowDropDownIcon />
+                    </div>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        onChange={handleChange("category")}
+                        MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                        }}
+                    >
+                        <MenuItem value="All">All</MenuItem>
+                        {categories.map((option) => (
+                            <MenuItem
+                                key={option}
+                                value={option}
+                                onClick={handleClose}
+                            >
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </Menu>
+                    <TextField
+                        className="search-element"
+                        id="search"
+                        label="Search products"
+                        type="search"
+                        onKeyDown={enterKey}
+                        onChange={handleChange("search")}
+                        margin="normal"
+                    />
+                    <div className="search-element search-btn" onClick={search}>
+                        <SearchIcon />
+                    </div>
+                    <Divider />
                 </div>
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    onChange={handleChange("category")}
-                    MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                    }}
-                >
-                    <MenuItem value="All">All</MenuItem>
-                    {categories.map((option) => (
-                        <MenuItem
-                            key={option}
-                            value={option}
-                            onClick={handleClose}
-                        >
-                            {option}
-                        </MenuItem>
-                    ))}
-                </Menu>
-                <TextField
-                    id="search"
-                    label="Search products"
-                    type="search"
-                    onKeyDown={enterKey}
-                    onChange={handleChange("search")}
-                    className="search-field"
-                    margin="normal"
-                />
-                <div onClick={search}>
-                    Button <SearchIcon />
-                </div>
-                <Divider />
+
                 <ProductBarView />
             </Card>
         </div>

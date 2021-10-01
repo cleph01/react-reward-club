@@ -1,0 +1,15 @@
+@import "../variables/variables";
+
+a {
+    text-decoration: none;
+    color: lightslategrey;
+}
+.item-footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .icons-wrapper {
+        margin-right: 20px;
+    }
+}

@@ -1,21 +1,50 @@
 @import "../variables/variables";
 
-.card {
-    margin-top: 50px;
+.card-container {
+    padding: 10px 10px;
 
-    .select-category-btn {
-        position: relative;
-        width: 150px;
-        height: 50px;
-        border-radius: 10px;
-        background: #2872a8;
-        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+    .search-header {
+        background-color: #fafcf9;
+        width: 100%;
+        margin-top: 5px;
         display: flex;
-        align-items: center;
         justify-content: center;
-        color: #fff;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform 0.2s ease-out;
+        align-items: center;
+
+        .search-element {
+            margin-left: 10px;
+        }
+
+        .search-btn {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            background: #2872a8;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
+        }
+
+        .select-category-btn {
+            position: relative;
+            width: 150px;
+            height: 50px;
+            border-radius: 5px;
+            background: #2872a8;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
+        }
     }
 }

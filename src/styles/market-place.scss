@@ -1,6 +1,8 @@
 @import "./variables/variables";
 
 .root-container-grid {
+    position: relative;
+    top: 100px;
     display: flex;
     flex-grow: 1;
     justify-content: space-between;
@@ -10,7 +12,7 @@
     }
 
     .col1 {
-        width: 74%;
+        width: 70%;
         margin-left: 25px;
     }
 
