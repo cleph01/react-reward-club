@@ -12,6 +12,16 @@ const SHOP = "/shops/:shopId";
 const CART = "/cart";
 const PRODUCT = "/product/:productId";
 
+// Auction
+const AUCTIONS = "/auctions/all";
+const AUCTION = "/auction/:auctionId";
+const MY_AUCTION = "/myauctions";
+const NEW_AUCTION = "/auction/new";
+const EDIT_AUCTION = "/auction/edit/:auctionId";
+
+// Stripe
+const STRIPE_CONNECT = "/seller/stripe/connect";
+
 // Order
 const ORDER = "/order/:orderId";
 const SHOP_ORDER = "/seller/orders/:shop/:shopId"; //private route
@@ -40,6 +50,8 @@ export {
     SHOP,
     CART,
     PRODUCT,
+    AUCTIONS,
+    AUCTION,
     ORDER,
     SHOP_ORDER,
     NEW_SHOP,

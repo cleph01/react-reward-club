@@ -44,6 +44,9 @@ const NewShop = lazy(() => import("./pages/NewShop.js"));
 const EditShop = lazy(() => import("./pages/EditShop.js"));
 const NewProduct = lazy(() => import("./pages/NewProduct.js"));
 const Market = lazy(() => import("./pages/Market.js"));
+const Product = lazy(() => import("./pages/Product.js"));
+const Auction = lazy(() => import("./pages/Auction.js"));
+const Auctions = lazy(() => import("./pages/Auctions.js"));
 // END Lazy Rendering functions
 
 function App() {
@@ -116,9 +119,12 @@ function App() {
                                 path={ROUTES.EDIT_PROFILE}
                                 component={EditProfile}
                             />
+                            <Route path={ROUTES.MARKET} component={Market} />
+                            <Route path={ROUTES.PRODUCT} component={Product} />
+                            <Route path={ROUTES.AUCTION} component={Auction} />
                             <Route
-                                path={ROUTES.MARKET}
-                                component={Market}
+                                path={ROUTES.AUCTIONS}
+                                component={Auctions}
                             />
                         </Switch>
                     </Suspense>

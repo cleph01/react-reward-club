@@ -1,0 +1,13 @@
+@import "./variables/variables";
+
+.timer-subheading {
+    margin: 16px;
+
+    color: #516186;
+
+    .end-time {
+        font-size: 0.75em;
+        color: #323232;
+        font-weight: 300;
+    }
+}
