@@ -36,6 +36,7 @@ const EDIT_PRODUCT = "/seller/:shopId/:productId/edit"; // private route
 // Socialiite
 const CHECKIN = "/checkin/:storeId/:dateToday";
 const WALLET = "/wallet/:userId"; // private route
+const STORE = "/store/:storeId"
 
 // Stripe connect
 const STRIPE = "/seller/stripe/connect";
@@ -61,5 +62,6 @@ export {
     MY_SHOPS,
     CHECKIN,
     WALLET,
+    STORE,
     STRIPE,
 };

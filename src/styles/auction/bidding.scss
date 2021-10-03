@@ -1,0 +1,47 @@
+@import "../../styles/variables/variables";
+
+.place-form {
+    margin-top: 13px;
+    padding: 3px 15px;
+    background-color: #e7ede4;
+    display: inline-block;
+
+    .margin-input {
+        margin: 16;
+    }
+
+    .bid-btn {
+        display: block;
+        position: relative;
+        width: 100px;
+        height: 40px;
+        border-radius: 25px;
+        background: $secondary;
+        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease-out;
+    }
+}
+
+.bid-history {
+    margin-top: 20px;
+    background-color: #e7ede4;
+    padding: 16px;
+
+    .row {
+        background-color: #fff;
+        border-bottom: 1px solid #516186;
+        display: flex;
+        flex: 1;
+
+        .col {
+            width: 33%;
+            padding: 10px 5px;
+        }
+    }
+}

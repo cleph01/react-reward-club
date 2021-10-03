@@ -1,0 +1,25 @@
+@import "../../styles/variables/variables";
+
+.bid-history {
+    width: 100%;
+    background-color: #e7ede4;
+    padding: 16px;
+    font-size: 0.005rem;
+
+    .bid-history-container {
+        // font-size: 0.1rem;
+
+        .row {
+            background-color: #fff;
+            border-bottom: 1px solid #516186;
+            display: flex;
+            flex: 1;
+
+            .col {
+                width: 33%;
+                padding: 10px 5px;
+                font-size: 0.005rem;
+            }
+        }
+    }
+}

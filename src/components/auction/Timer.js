@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 
-import "../../styles/timer/timer.scss";
+import "../../styles/auction/timer.scss";
 
 const calculateTimeLeft = (date) => {
     const difference = date - new Date();

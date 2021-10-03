@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import Card from "@mui/material/Card";
@@ -11,13 +11,18 @@ import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
-import Nav from "../components/nav_bar/Nav.js";
-import LatestProductsList from "../components/products/LatestProductsList.js";
+import Nav from "../nav_bar/Nav.js";
+import LatestProductsList from "../products/LatestProductsList.js";
 
-import "../styles/auction/auction.scss";
+import Timer from "./Timer";
+
+import Bidding from "./Bidding";
+
+import "../../styles/auction/auction.scss";
 
 const auctionData = {
-    bidStart: new Date("yesterday").toDateString(),
+    bidStart: new Date("10-02-2021"),
+    bidEnd: new Date("10-03-2021"),
     itemName: "Five Star Breakfast",
     created: "Jan 1 2021",
     quantity: 20,
@@ -30,12 +35,45 @@ const auctionData = {
         "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness.",
 };
 
+const bidHistory = [
+    {
+        bid: 134,
+        time: new Date("yesterday").toDateString(),
+        bidderName: "Charlie",
+    },
+    {
+        bid: 128,
+        time: new Date("yesterday").toDateString(),
+        bidderName: "Wilson",
+    },
+    {
+        bid: 100,
+        time: new Date("yesterday").toDateString(),
+        bidderName: "Zuperberga",
+    },
+    {
+        bid: 89,
+        time: new Date("yesterday").toDateString(),
+        bidderName: "Besos",
+    },
+];
+
 function Auction() {
     const currentDate = new Date();
 
+    const [auction, setAuction] = useState({});
+    const [error, setError] = useState("");
+    const [justEnded, setJustEnded] = useState(false);
+
+    const updateBids = (updatedAuction) => {
+        setAuction(updatedAuction);
+    };
+    const update = () => {
+        setJustEnded(true);
+    };
+
     return (
         <div>
-            <Nav />
             <div className="root-container-grid">
                 <Card className="card">
                     <CardHeader
@@ -54,37 +92,49 @@ function Auction() {
                         }
                     />
 
-                    <div style={{ display: "flex" }}>
+                    <div className="content-wrapper">
                         <div className="col col1">
                             <CardMedia
                                 className="product-image"
+                                component="img"
                                 image={auctionData.imageUrl}
-                                title={auctionData.itemName}
+                                alt="green iguana"
                             />
+
                             <Typography
                                 component="p"
                                 variant="subtitle1"
                                 className="about-item-subheading"
                             >
+                                About Item
+                            </Typography>
+                            <Typography
+                                component="p"
+                                className="item-description"
+                            >
                                 {auctionData.description}
                             </Typography>
                         </div>
                         <div className="col col2">
+                            <Timer
+                                endTime={auctionData.bidEnd}
+                                update={update}
+                            />
 
-                                {currentDate > new Date(auctionData.bidStart) 
-                                    ? (<>
-                                        <Timer endTime={auctionData.bidEnd} update={update}/> 
-                                        { auctionData.bids.length > 0 &&  
-                                            <Typography component="p" variant="subtitle1" className={classes.lastBid}>
-                                                {` Last bid: $ ${auctionData.bids[0].bid}`}
-                                            </Typography>
-                                        }
-                                        { !auth.isAuthenticated() && <Typography>Please, <Link to='/signin'>sign in</Link> to place your bid.</Typography> }
-                                        { auth.isAuthenticated() && <Bidding auction={auction} justEnded={justEnded} updateBids={updateBids}/> }
-                                    </>)
-                                    : <Typography component="p" variant="h6">{`Auction Starts at ${new Date(auctionData.bidStart).toLocaleString()}`}</Typography>}
-                  
-                            </div>
+                            <Typography
+                                component="p"
+                                variant="subtitle1"
+                                className="lastBid"
+                            >
+                                {` Last bid: $ ${bidHistory[0].bid}`}
+                            </Typography>
+
+                            <Bidding
+                                auction={auction}
+                                justEnded={justEnded}
+                                updateBids={updateBids}
+                            />
+                        </div>
                     </div>
                 </Card>
             </div>

@@ -4,6 +4,21 @@ import Auth from "../components/Auth";
 import "../styles/checkin.scss";
 import { db } from "../firebase/firebase_config";
 import logo from "../assets/images/logos/chicken_shack_logo.png";
+import socialiite from "../assets/images/logos/logo.png";
+import productPic from "../assets/images/chickenshack-product.jpg";
+
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+
+import ShareIcon from "@mui/icons-material/Share";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
 // Date sample in milliseconds
 // 1632343915372
@@ -88,12 +103,56 @@ function Checkin() {
 
     return (
         <div className="container">
-            <div className="header">
-                <h1>Business Name</h1>
-                <img className="logo" src={logo} alt="logo" />
-                <h2>Check In By Logging in Below and Get</h2>
-                <h2>20% OFF Your 4th Visit!</h2>
-            </div>
+            <Card sx={{ maxWidth: 345 }}>
+                <CardHeader
+                    avatar={
+                        <Avatar
+                            src={logo}
+                            sx={{
+                                /* bgcolor: red[500],*/
+                                width: 50,
+                                height: 50,
+                                margin: "auto",
+                                padding: "10px",
+                                border: "1px solid #f0f0f0",
+                            }}
+                        />
+                    }
+                    action={
+                        <IconButton aria-label="settings">
+                            <ShareIcon />
+                        </IconButton>
+                    }
+                    title="Chick Shack"
+                    subheader="36-19 Broadway, Astoria NY"
+                />
+                <CardMedia
+                    component="img"
+                    height="194"
+                    image={productPic}
+                    alt="Paella dish"
+                    loading="lazy"
+                />
+                <CardContent>
+                    <Typography variant="body1" color="text.secondary">
+                        Login Each Time You Visit and Get 20% OFF Your 4th
+                        Visit!
+                    </Typography>
+                    <br />
+                    <Typography variant="body2" color="text.secondary">
+                        Share With a Friend and Win a FREE Bucket of Chicken
+                        when they Login
+                    </Typography>
+                </CardContent>
+                <CardActions disableSpacing>
+                    <IconButton aria-label="add to favorites">
+                        <LocalFireDepartmentIcon />
+                    </IconButton>
+                    <IconButton aria-label="share">
+                        <ShareIcon />
+                    </IconButton>
+                </CardActions>
+            </Card>
             <Auth />
         </div>
     );

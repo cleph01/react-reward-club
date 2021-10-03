@@ -14,6 +14,8 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Nav from "../components/nav_bar/Nav.js";
 import AuctionsList from "../components/auction/AuctionsList.js";
 
+import FeaturedAuction from "../components/auction/FeaturedAuction";
+
 import "../styles/auction/auctions.scss";
 
 const product = {
@@ -33,57 +35,21 @@ function Auctions() {
         <div>
             <Nav />
             <div className="root-container-grid">
-                <Typography
-                    style={{ margin: "20px 20px" }}
-                    type="headline"
-                    component="h1"
-                >
-                    Featured Trade
-                </Typography>
-                <div className="row row1">
+                <div className="card-wrapper">
+                    <div className="headline">
+                        <h3>Featured Trade</h3>
+                    </div>
                     <Card className="card">
-                        <CardHeader
-                            title={product.name}
-                            subheader={
-                                product.quantity > 0
-                                    ? "In Stock"
-                                    : "Out of Stock"
-                            }
-                            action={
-                                <span className="add-to-cart">
-                                    <AddShoppingCartIcon />
-                                </span>
-                            }
-                        />
-                        <div style={{ display: "flex" }}>
-                            <CardMedia
-                                className="product-image"
-                                image={product.imageUrl}
-                                title={product.name}
-                            />
-                            <Typography
-                                component="p"
-                                variant="subtitle1"
-                                className="description-subheading"
-                            >
-                                {product.description}
-                                <br />
-                                <span className="price">$ {product.price}</span>
-                                <Link
-                                    to={"/shops/" + product._id}
-                                    className="link"
-                                >
-                                    <span>
-                                        <ShoppingBasketIcon />{" "}
-                                        {product.shopName}
-                                    </span>
-                                </Link>
-                            </Typography>
-                        </div>
+                        <FeaturedAuction />
                     </Card>
                 </div>
-                <div className="row row2">
-                    <AuctionsList />
+                <div className="card-wrapper" style={{ marginTop: "0px" }}>
+                    <div className="headline">
+                        <h3>Live Trades</h3>
+                    </div>
+                    <Card className="card">
+                        <AuctionsList />
+                    </Card>
                 </div>
             </div>
         </div>

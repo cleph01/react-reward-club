@@ -1,7 +1,43 @@
 @import "../../styles/variables/variables";
 
-.root-container-grid{
-
+.root-container-grid {
     flex-grow: 1;
-    margin 60;
+    position: "relative";
+    margin-top: 40px;
+
+    .card {
+        .content-wrapper {
+            display: flex;
+
+            .col {
+                display: flex;
+                flex-direction: column;
+
+                width: 50%;
+            }
+
+            .col1 {
+                .product-image {
+                    width: 275px;
+                    height: auto;
+                }
+                .about-item-subheading {
+                    margin: 16px;
+                }
+
+                .item-description {
+                    margin-left: 16px;
+                    text-align: justify;
+                }
+            }
+
+            .col2 {
+                margin-left: 20px;
+
+                .lastBid {
+                    font-weight: 700;
+                }
+            }
+        }
+    }
 }
