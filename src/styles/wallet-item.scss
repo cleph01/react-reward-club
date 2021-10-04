@@ -1,140 +1,25 @@
 @import "./variables/variables";
 
-.wallet-item-container {
-    margin-top: 15px;
-    width: 80%;
-    height: 250px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 1px 6px -2px #000;
+.header {
+    background-color: #faf9f9;
+}
 
-    .item-header {
-        background-color: $primary;
-        width: 100%;
-        height: 50px;
-        border-radius: 5px;
-        color: #fff;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-    }
+.wallet-item-emoji {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 55px;
+}
 
-    .body-wrapper {
-        width: 80%;
-        height: 150px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-        align-items: center;
-        border-bottom: 1px solid #f1f1f1;
+.description {
+    font-size: 35px;
+    text-align: center;
+}
 
-        .phone {
-            transform: rotate(90deg);
-            color: slategray;
-            font-size: 2em;
-        }
+.footer {
+    background-color: #3674b3;
+    justify-content: space-around;
 
-        .shopping-cart {
-            color: slategray;
-            font-size: 2em;
-        }
-
-        .body-center {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            align-items: center;
-
-            .wallet-item-business-name,
-            .wallet-item-emoji,
-            .wallet-item-description {
-                color: rgb(90, 90, 90);
-                font-size: 25px;
-            }
-        }
-    }
-
-    .footer {
-        height: 50px;
-
-        .redeem-btn {
-            background-color: #15a9dc;
-            font-family: "Roboto";
-            color: #ffffff;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;
-            border: none;
-            font-size: 20px;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            -webkit-animation: glowing 1500ms infinite;
-            -moz-animation: glowing 1500ms infinite;
-            -o-animation: glowing 1500ms infinite;
-            animation: glowing 1500ms infinite;
-            margin-top: 9px;
-            @-webkit-keyframes glowing {
-                0% {
-                    background-color: #15a9dc;
-                    -webkit-box-shadow: 0 0 3px #15a9dc;
-                }
-                50% {
-                    background-color: #15a9dc;
-                    -webkit-box-shadow: 0 0 40px #15a9dc;
-                }
-                100% {
-                    background-color: #15a9dc;
-                    -webkit-box-shadow: 0 0 3px #15a9dc;
-                }
-            }
-            @-moz-keyframes glowing {
-                0% {
-                    background-color: #15a9dc;
-                    -moz-box-shadow: 0 0 3px #15a9dc;
-                }
-                50% {
-                    background-color: #15a9dc;
-                    -moz-box-shadow: 0 0 40px #15a9dc;
-                }
-                100% {
-                    background-color: #15a9dc;
-                    -moz-box-shadow: 0 0 3px #15a9dc;
-                }
-            }
-            @-o-keyframes glowing {
-                0% {
-                    background-color: #15a9dc;
-                    box-shadow: 0 0 3px #15a9dc;
-                }
-                50% {
-                    background-color: #15a9dc;
-                    box-shadow: 0 0 40px #15a9dc;
-                }
-                100% {
-                    background-color: #15a9dc;
-                    box-shadow: 0 0 3px #15a9dc;
-                }
-            }
-            @keyframes glowing {
-                0% {
-                    background-color: #15a9dc;
-                    box-shadow: 0 0 3px #15a9dc;
-                }
-                50% {
-                    background-color: #15a9dc;
-                    box-shadow: 0 0 40px #15a9dc;
-                }
-                100% {
-                    background-color: #15a9dc;
-                    box-shadow: 0 0 3px #15a9dc;
-                }
-            }
-        }
+    .icon {
+        color: #f0f0f0;
     }
 }

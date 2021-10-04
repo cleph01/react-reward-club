@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Auth from "../components/Auth";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
@@ -21,6 +21,12 @@ function Home() {
     };
 
     console.log("Home User:", user);
+
+    // useEffect(() => {
+    //     if (user) {
+    //         history.push("/wallet");
+    //     }
+    // }, [user]);
 
     return (
         <div className="container">

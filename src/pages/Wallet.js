@@ -4,15 +4,36 @@ import { Link, useHistory } from "react-router-dom";
 import "../styles/wallet.scss";
 import { db } from "../firebase/firebase_config";
 
-import WalletItem from "../components/WalletItem";
+import WalletItem from "../components/wallet/WalletItem";
 
 import Nav from "../components/nav_bar/Nav";
 
-import logo from "../assets/images/logos/logo_white_text.png";
+import Box from "@mui/material/Box";
+
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+
+const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+};
 
 const Wallet = (props) => {
     // State to hold post data from Firebase call
+
     const [wallet, setWallet] = useState([]);
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     //every time a new post is added this code fires
     useEffect(() => {
@@ -59,22 +80,59 @@ const Wallet = (props) => {
     return (
         <>
             <div className="container">
-                {/* <div className="nav">
-                    <img className="logo" src={logo} alt="logo" />
-                    <div>&#x1F4B0; Digital Wallet &#x1F4B0;</div>
-                </div> */}
                 <Nav />
 
                 <div className="wallet-wrapper">
+                    <div className="header">
+                        <h3>&#x1F4B0; Digital Wallet &#x1F4B0;</h3>
+                    </div>
                     {wallet.map((item, index) => (
                         <WalletItem
                             key={index}
                             itemId={item.walletItemId}
                             item_details={item.walletItem}
+                            handleOpen={handleOpen}
+                            handleClose={handleClose}
                         />
                     ))}
                 </div>
             </div>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                        sx={{ textAlign: "center", borderColor: "#f0f0f0" }}
+                    >
+                        Please Show to Attendant
+                    </Typography>
+                    <Typography
+                        id="modal-modal-description"
+                        sx={{ mt: 2, textAlign: "center" }}
+                    >
+                        Sure About Claiming Prize?
+                    </Typography>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                            marginTop: "15px",
+                        }}
+                    >
+                        <Button color="primary">Claim Prize</Button>
+                        <Button color="error" onClick={handleClose}>
+                            Cancel
+                        </Button>
+                    </div>
+                </Box>
+            </Modal>
         </>
     );
 };
