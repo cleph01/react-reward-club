@@ -15,6 +15,7 @@ import "../../styles/product/product_list.scss";
 
 const itemData = [
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -23,6 +24,7 @@ const itemData = [
         shopName: "@bkristastucchio",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -31,6 +33,7 @@ const itemData = [
         shopName: "@rollelflex_graphy726",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -39,6 +42,7 @@ const itemData = [
         shopName: "@helloimnik",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -47,6 +51,7 @@ const itemData = [
         shopName: "@nolanissac",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -55,6 +60,7 @@ const itemData = [
         shopName: "@hjrc33",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -63,6 +69,7 @@ const itemData = [
         shopName: "@arwinneil",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -71,6 +78,7 @@ const itemData = [
         shopName: "@tjdragotta",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -79,6 +87,7 @@ const itemData = [
         shopName: "@katie_wasserman",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -87,14 +96,17 @@ const itemData = [
         shopName: "@silverdalex",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
+
         img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
         category: "Tomato basil",
         shopName: "@shelleypauls",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -103,6 +115,7 @@ const itemData = [
         shopName: "@peterlaster",
     },
     {
+        emojiHexCode: "0x1F32E",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -120,18 +133,15 @@ function ProductList() {
                     <Divider />
                     <ListItem className="product-list-item">
                         <ListItemAvatar>
-                            <Avatar src={shop.img} />
+                            <span>
+                                {String.fromCodePoint(shop.emojiHexCode)}
+                            </span>
                         </ListItemAvatar>
                         <div className="bla">
-                            <Typography type="headline" component="h2">
-                                {shop.category}
-                            </Typography>
-                            <span>
-                                <Typography type="subheading" component="text">
-                                    Quantity: {shop.quantity} | Price:{" "}
-                                    {shop.price}
-                                </Typography>
-                            </span>
+                            <ListItemText
+                                primary={shop.category}
+                                secondary={`Quantity: ${shop.quantity} | Price: $${shop.price}`}
+                            />
                         </div>
                         <ListItemSecondaryAction className="list-icons-wrapper">
                             <EditIcon className="list-icons" />

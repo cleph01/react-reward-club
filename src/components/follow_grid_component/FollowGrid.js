@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import Avatar from "@mui/material/Avatar";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import { makeStyles } from "@material-ui/core/styles";
+
+import { firebase, db } from "../../firebase/firebase_config";
 
 import "../../styles/post_grid.scss";
 

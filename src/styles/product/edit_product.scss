@@ -1,0 +1,89 @@
+@import "../variables/variables";
+
+.card {
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    margin-top: 10px;
+    padding-bottom: 20px;
+
+    .title {
+        margin: 20px 0px;
+        color: #213b77;
+    }
+
+    .emoji-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0px;
+
+        .emoji-preview {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+    }
+
+    .text-field {
+        margin-left: 10px;
+        margin-right: 10px;
+        width: 300;
+    }
+
+    .btn-wrapper {
+        display: flex;
+        justify-content: center;
+
+        .submit-btn {
+            display: block;
+            position: relative;
+            width: 100px;
+            height: 40px;
+            border-radius: 25px;
+            background: $secondary;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
+        }
+
+        .change-emoji-btn {
+            display: block;
+            position: relative;
+            width: 130px;
+            height: 40px;
+            border-radius: 25px;
+            background: $secondary;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
+        }
+
+        .close-emoji-btn {
+            display: block;
+            position: relative;
+            width: 160px;
+            height: 40px;
+            border-radius: 25px;
+            background: $secondary;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
+        }
+    }
+}

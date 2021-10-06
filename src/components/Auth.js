@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { UserContext } from "../contexts/UserContext";
-import { firebase, auth } from "../firebase/firebase_config";
+import { firebase, auth, db } from "../firebase/firebase_config";
 
 // let uiConfig = ;
 
@@ -22,7 +22,7 @@ function Auth() {
 
     return (
         <>
-            {isSignedIn ? (
+            {user ? (
                 <div>
                     <div>Signed In!</div>
                     <button onClick={handleSignOut}>Sign Out</button>
@@ -38,8 +38,49 @@ function Auth() {
                         ],
                         callbacks: {
                             signInSuccessWithAuthResult: (authUser) => {
-                                setUser(authUser);
+                                setUser(authUser.user);
                                 setIsSignedIn(!isSignedIn);
+
+                                db.collection("user")
+                                    .doc(authUser.user.uid)
+                                    .get()
+                                    .then((doc) => {
+                                        const inputData = {
+                                            displayName:
+                                                authUser.user.displayName,
+                                            avatarUrl: authUser.user.photoURL,
+                                            seller: false,
+                                            created:
+                                                firebase.firestore.FieldValue.serverTimestamp(),
+                                        };
+
+                                        if (!doc.exists) {
+                                            // Create a new doc with UID as DocId
+                                            db.collection("user")
+                                                .doc(authUser.user.uid)
+                                                .set(inputData)
+                                                .then(() => {
+                                                    console.log(
+                                                        "Document successfully written!"
+                                                    );
+                                                })
+                                                .catch((error) => {
+                                                    console.error(
+                                                        "Error writing document: ",
+                                                        error
+                                                    );
+                                                });
+                                        } else {
+                                            // doc.data() will be undefined in this case
+                                            console.log("Document Exists!");
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        console.log(
+                                            "Error getting document:",
+                                            error
+                                        );
+                                    });
                             },
                         },
                     }}

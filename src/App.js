@@ -4,32 +4,6 @@ import { UserContext } from "./contexts/UserContext";
 import { auth } from "./firebase/firebase_config";
 import * as ROUTES from "./constants/routes";
 
-// START FontAwesome
-import { library } from "@fortawesome/fontawesome-svg-core";
-
-import {
-    faSearch,
-    faBars,
-    faLink,
-    faExclamationTriangle,
-    faCheckCircle,
-    faSpinner,
-    faPhone,
-    faShoppingCart,
-} from "@fortawesome/free-solid-svg-icons";
-
-library.add(
-    faBars,
-    faSearch,
-    faLink,
-    faExclamationTriangle,
-    faCheckCircle,
-    faSpinner,
-    faPhone,
-    faShoppingCart
-);
-// END FontAwesome
-
 // START Lazy Rendering functions
 const Home = lazy(() => import("./pages/Home.js"));
 
@@ -48,6 +22,8 @@ const Product = lazy(() => import("./pages/Product.js"));
 const Auction = lazy(() => import("./components/auction/FeaturedAuction.js"));
 const Auctions = lazy(() => import("./pages/Auctions.js"));
 const Store = lazy(() => import("./pages/Store.js"));
+const EditProduct = lazy(() => import("./pages/EditProduct.js"));
+const EditPrize = lazy(() => import("./pages/EditLoyaltyPrize.js"));
 // END Lazy Rendering functions
 
 function App() {
@@ -128,6 +104,14 @@ function App() {
                                 component={Auctions}
                             />
                             <Route path={ROUTES.STORE} component={Store} />
+                            <Route
+                                path={ROUTES.EDIT_PRODUCT}
+                                component={EditProduct}
+                            />
+                            <Route
+                                path={ROUTES.EDIT_PRIZE}
+                                component={EditPrize}
+                            />
                         </Switch>
                     </Suspense>
                 </Router>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Auth from "../components/Auth";
 import "../styles/checkin.scss";
@@ -20,6 +20,8 @@ import Typography from "@mui/material/Typography";
 import ShareIcon from "@mui/icons-material/Share";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
+import { getDistanceBetween } from "geolocation-distance-between";
+
 // Date sample in milliseconds
 // 1632343915372
 
@@ -27,79 +29,113 @@ import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
 function Checkin() {
     const { storeId, dateToday } = useParams();
+    const [business, setBusiness] = useState();
 
-    const todaysDate = Date.now();
+    const [geoDistance, setGeoDistance] = useState();
 
-    console.log("Millisecond Date: ", todaysDate);
-
-    const deviceDate = new Date(todaysDate).toDateString();
-
-    console.log("Store - Url: ", storeId, dateToday);
-
-    const urlDate = new Date(Number(dateToday)).toDateString();
-
-    console.log("Device Date - Url Date: ", deviceDate, urlDate);
-
-    console.log(deviceDate === urlDate);
-
-    //every time a new post is added this code fires
     useEffect(() => {
-        let batch = db.batch();
-
-        const userRef = db.collection("user").doc("u002");
-
-        const userData = {
-            userId: "u002",
-            name: "Charlie",
-            displayName: "cleph02",
-            bio: "Something bout me.",
-            seller: false,
-            joined: Date.now(),
-        };
-
-        // Set UserRef
-        batch.set(userRef, userData);
-
-        // Set Relationship Ref
-        const bizRelationshipRef = userRef.collection("bizRelationships").doc();
-
-        const relationshipData = {
-            businessId: "b001",
-            businessName: "Chicken Shack",
-            vists: [Date.now()],
-            points: 1,
-            lastVisit: Date.now(),
-            matched: Date.now(),
-        };
-
-        batch.set(bizRelationshipRef, relationshipData);
-
-        // Set Wallet Ref
-        // This stuff will need to be pulled in from the
-        // checkin UI if signing up from check
-        // ElSE be left blank
-        const walletRef = userRef.collection("wallet").doc();
-
-        const walletData = {
-            businessId: "b001",
-            businessName: "Chicken Shack",
-            itemId: "item001",
-            itemDescription: "1/2 OFF",
-            emojiHexCode: "0x1F357",
-        };
-
-        batch.set(walletRef, walletData);
-
-        batch
-            .commit()
-            .then((res) => {
-                //
-                console.log("Record Created Successfully: ", res);
-            })
-            .catch((error) => {
-                console.log("Error: ", error);
+        db.collection("shops")
+            .doc(storeId)
+            .get()
+            .then((doc) => {
+                setBusiness(doc.data());
             });
     }, []);
+
+    console.log("Business info: ", business);
+    // useEffect(() => {
+    //     if ("geolocation" in navigator) {
+    //         console.log("Available");
+
+    //         navigator.geolocation.getCurrentPosition(function (position) {
+    //             console.log("Latitude is :", position.coords.latitude);
+    //             console.log("Longitude is :", position.coords.longitude);
+
+    //             let coordinateOne = {
+    //                 latitude: position.coords.latitude,
+    //                 longitude: position.coords.longitude,
+    //             };
+    //             let coordinateTwo = {
+    //                 latitude: 40.7599133,
+    //                 longitude: -73.9228225,
+    //             };
+
+    //             let distanceBetween = getDistanceBetween(
+    //                 coordinateOne,
+    //                 coordinateTwo
+    //             );
+
+    //             console.log("Kilometers: ", distanceBetween);
+
+    //             setGeoDistance(distanceBetween);
+    //         });
+    //     } else {
+    //         console.log("Not Available");
+    //     }
+    // }, []);
+
+    //every time a new post is added this code fires
+    // useEffect(() => {
+    //     let batch = db.batch();
+
+    //     const userRef = db.collection("user").doc("u002");
+
+    //     const userData = {
+    //         userId: "u002",
+    //         name: "Charlie",
+    //         displayName: "cleph02",
+    //         bio: "Something bout me.",
+    //         seller: false,
+    //         joined: Date.now(),
+    //     };
+
+    //     // Set UserRef
+    //     batch.set(userRef, userData);
+
+    //     // Set Relationship Ref
+    //     const bizRelationshipRef = userRef.collection("bizRelationships").doc();
+
+    //     const relationshipData = {
+    //         businessId: "b001",
+    //         businessName: "Chicken Shack",
+    //         vists: [Date.now()],
+    //         points: 1,
+    //         lastVisit: Date.now(),
+    //         matched: Date.now(),
+    //     };
+
+    //     batch.set(bizRelationshipRef, relationshipData);
+
+    //     // Set Wallet Ref
+    //     // This stuff will need to be pulled in from the
+    //     // checkin UI if signing up from check
+    //     // ElSE be left blank
+    //     const walletRef = userRef.collection("wallet").doc();
+
+    //     const walletData = {
+    //         businessId: "b001",
+    //         businessName: "Chicken Shack",
+    //         itemId: "item001",
+    //         itemDescription: "1/2 OFF",
+    //         emojiHexCode: "0x1F357",
+    //     };
+
+    //     batch.set(walletRef, walletData);
+
+    //     batch
+    //         .commit()
+    //         .then((res) => {
+    //             //
+    //             console.log("Record Created Successfully: ", res);
+    //         })
+    //         .catch((error) => {
+    //             console.log("Error: ", error);
+    //         });
+    // }, []);
+
+    // if (geoDistance && geoDistance * 1000 > 100) {
+    //     return <div>Fuhgetabout it</div>;
+    // }
 
     return (
         <div className="container">

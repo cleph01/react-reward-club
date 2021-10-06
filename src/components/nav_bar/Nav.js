@@ -15,14 +15,7 @@ function Nav() {
 
     const { user } = useContext(UserContext);
 
-    const printTitle = () => {
-        if (history.location.pathname === "/profile") {
-            return <div>&#x1F600; &nbsp; Profile &#x1F600;</div>;
-        } else if (history.location.pathname === "/wallet") {
-            return <div>&#x1F4B0; Digital Wallet &#x1F4B0;</div>;
-        }
-    };
-
+    
     const handleSignOut = () => {
         auth.signOut();
         localStorage.removeItem("user");
@@ -34,7 +27,7 @@ function Nav() {
         <div className="navbar-container">
             <div className="logo-wrapper">
                 <img className="logo" src={logo} alt="logo" />
-                {printTitle()}
+                
             </div>
             <div className="navbar__body">
                 <Link to="/">
@@ -42,7 +35,7 @@ function Nav() {
                         <HomeIcon />
                     </div>
                 </Link>
-                <Link to="/market">
+                {/* <Link to="/market">
                     <div>Market Place</div>
                 </Link>
                 <Link to="/cart">
@@ -61,7 +54,7 @@ function Nav() {
                 </Link>
                 <Link to="/shop/:userId">
                     <div>My Shop</div>
-                </Link>
+                </Link> */}
                 <Link to="/profile/:userId">
                     <div>Profile</div>
                 </Link>

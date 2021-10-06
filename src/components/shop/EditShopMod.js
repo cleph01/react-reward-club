@@ -11,9 +11,9 @@ import "../../styles/shop/edit_shop_mod.scss";
 const imgUrl =
     "https://firebasestorage.googleapis.com/v0/b/socialiite-instagram-clone.appspot.com/o/images%2FIMG_82B4B1E571E6-1.jpeg?alt=media&token=4db7c353-d0a5-47c9-bc8a-31cdbbdad1e9";
 
-function EditShop() {
+function EditShopMod(props) {
     const [values, setValues] = useState({
-        name: "",
+        businessName: props.businessData.info.businessName,
         handle: "",
         email: "",
         bio: "",
@@ -33,12 +33,15 @@ function EditShop() {
                     Edit Shop
                 </Typography>
 
-                <ShopLogoUpload imgUrl={imgUrl} />
+                <ShopLogoUpload
+                    imgUrl={props.businessData.info.logoUrl || imgUrl}
+                    businessId={props.businessData.businessId}
+                />
                 <center>
                     <TextField
                         id="shopname"
                         label="Shop Name"
-                        value={values.handle}
+                        value={values.businessName}
                         onChange={handleChange("handle")}
                         margin="normal"
                     />
@@ -46,7 +49,7 @@ function EditShop() {
                     <TextField
                         id="description"
                         label="Description"
-                        value={values.bio}
+                        value={values.businessName}
                         onChange={handleChange("bio")}
                         margin="normal"
                     />
@@ -59,7 +62,9 @@ function EditShop() {
                     )}
                 </center>
             </CardContent>
-            <center><h3>Owner: Super Mahn</h3></center>
+            <center>
+                <h3>Owner: Super Mahn</h3>
+            </center>
             <div className="btn-wrapper">
                 <div className="submit-btn">Update</div>
             </div>
@@ -67,4 +72,4 @@ function EditShop() {
     );
 }
 
-export default EditShop;
+export default EditShopMod;

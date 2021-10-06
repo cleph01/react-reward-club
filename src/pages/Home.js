@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import Auth from "../components/Auth";
+import { Redirect } from "react-router";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 
@@ -13,20 +14,24 @@ import logo_text from "../assets/images/logos/logo_white_text.png";
 function Home() {
     const history = useHistory();
 
-    const user = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
     const handleSignOut = () => {
         auth.signOut();
         localStorage.removeItem("user");
     };
 
-    console.log("Home User:", user);
+    user ? console.log("Home User Id:", user.uid) : console.log("No User");
 
     // useEffect(() => {
-    //     if (user) {
+    //     if (user.uid) {
     //         history.push("/wallet");
     //     }
     // }, [user]);
+
+    if (user) {
+        return <Redirect to={`/wallet/${user.uid}`} />;
+    }
 
     return (
         <div className="container">

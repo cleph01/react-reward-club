@@ -32,11 +32,12 @@ const NEW_SHOP = "/seller/shop/new"; // private route"
 const EDIT_SHOP = "/seller/shop/edit/:shopId"; // private route
 const NEW_PRODUCT = "/seller/:shopId/products/new"; // private route
 const EDIT_PRODUCT = "/seller/:shopId/:productId/edit"; // private route
+const EDIT_PRIZE = "/seller/:shopId/:productId/edit-prize"; // private route
 
 // Socialiite
-const CHECKIN = "/checkin/:storeId/:dateToday";
+const CHECKIN = "/checkin/:storeId";
 const WALLET = "/wallet/:userId"; // private route
-const STORE = "/store/:storeId"
+const STORE = "/store/:storeId";
 
 // Stripe connect
 const STRIPE = "/seller/stripe/connect";
@@ -59,6 +60,7 @@ export {
     EDIT_SHOP,
     NEW_PRODUCT,
     EDIT_PRODUCT,
+    EDIT_PRIZE,
     MY_SHOPS,
     CHECKIN,
     WALLET,

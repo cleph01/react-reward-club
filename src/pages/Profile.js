@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 import ProfileTabs from "../components/profile_components/profile_body/ProfileTabs";
 import ProfileHeader from "../components/profile_components/profile_header/ProfileHeader";
 import ProfileBodyLeft from "../components/profile_components/profile_body/ProfileBodyLeft";
@@ -6,7 +7,6 @@ import ProfileBodyRight from "../components/profile_components/profile_body/Prof
 import ProfileBio from "../components/profile_components/profile_bio/ProfileBio";
 import ProfileRecentActivity from "../components/profile_components/profile_recent_activity/ProfileRecentActivity.js";
 import Nav from "../components/nav_bar/Nav";
-
 
 import "../styles/profile/profile.scss";
 
@@ -74,13 +74,19 @@ const itemData = [
 ];
 
 function Profile() {
+    const { user } = useContext(UserContext);
+
+    console.log("Profile user: ", user);
+
+    if (!user){ return <div>...Loading</div>}
+
     return (
         <div className="profile-container">
             <Nav />
             {/* <ProfileHeader /> */}
             <div className="profile-body-wrapper">
-                <ProfileBodyLeft />
-                <ProfileBodyRight />
+                <ProfileBodyLeft user={user} />
+                <ProfileBodyRight user={user} />
             </div>
             <ProfileBio />
             <ProfileRecentActivity />

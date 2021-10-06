@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import "../../styles/wallet-item.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
