@@ -72,7 +72,7 @@ function Auth() {
                                                 });
                                         } else {
                                             // doc.data() will be undefined in this case
-                                            console.log("Document Exists!");
+                                            console.log("User Exists!");
                                         }
                                     })
                                     .catch((error) => {

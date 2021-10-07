@@ -3,22 +3,20 @@ import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import "../../styles/checkin/get_location.scss";
 
-function GetLocation({ handleGeoLocation, distanceStatus }) {
+function GetLocation({ handleGeoLocation, goStatus }) {
     return (
         <div className="geolocation-container">
             <h3 className="geolocation-header">
-                Please Provide Your Location To Verify Proximity
+                Please Confirm Your Location To Check-In
             </h3>
             <div
                 className="geolocation-button"
                 style={{
-                    padding: distanceStatus.fetchingDistance
-                        ? "30px 0px"
-                        : null,
+                    padding: goStatus.fetchingDistance ? "30px 0px" : null,
                 }}
                 onClick={handleGeoLocation}
             >
-                {distanceStatus.fetchingDistance ? (
+                {goStatus.fetchingDistance ? (
                     // <LinearProgress color="success" />
                     <CircularProgress />
                 ) : (

@@ -3,18 +3,18 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import Auth from "../components/Auth";
 
-import { db } from "../firebase/firebase_config";
-import logo from "../assets/images/logos/chicken_shack_logo.png";
-import socialiite from "../assets/images/logos/logo.png";
+import { firebase, db } from "../firebase/firebase_config";
 import productPic from "../assets/images/chickenshack-product.jpg";
 import GetLocation from "../components/checkin/GetLocation";
 import CheckinAuth from "../components/checkin/CheckInAuth";
+import AvailablePrizes from "../components/checkin/AvailablePrizes";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
+import Divider from "@mui/material/Divider";
 
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
@@ -40,12 +40,15 @@ function Checkin() {
 
     const { storeId } = useParams();
     const [business, setBusiness] = useState();
+
+    const [prizes, setPrizes] = useState();
+
     // State to control GetLocation Modal
     const [openModal, setOpenModal] = useState();
 
     const [geoDistance, setGeoDistance] = useState();
 
-    const [distanceStatus, setDistanceStatus] = useState({
+    const [goStatus, setGoStatus] = useState({
         fetchingDistance: false,
         gotDistance: false,
     });
@@ -55,11 +58,11 @@ function Checkin() {
     const [openSnackBar, setOpenSnackBar] = useState(false);
 
     useEffect(() => {
-        console.log("Ready to Go: ", distanceStatus);
-    }, [distanceStatus]);
+        console.log("Ready to Go: ", goStatus);
+    }, [goStatus]);
 
     const handleGeoLocation = () => {
-        setDistanceStatus({ ...distanceStatus, fetchingDistance: true });
+        setGoStatus({ ...goStatus, fetchingDistance: true });
 
         if ("geolocation" in navigator) {
             console.log("Available");
@@ -85,8 +88,8 @@ function Checkin() {
                 console.log("Kilometers: ", distanceBetween);
 
                 setGeoDistance(distanceBetween);
-                setDistanceStatus({
-                    ...distanceStatus,
+                setGoStatus({
+                    ...goStatus,
                     gotDistance: true,
                     fetchingDistance: false,
                 });
@@ -97,79 +100,121 @@ function Checkin() {
     };
 
     useEffect(() => {
+        // Get Business Info
         db.collection("shops")
             .doc(storeId)
             .get()
             .then((doc) => {
                 setBusiness(doc.data());
+            })
+            .catch((err) => {
+                console.log("Error getting Business Info: ", err);
+            });
+
+        db.collection("shops")
+            .doc(storeId)
+            .collection("loyaltyPrizes")
+            .get()
+            .then((doc) => {
+                console.log("docs: ", doc);
+                setPrizes(
+                    doc.docs.map((doc) => ({
+                        prizeId: doc.id,
+                        prize: doc.data(),
+                    }))
+                );
+            })
+            .catch((err) => {
+                console.log("Error getting Prizes: ", err);
             });
     }, []);
 
     console.log("Business info: ", business);
+    console.log("Prizes: ", prizes);
     console.log("User: ", user);
 
     //every time a new post is added this code fires
-    // useEffect(() => {
-    //     let batch = db.batch();
+    const handleCheckin = () => {
+        // First Check if Proximity is confirmed and user is logged in
+        const goodToGo = goStatus.gotDistance && user ? true : false;
 
-    //     const userRef = db.collection("user").doc("u002");
+        if (!goodToGo) {
+            setGoStatus({
+                ...goStatus,
+                error: "Provide Location & Ensure Login",
+            });
 
-    //     const userData = {
-    //         userId: "u002",
-    //         name: "Charlie",
-    //         displayName: "cleph02",
-    //         bio: "Something bout me.",
-    //         seller: false,
-    //         joined: Date.now(),
-    //     };
+            console.log("Check IN Button Go Status Not 100");
+            return;
+        }
 
-    //     // Set UserRef
-    //     batch.set(userRef, userData);
+        // console.log("Check In Button Working - goodToGo: ", goodToGo);
 
-    //     // Set Relationship Ref
-    //     const bizRelationshipRef = userRef.collection("bizRelationships").doc();
+        // Check if Relationship with business exists
+        const relationshipRef = db
+            .collection("user")
+            .doc(user.uid)
+            .collection("bizRelationship")
+            .doc(storeId);
 
-    //     const relationshipData = {
-    //         businessId: "b001",
-    //         businessName: "Chicken Shack",
-    //         vists: [Date.now()],
-    //         points: 1,
-    //         lastVisit: Date.now(),
-    //         matched: Date.now(),
-    //     };
+        relationshipRef
+            .get()
+            .then((doc) => {
+                if (doc.exists) {
+                    console.log("Document data:", doc.data());
 
-    //     batch.set(bizRelationshipRef, relationshipData);
+                    const timeStamp = new Date(Date.now());
+                    // Update Counts and Log
+                    db.collection("user")
+                        .doc(user.uid)
+                        .collection("bizRelationship")
+                        .doc(storeId)
+                        .update({
+                            visitCount:
+                                firebase.firestore.FieldValue.increment(1),
+                            pointSum:
+                                firebase.firestore.FieldValue.increment(1),
+                            visitLog:
+                                firebase.firestore.FieldValue.arrayUnion(
+                                    timeStamp
+                                ),
+                        })
+                        .then(() => {
+                            console.log("Document successfully updated!");
+                        })
+                        .catch((error) => {
+                            // The document probably doesn't exist.
+                            console.error("Error updating document: ", error);
+                        });
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("Relationhip Doesn't Exist !");
 
-    //     // Set Wallet Ref
-    //     // This stuff will need to be pulled in from the
-    //     // checkin UI if signing up from check
-    //     // ElSE be left blank
-    //     const walletRef = userRef.collection("wallet").doc();
-
-    //     const walletData = {
-    //         businessId: "b001",
-    //         businessName: "Chicken Shack",
-    //         itemId: "item001",
-    //         itemDescription: "1/2 OFF",
-    //         emojiHexCode: "0x1F357",
-    //     };
-
-    //     batch.set(walletRef, walletData);
-
-    //     batch
-    //         .commit()
-    //         .then((res) => {
-    //             //
-    //             console.log("Record Created Successfully: ", res);
-    //         })
-    //         .catch((error) => {
-    //             console.log("Error: ", error);
-    //         });
-    // }, []);
-
-    // if (geoDistance && geoDistance * 1000 > 100) {
-    //     return <div>Fuhgetabout it</div>;
-    // }
+                    const timeStamp = new Date(Date.now());
+                    // Add New Relationship Doc Here
+                    db.collection("user")
+                        .doc(user.uid)
+                        .collection("bizRelationship")
+                        .doc(storeId)
+                        .set({
+                            visitCount: 1,
+                            pointSum: 1,
+                            redeemCount: 0,
+                            redeemLog: [],
+                            visitLog: [timeStamp],
+                        })
+                        .then(() => {
+                            console.log("Document successfully written!");
+                        })
+                        .catch((error) => {
+                            console.error("Error writing document: ", error);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.log("Error getting relationship document:", error);
+            });
+    };
 
     const Alert = forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -183,13 +228,19 @@ function Checkin() {
         setOpenSnackBar(false);
     };
 
+    if (!business) {
+        return <div>...Loading</div>;
+    }
+
     return (
         <div className="container">
             <Card sx={{ maxWidth: 345 }}>
                 <CardHeader
                     avatar={
                         <Avatar
-                            src={logo}
+                            loading="lazy"
+                            alt={business.businessName}
+                            src={business.logoUrl}
                             sx={{
                                 /* bgcolor: red[500],*/
                                 width: 50,
@@ -201,94 +252,47 @@ function Checkin() {
                         />
                     }
                     action={
-                        <IconButton aria-label="settings">
-                            <ShareIcon />
+                        <IconButton aria-label="add to favorites">
+                            <LocalFireDepartmentIcon />
                         </IconButton>
                     }
                     title="Chick Shack"
                     subheader="36-19 Broadway, Astoria NY"
                 />
-                <CardMedia
+                <Divider />
+                {/* <CardMedia
                     component="img"
                     height="194"
                     image={productPic}
                     alt="Paella dish"
                     loading="lazy"
-                />
+                /> */}
                 <CardContent>
+                    <AvailablePrizes prizes={prizes} />
                     <Typography variant="body1" color="text.secondary">
-                        Login Each Time You Visit and Get 20% OFF Your 4th
-                        Visit!
+                        Login Each Time You Visit and Get a Chance to Win a
+                        Prize!
                     </Typography>
                     <br />
                     <Typography variant="body2" color="text.secondary">
-                        Share With a Friend and Win a FREE Bucket of Chicken
+                        Share With a Friend and they AUTOMATICALLY win the prize
                         when they Login
                     </Typography>
                 </CardContent>
-                <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites">
-                        <LocalFireDepartmentIcon />
-                    </IconButton>
-                    <IconButton aria-label="share">
-                        <ShareIcon />
-                    </IconButton>
-                </CardActions>
             </Card>
-            {distanceStatus.gotDistance ? (
+            {goStatus.gotDistance ? (
                 // Created this component to render a different view
                 // based on whether user is logged in already & thus
                 // update useEffect dependancy variable to trigger db update
-                <CheckinAuth
-                    user={user}
-                    setDistanceStatus={setDistanceStatus}
-                    distanceStatus={distanceStatus}
-                />
+                <CheckinAuth user={user} handleCheckin={handleCheckin} />
             ) : (
                 <GetLocation
                     handleGeoLocation={handleGeoLocation}
-                    distanceStatus={distanceStatus}
+                    goStatus={goStatus}
                 />
             )}
 
-            {/* <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={style}>
-                    <Typography
-                        id="modal-modal-title"
-                        variant="h6"
-                        component="h2"
-                        sx={{ textAlign: "center", borderColor: "#f0f0f0" }}
-                    >
-                        Please Show to Attendant
-                    </Typography>
-                    <Typography
-                        id="modal-modal-description"
-                        sx={{ mt: 2, textAlign: "center" }}
-                    >
-                        Sure About Claiming Prize?
-                    </Typography>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-around",
-                            alignItems: "center",
-                            marginTop: "15px",
-                        }}
-                    >
-                        <Button color="primary" onClick={handleRedeem}>
-                            Claim Prize
-                        </Button>
-                        <Button color="error" onClick={handleClose}>
-                            Cancel
-                        </Button>
-                    </div>
-                </Box>
-            </Modal>
+            {/* 
 
             <Stack spacing={2} sx={{ width: "100%" }}>
                 <Snackbar

@@ -16,7 +16,7 @@ const style = {
     cursor: "pointer",
     transition: "transform 0.2s ease-out",
 };
-function CheckInAuth({ user, setDistanceStatus, distanceStatus }) {
+function CheckInAuth({ user, handleCheckin }) {
     let component;
 
     if (user) {
@@ -24,15 +24,20 @@ function CheckInAuth({ user, setDistanceStatus, distanceStatus }) {
             <div>
                 <center>
                     <h3 style={{ color: "#f0f0f0" }}>You're Signed In</h3>
-                    <div style={style}> Check In </div>
+                    <div style={style} onClick={handleCheckin}>
+                        {" "}
+                        Check In{" "}
+                    </div>
                 </center>
             </div>
         );
     } else {
         component = (
             <div>
-                <h3>Loggin Below to Checkin</h3>
-                <Auth />
+                <center>
+                    <h3 style={{ color: "#f0f0f0" }}>Login Below to Checkin</h3>
+                    <Auth />
+                </center>
             </div>
         );
     }

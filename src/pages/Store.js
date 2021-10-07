@@ -18,6 +18,7 @@ import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import "../styles/store.scss";
 import logo from "../assets/images/logos/chicken_shack_logo.png";
 import socialiite from "../assets/images/logos/logo_white_text.png";
+import productPic from "../assets/images/chickenshack-product.jpg";
 
 function Store() {
     const todaysDate = Date.now();
@@ -39,15 +40,20 @@ function Store() {
                             }}
                         />
                     }
-                    action={
-                        <IconButton aria-label="settings">
-                            <ShareIcon />
-                        </IconButton>
-                    }
                     title="Chick Shack"
                     subheader="36-19 Broadway, Astoria NY"
                 />
-                <QRcodeGen date={todaysDate} />
+                <div className="body-wrapper">
+                    <CardMedia
+                        component="img"
+                        height="194"
+                        image={productPic}
+                        alt="Paella dish"
+                        loading="lazy"
+                        sx={{ marginRight: "30px" }}
+                    />
+                    <QRcodeGen date={todaysDate} />
+                </div>
                 <CardContent>
                     <br />
                     <Typography
@@ -55,7 +61,7 @@ function Store() {
                         color="text.secondary"
                         sx={{ textAlign: "center" }}
                     >
-                        Scan and Get 20% OFF Your 4th Visit!
+                        Scan and Win a Boatload of Prizes!
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing className="footer">

@@ -1,0 +1,17 @@
+@import "../variables/variables";
+
+.prize-list-container {
+    a {
+        text-decoration: none;
+        color: #3a3939;
+    }
+
+    .list-icons-wrapper {
+        display: flex;
+        justify-content: flex-end;
+
+        .list-icons {
+            color: #7c7c7c;
+        }
+    }
+}
