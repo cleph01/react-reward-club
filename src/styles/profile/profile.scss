@@ -3,10 +3,20 @@
 .profile-container {
     position: relative;
     top: 100px;
+    display: flex;
+    justify-content: center;
 
-    .profile-body-wrapper {
+    .card-content {
         display: flex;
-        margin-top: 30px;
-        margin: 10px 50px;
+        flex-direction: column;
+        align-items: center;
+
+        .profile-body-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+            width: 100%;
+        }
     }
 }

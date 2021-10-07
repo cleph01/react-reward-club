@@ -11,7 +11,7 @@
     .profile__personal-details {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-around;
 
         .name {
             font-weight: bold;

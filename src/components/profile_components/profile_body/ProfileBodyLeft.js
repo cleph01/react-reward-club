@@ -1,4 +1,5 @@
 import React from "react";
+import Avatar from "@mui/material/Avatar";
 import "../../../styles/profile/profile_body_left.scss";
 
 const imageSrc =
@@ -8,11 +9,16 @@ const imageSrc =
 function ProfileBodyLeft({ user }) {
     return (
         <div className="profile-body__left">
-            <img
-                className="profile-body__avatar"
-                src={user.photoURL}
-                alt="avatar"
+            <Avatar
+                src={user.userInfo.avatarUrl}
+                alt={user.userInfo.displayName}
+                sx={{ width: 56, height: 56 }}
             />
+            <div className="profile__personal-details">
+                <div className="name">{user.userInfo.displayName}</div>
+                <div className="handle">@cleph01</div>
+                <div className="email"> {user.userInfo.email}</div>
+            </div>
         </div>
     );
 }

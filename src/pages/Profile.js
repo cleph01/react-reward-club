@@ -1,12 +1,16 @@
-import React, { useState, useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+import { db } from "../firebase/firebase_config";
 import ProfileTabs from "../components/profile_components/profile_body/ProfileTabs";
-import ProfileHeader from "../components/profile_components/profile_header/ProfileHeader";
+
 import ProfileBodyLeft from "../components/profile_components/profile_body/ProfileBodyLeft";
-import ProfileBodyRight from "../components/profile_components/profile_body/ProfileBodyRight";
+
 import ProfileBio from "../components/profile_components/profile_bio/ProfileBio";
 import ProfileRecentActivity from "../components/profile_components/profile_recent_activity/ProfileRecentActivity.js";
 import Nav from "../components/nav_bar/Nav";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 
 import "../styles/profile/profile.scss";
 
@@ -74,24 +78,49 @@ const itemData = [
 ];
 
 function Profile() {
-    const { user } = useContext(UserContext);
+    const [user, setUser] = useState();
+
+    const { userId } = useParams();
+
+    //every time a new post is added this code fires
+    useEffect(() => {
+        db.collection("user")
+            .doc(userId)
+            .onSnapshot((doc) => {
+                setUser({
+                    userId: doc.id,
+                    userInfo: doc.data(),
+                });
+            });
+    }, []);
+    // const { user } = useContext(UserContext);
 
     console.log("Profile user: ", user);
 
-    if (!user){ return <div>...Loading</div>}
+    if (!user) {
+        return <div>...Loading</div>;
+    }
 
     return (
-        <div className="profile-container">
+        <>
             <Nav />
-            {/* <ProfileHeader /> */}
-            <div className="profile-body-wrapper">
-                <ProfileBodyLeft user={user} />
-                <ProfileBodyRight user={user} />
+            <div className="profile-container">
+                <Card
+                    sx={{
+                        maxWidth: 350,
+                    }}
+                >
+                    <CardContent className="card-content">
+                        <div className="profile-body-wrapper">
+                            <ProfileBodyLeft user={user} />
+                        </div>
+                        <ProfileBio />
+                        <ProfileRecentActivity />
+                        <ProfileTabs user={itemData} posts={itemData} />
+                    </CardContent>
+                </Card>
             </div>
-            <ProfileBio />
-            <ProfileRecentActivity />
-            <ProfileTabs user={itemData} posts={itemData} />
-        </div>
+        </>
     );
 }
 

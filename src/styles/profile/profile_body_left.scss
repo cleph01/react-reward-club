@@ -1,11 +1,29 @@
 @import "../variables/variables.scss";
 
 .profile-body__left {
-    margin: 0px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    .profile-body__avatar {
-        width: 100px;
-        height: auto;
-        border-radius: 25%/50%;
+    .profile__personal-details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        div {
+            margin: 5px 0px;
+        }
+        .name {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .handle {
+            font-style: italic;
+        }
+
+        .emai {
+            color: lightgrey;
+        }
     }
 }

@@ -2,7 +2,7 @@ const HOME = "/";
 const USERS = "/users";
 
 // My User
-const PROFILE = "/profile/:Id";
+const PROFILE = "/profile/:userId";
 const EDIT_PROFILE = "/profile/edit/:userId"; // Private Route
 
 // Market

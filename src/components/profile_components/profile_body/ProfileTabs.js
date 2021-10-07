@@ -23,7 +23,7 @@ function ProfileTabs({ user, posts }) {
     };
 
     return (
-        <div style={{ margin: "20px 50px" }}>
+        <div className="profile-tabs-container">
             <AppBar position="static" color="default">
                 <Tabs
                     value={tab}
@@ -32,9 +32,9 @@ function ProfileTabs({ user, posts }) {
                     textColor="inherit"
                     variant="fullWidth"
                 >
-                    <Tab label="Posts" />
-                    <Tab label="Following" />
-                    <Tab label="Followers" />
+                    <Tab className="tab" label="Posts" />
+                    <Tab className="tab" label="Following" />
+                    <Tab className="tab" label="Followers" />
                 </Tabs>
             </AppBar>
             {tab === 0 && (

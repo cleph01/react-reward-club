@@ -15,7 +15,6 @@ function Nav() {
 
     const { user } = useContext(UserContext);
 
-    
     const handleSignOut = () => {
         auth.signOut();
         localStorage.removeItem("user");
@@ -27,7 +26,6 @@ function Nav() {
         <div className="navbar-container">
             <div className="logo-wrapper">
                 <img className="logo" src={logo} alt="logo" />
-                
             </div>
             <div className="navbar__body">
                 <Link to="/">
@@ -55,11 +53,17 @@ function Nav() {
                 <Link to="/shop/:userId">
                     <div>My Shop</div>
                 </Link> */}
-                <Link to="/profile/:userId">
+                <Link to={`/profile/${user.uid}`}>
                     <div>Profile</div>
                 </Link>
-                {user && <span onClick={handleSignOut}>Sign Out</span>}
-                {!user && <span>User No Esta</span>}
+                <Link to={`/wallet/${user.uid}`}>
+                    <div>Wallet</div>
+                </Link>
+                {user ? (
+                    <span onClick={handleSignOut}>Sign Out</span>
+                ) : (
+                    <span>User No Esta</span>
+                )}
             </div>
         </div>
     );
