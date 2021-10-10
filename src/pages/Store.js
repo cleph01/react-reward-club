@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import QRcodeGen from "../components/QRcodeGen";
 
 import Card from "@mui/material/Card";
@@ -9,19 +9,39 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-
-import ShareIcon from "@mui/icons-material/Share";
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
 import "../styles/store.scss";
 import logo from "../assets/images/logos/chicken_shack_logo.png";
 import socialiite from "../assets/images/logos/logo_white_text.png";
 import productPic from "../assets/images/chickenshack-product.jpg";
 
+import { db } from "../firebase/firebase_config";
+
 function Store() {
-    const todaysDate = Date.now();
+    const { storeId } = useParams();
+
+    const [businessInfo, setBusinessInfo] = useState();
+
+    // const todaysDate = Date.now();
+
+    useEffect(() => {
+        db.collection("shops")
+            .doc(storeId)
+            .get()
+            .then((doc) => {
+                setBusinessInfo(doc.data());
+            })
+            .catch((err) => {
+                console.log("Error getting Business Info: ", err);
+            });
+    }, []);
+
+    console.log("Business Info: ", businessInfo);
+
+    if (!businessInfo) {
+        return <div>...Loading</div>;
+    }
 
     return (
         <div className="container">
@@ -29,7 +49,7 @@ function Store() {
                 <CardHeader
                     avatar={
                         <Avatar
-                            src={logo}
+                            src={businessInfo.logoUrl}
                             sx={{
                                 /* bgcolor: red[500],*/
                                 width: 50,
@@ -40,8 +60,8 @@ function Store() {
                             }}
                         />
                     }
-                    title="Chick Shack"
-                    subheader="36-19 Broadway, Astoria NY"
+                    title={businessInfo.businessName}
+                    subheader={`${businessInfo.address}, ${businessInfo.city} ${businessInfo.state}`}
                 />
                 <div className="body-wrapper">
                     <CardMedia
@@ -52,7 +72,7 @@ function Store() {
                         loading="lazy"
                         sx={{ marginRight: "30px" }}
                     />
-                    <QRcodeGen date={todaysDate} />
+                    <QRcodeGen />
                 </div>
                 <CardContent>
                     <br />

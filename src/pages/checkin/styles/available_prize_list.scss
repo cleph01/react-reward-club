@@ -6,9 +6,16 @@
         color: #3a3939;
     }
 
+    .prize-list-item {
+        .emoji {
+            font-size: 36px;
+        }
+    }
+
     .list-icons-wrapper {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        margin-right: -15px;
 
         .list-icons {
             color: #7c7c7c;

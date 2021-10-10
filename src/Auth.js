@@ -1,24 +1,20 @@
 import React, { useContext } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { UserContext } from "../contexts/UserContext";
-import { firebase, auth, db } from "../firebase/firebase_config";
+import { UserContext } from "./contexts/UserContext";
+import { firebase, auth, db } from "./firebase/firebase_config";
 
 // let uiConfig = ;
 
 function Auth() {
-    const { user, setUser, isSignedIn, setIsSignedIn } =
-        useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
 
     const handleSignOut = (e) => {
         e.preventDefault();
-
-        setIsSignedIn(!isSignedIn);
 
         auth.signOut();
     };
 
     console.log("User from State: ", user);
-    console.log("isSignedIn: ", isSignedIn);
 
     return (
         <>
@@ -39,7 +35,6 @@ function Auth() {
                         callbacks: {
                             signInSuccessWithAuthResult: (authUser) => {
                                 setUser(authUser.user);
-                                setIsSignedIn(!isSignedIn);
 
                                 db.collection("user")
                                     .doc(authUser.user.uid)

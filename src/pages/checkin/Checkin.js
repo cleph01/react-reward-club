@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext, forwardRef } from "react";
 import { useParams } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
-import Auth from "../components/Auth";
+import { UserContext } from "../../contexts/UserContext";
+import Auth from "../../Auth";
 
-import { firebase, db } from "../firebase/firebase_config";
+import { firebase, db } from "../../firebase/firebase_config";
 import productPic from "../assets/images/chickenshack-product.jpg";
-import GetLocation from "../components/checkin/GetLocation";
-import CheckinAuth from "../components/checkin/CheckInAuth";
-import AvailablePrizes from "../components/checkin/AvailablePrizes";
+import GetLocation from "../../components/checkin/GetLocation";
+import CheckinAuth from "../../components/checkin/CheckInAuth";
+import AvailablePrizes from "./components/AvailablePrizes";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -23,6 +23,10 @@ import Typography from "@mui/material/Typography";
 import ShareIcon from "@mui/icons-material/Share";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -30,10 +34,18 @@ import MuiAlert from "@mui/material/Alert";
 import { getDistanceBetween } from "geolocation-distance-between";
 
 import "../styles/checkin/checkin.scss";
-// Date sample in milliseconds
-// 1632343915372
 
-// Need to check if user-business relationship exists
+const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+};
 
 function Checkin() {
     const { user } = useContext(UserContext);
@@ -43,8 +55,41 @@ function Checkin() {
 
     const [prizes, setPrizes] = useState();
 
-    // State to control GetLocation Modal
-    const [openModal, setOpenModal] = useState();
+    const [userBizRelationship, setUserBizRelationship] = useState();
+
+    const [walletPrize, setwalletPrize] = useState();
+
+    // State to control Add Prize to Wallet Modal
+    const [openClaimModal, setOpenClaimModal] = useState(false);
+
+    const handleOpenClaimModal = (itemObj) => {
+        if (goStatus.gotDistance && user) {
+            setOpenClaimModal(true);
+            setwalletPrize(itemObj);
+
+            console.log("itemId: ", walletPrize);
+        } else {
+            setAlertMsg({
+                message: "Please Provide Your Location and Be logged in",
+                severity: "error",
+            });
+
+            setOpenSnackBar(true);
+        }
+    };
+    const handleCloseClaimModal = () => setOpenClaimModal(false);
+
+    const handleAddToWallet = () => {
+        console.log("Add to wallet invoked: ", walletPrize);
+
+        setAlertMsg({
+            message: "Item Added to Your Wallet!",
+            severity: "success",
+        });
+
+        setOpenClaimModal(false);
+        setOpenSnackBar(true);
+    };
 
     const [geoDistance, setGeoDistance] = useState();
 
@@ -53,7 +98,10 @@ function Checkin() {
         gotDistance: false,
     });
 
-    const [alertMsg, setAlertMsg] = useState();
+    const [alertMsg, setAlertMsg] = useState({
+        message: "",
+        severity: "success",
+    });
 
     const [openSnackBar, setOpenSnackBar] = useState(false);
 
@@ -67,6 +115,37 @@ function Checkin() {
         if ("geolocation" in navigator) {
             console.log("Available");
 
+            // Get RealTIme Connection to that BizRelationship
+            // to listen and update if/when customer decides to claim
+            // a prize
+            db.collection("user")
+                .doc(user.uid)
+                .collection("bizRelationship")
+                .doc(storeId)
+                .onSnapshot(
+                    (doc) => {
+                        console.log(
+                            "Realtime Listerner to Updated Biz Relationship: ",
+                            doc.data()
+                        );
+
+                        setUserBizRelationship({
+                            realtionshipId: doc.id,
+                            relationshipInfo: doc.data(),
+                        });
+                    },
+                    (error) => {
+                        console.log(
+                            "Error getting User Biz Relationship: ",
+                            error
+                        );
+                    }
+                );
+            /**
+             *
+             * After RealTime Relationship Data is retrieved
+             * Do distance calcs
+             */
             navigator.geolocation.getCurrentPosition(function (position) {
                 console.log("Latitude is :", position.coords.latitude);
                 console.log("Longitude is :", position.coords.longitude);
@@ -95,7 +174,7 @@ function Checkin() {
                 });
             });
         } else {
-            console.log("Not Available");
+            console.log("Geolocation Not Available in Your Browser");
         }
     };
 
@@ -135,6 +214,23 @@ function Checkin() {
 
     //every time a new post is added this code fires
     const handleCheckin = () => {
+        const currTime = new Date(Date.now());
+
+        const len = userBizRelationship.relationshipInfo.visitLog.length;
+
+        let lastCheckin =
+            userBizRelationship.relationshipInfo.visitLog[len - 1];
+
+        const lastCheckinObj = lastCheckin.toDate();
+
+        console.log("Last Checkin To String: ", lastCheckinObj);
+
+        const timeDiff = Math.abs(currTime - lastCheckinObj);
+
+        const diffInMinutes = Math.ceil(timeDiff / (1000 * 60));
+
+        console.log("Difference in Minutes: ", diffInMinutes);
+
         // First Check if Proximity is confirmed and user is logged in
         const goodToGo = goStatus.gotDistance && user ? true : false;
 
@@ -151,17 +247,17 @@ function Checkin() {
         // console.log("Check In Button Working - goodToGo: ", goodToGo);
 
         // Check if Relationship with business exists
-        const relationshipRef = db
-            .collection("user")
+        db.collection("user")
             .doc(user.uid)
             .collection("bizRelationship")
-            .doc(storeId);
-
-        relationshipRef
+            .doc(storeId)
             .get()
             .then((doc) => {
                 if (doc.exists) {
-                    console.log("Document data:", doc.data());
+                    console.log("Relationship Exists:", doc.data());
+
+                    // Update the data
+                    //**//
 
                     const timeStamp = new Date(Date.now());
                     // Update Counts and Log
@@ -180,11 +276,16 @@ function Checkin() {
                                 ),
                         })
                         .then(() => {
-                            console.log("Document successfully updated!");
+                            console.log(
+                                "BizRelationship Points Successfully Updated!"
+                            );
                         })
                         .catch((error) => {
                             // The document probably doesn't exist.
-                            console.error("Error updating document: ", error);
+                            console.error(
+                                "Error updating BizRelationship Points: ",
+                                error
+                            );
                         });
                 } else {
                     // doc.data() will be undefined in this case
@@ -260,15 +361,12 @@ function Checkin() {
                     subheader="36-19 Broadway, Astoria NY"
                 />
                 <Divider />
-                {/* <CardMedia
-                    component="img"
-                    height="194"
-                    image={productPic}
-                    alt="Paella dish"
-                    loading="lazy"
-                /> */}
+
                 <CardContent>
-                    <AvailablePrizes prizes={prizes} />
+                    <AvailablePrizes
+                        prizes={prizes}
+                        handleOpenClaimModal={handleOpenClaimModal}
+                    />
                     <Typography variant="body1" color="text.secondary">
                         Login Each Time You Visit and Get a Chance to Win a
                         Prize!
@@ -284,7 +382,22 @@ function Checkin() {
                 // Created this component to render a different view
                 // based on whether user is logged in already & thus
                 // update useEffect dependancy variable to trigger db update
-                <CheckinAuth user={user} handleCheckin={handleCheckin} />
+                <div>
+                    {userBizRelationship ? (
+                        <h3 style={{ color: "#f1f1f1" }}>
+                            {" "}
+                            Your Current {business.businessName} Points:{" "}
+                            {userBizRelationship.relationshipInfo.pointSum}
+                        </h3>
+                    ) : (
+                        <h3 style={{ color: "#f1f1f1" }}>
+                            {" "}
+                            Your Current {business.businessName} Points: 0
+                        </h3>
+                    )}
+
+                    <CheckinAuth user={user} handleCheckin={handleCheckin} />
+                </div>
             ) : (
                 <GetLocation
                     handleGeoLocation={handleGeoLocation}
@@ -292,7 +405,44 @@ function Checkin() {
                 />
             )}
 
-            {/* 
+            <Modal
+                open={openClaimModal}
+                onClose={handleCloseClaimModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                        sx={{ textAlign: "center", borderColor: "#f0f0f0" }}
+                    >
+                        Sure About Adding To Your Wallet?
+                    </Typography>
+                    <Typography
+                        id="modal-modal-description"
+                        sx={{ mt: 2, textAlign: "center" }}
+                    >
+                        Your Points Will Be Adjusted and Can't be Reversed.
+                    </Typography>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                            marginTop: "15px",
+                        }}
+                    >
+                        <Button color="primary" onClick={handleAddToWallet}>
+                            Add to Wallet
+                        </Button>
+                        <Button color="error" onClick={handleCloseClaimModal}>
+                            Cancel
+                        </Button>
+                    </div>
+                </Box>
+            </Modal>
 
             <Stack spacing={2} sx={{ width: "100%" }}>
                 <Snackbar
@@ -302,13 +452,13 @@ function Checkin() {
                 >
                     <Alert
                         onClose={handleCloseSnackBar}
-                        severity="success"
+                        severity={alertMsg.severity}
                         sx={{ width: "100%" }}
                     >
-                        Congratulations! Enjoy Your Prize.
+                        {alertMsg.message}
                     </Alert>
                 </Snackbar>
-            </Stack> */}
+            </Stack>
         </div>
     );
 }

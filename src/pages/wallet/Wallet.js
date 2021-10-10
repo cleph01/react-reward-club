@@ -2,11 +2,11 @@ import React, { forwardRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link, useHistory } from "react-router-dom";
 import "../styles/wallet.scss";
-import { firebase, db } from "../firebase/firebase_config";
+import { firebase, db } from "../../firebase/firebase_config";
 
-import WalletItem from "../components/wallet/WalletItem";
+import WalletItem from "../../components/wallet/WalletItem";
 
-import Nav from "../components/nav_bar/Nav";
+import Nav from "../../components/nav_bar/Nav";
 
 import Box from "@mui/material/Box";
 

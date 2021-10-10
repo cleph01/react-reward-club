@@ -8,8 +8,8 @@ import * as ROUTES from "./constants/routes";
 const Home = lazy(() => import("./pages/Home.js"));
 
 const Profile = lazy(() => import("./pages/Profile.js"));
-const Checkin = lazy(() => import("./pages/Checkin.js"));
-const Wallet = lazy(() => import("./pages/Wallet.js"));
+const Checkin = lazy(() => import("./pages/checkin/Checkin.js"));
+const Wallet = lazy(() => import("./pages/wallet/Wallet.js"));
 const MyShop = lazy(() => import("./pages/MyShop.js"));
 const EditProfile = lazy(() => import("./pages/EditProfile.js"));
 const AllShops = lazy(() => import("./pages/AllShops.js"));
@@ -29,8 +29,7 @@ const EditPrize = lazy(() => import("./pages/EditLoyaltyPrize.js"));
 function App() {
     const [user, setUser] = useState(null);
     const [username, setUsername] = useState("");
-    const [isSignedIn, setIsSignedIn] = useState(false);
-
+    
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((authUser) => {
             if (authUser) {
@@ -66,7 +65,7 @@ function App() {
     return (
         <div className="App">
             <UserContext.Provider
-                value={{ user, setUser, isSignedIn, setIsSignedIn }}
+                value={{ user, setUser}}
             >
                 <Router>
                     <Suspense fallback={<p>Loading...</p>}>
