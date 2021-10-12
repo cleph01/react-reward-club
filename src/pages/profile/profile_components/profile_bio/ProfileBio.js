@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../styles/profile/profile_bio.scss";
+import "../../styles/profile_bio.scss";
 
 function ProfileBio() {
     return (

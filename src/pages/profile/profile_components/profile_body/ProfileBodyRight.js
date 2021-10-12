@@ -1,6 +1,6 @@
 import React from "react";
 import ProfileIsSeller from "./ProfileIsSeller";
-import "../../../styles/profile/profile_body_right.scss";
+import "../../styles/profile_body_right.scss";
 
 function ProfileBodyRight({ user }) {
     console.log("Body Right: ", user.displayName);

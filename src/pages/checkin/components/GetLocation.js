@@ -1,7 +1,7 @@
 import React from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
-import "../../styles/checkin/get_location.scss";
+import "../styles/get_location.scss";
 
 function GetLocation({ handleGeoLocation, goStatus }) {
     return (

@@ -1,10 +1,10 @@
 import React, { forwardRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link, useHistory } from "react-router-dom";
-import "../styles/wallet.scss";
+import "./styles/wallet.scss";
 import { firebase, db } from "../../firebase/firebase_config";
 
-import WalletItem from "../../components/wallet/WalletItem";
+import WalletItem from "./components/WalletItem";
 
 import Nav from "../../components/nav_bar/Nav";
 

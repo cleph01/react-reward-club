@@ -1,15 +1,15 @@
 import React, { useContext, useEffect } from "react";
-import Auth from "../components/Auth";
+import Auth from "../../Auth";
 import { Redirect } from "react-router";
 import { useHistory } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
-import { auth } from "../firebase/firebase_config";
+import { auth } from "../../firebase/firebase_config";
 
-import "../styles/home.scss";
+import "./styles/home.scss";
 
-import logo from "../assets/images/logos/logo.png";
-import logo_text from "../assets/images/logos/logo_white_text.png";
+import logo from "../../assets/images/logos/logo.png";
+import logo_text from "../../assets/images/logos/logo_white_text.png";
 
 function Home() {
     const history = useHistory();

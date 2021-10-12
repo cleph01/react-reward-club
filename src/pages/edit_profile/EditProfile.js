@@ -5,10 +5,10 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { makeStyles } from "@mui/styles";
-import ProfileImageUpload from "../components/image_upload/ProfileImageUpload";
-import Nav from "../components/nav_bar/Nav";
+import ProfileImageUpload from "../../components/image_upload/ProfileImageUpload";
+import Nav from "../../components/nav_bar/Nav";
 
-import "../styles/profile/profile_edit.scss";
+import "./styles/profile_edit.scss";
 
 const useStyles = makeStyles((theme) => ({
     card: {

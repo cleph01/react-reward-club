@@ -1,6 +1,6 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
-import "../../../styles/profile/profile_body_left.scss";
+import "../../styles/profile_body_left.scss";
 
 const imageSrc =
     "https://firebasestorage.googleapis.com/v0/b/socialiite-instagram-clone.appspot.com/o/images%2FIMG_82B4B1E571E6-1.jpeg?alt=media&token=4db7c353-d0a5-47c9-bc8a-31cdbbdad1e9";

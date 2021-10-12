@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
-import "../../styles/wallet-item.scss";
+import "../styles/wallet-item.scss";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -19,7 +19,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import CheckIcon from "@mui/icons-material/Check";
 
-import logo from "../../assets/images/logos/chicken_shack_logo.png";
+import logo from "../../../assets/images/logos/chicken_shack_logo.png";
 
 const Wallet_Item = (props) => {
     const history = useHistory();

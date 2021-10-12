@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../styles/profile/profile_header.scss";
+import "../../styles/profile_header.scss";
 
 function ProfileHeader() {
     return (

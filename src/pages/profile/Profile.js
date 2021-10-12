@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import { db } from "../firebase/firebase_config";
-import ProfileTabs from "../components/profile_components/profile_body/ProfileTabs";
+import { db } from "../../firebase/firebase_config";
+import ProfileTabs from "./profile_components/profile_body/ProfileTabs";
 
-import ProfileBodyLeft from "../components/profile_components/profile_body/ProfileBodyLeft";
+import ProfileBodyLeft from "./profile_components/profile_body/ProfileBodyLeft";
 
-import ProfileBio from "../components/profile_components/profile_bio/ProfileBio";
-import ProfileRecentActivity from "../components/profile_components/profile_recent_activity/ProfileRecentActivity.js";
-import Nav from "../components/nav_bar/Nav";
+import ProfileBio from "./profile_components/profile_bio/ProfileBio";
+import ProfileRecentActivity from "./profile_components/profile_recent_activity/ProfileRecentActivity.js";
+import Nav from "../../components/nav_bar/Nav";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 
-import "../styles/profile/profile.scss";
+import "./styles/profile.scss";
 
 const itemData = [
     {

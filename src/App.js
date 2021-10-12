@@ -5,13 +5,13 @@ import { auth } from "./firebase/firebase_config";
 import * as ROUTES from "./constants/routes";
 
 // START Lazy Rendering functions
-const Home = lazy(() => import("./pages/Home.js"));
+const Home = lazy(() => import("./pages/home/Home.js"));
 
-const Profile = lazy(() => import("./pages/Profile.js"));
+const Profile = lazy(() => import("./pages/profile/Profile.js"));
 const Checkin = lazy(() => import("./pages/checkin/Checkin.js"));
 const Wallet = lazy(() => import("./pages/wallet/Wallet.js"));
 const MyShop = lazy(() => import("./pages/MyShop.js"));
-const EditProfile = lazy(() => import("./pages/EditProfile.js"));
+const EditProfile = lazy(() => import("./pages/edit_profile/EditProfile.js"));
 const AllShops = lazy(() => import("./pages/AllShops.js"));
 const Shop = lazy(() => import("./pages/Shop.js"));
 const NewShop = lazy(() => import("./pages/NewShop.js"));
@@ -29,7 +29,7 @@ const EditPrize = lazy(() => import("./pages/EditLoyaltyPrize.js"));
 function App() {
     const [user, setUser] = useState(null);
     const [username, setUsername] = useState("");
-    
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((authUser) => {
             if (authUser) {
@@ -64,9 +64,7 @@ function App() {
 
     return (
         <div className="App">
-            <UserContext.Provider
-                value={{ user, setUser}}
-            >
+            <UserContext.Provider value={{ user, setUser }}>
                 <Router>
                     <Suspense fallback={<p>Loading...</p>}>
                         <Switch>

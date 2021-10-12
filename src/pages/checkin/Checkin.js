@@ -3,10 +3,11 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import Auth from "../../Auth";
 
+import { getBizRelationship } from "./helper_functions/helper_functions";
 import { firebase, db } from "../../firebase/firebase_config";
-import productPic from "../assets/images/chickenshack-product.jpg";
-import GetLocation from "../../components/checkin/GetLocation";
-import CheckinAuth from "../../components/checkin/CheckInAuth";
+import productPic from "../../assets/images/chickenshack-product.jpg";
+import GetLocation from "./components/GetLocation";
+import CheckinAuth from "./components/CheckInAuth";
 import AvailablePrizes from "./components/AvailablePrizes";
 
 import Card from "@mui/material/Card";
@@ -33,7 +34,7 @@ import MuiAlert from "@mui/material/Alert";
 
 import { getDistanceBetween } from "geolocation-distance-between";
 
-import "../styles/checkin/checkin.scss";
+import "./styles/checkin.scss";
 
 const style = {
     position: "absolute",
@@ -67,7 +68,7 @@ function Checkin() {
             setOpenClaimModal(true);
             setwalletPrize(itemObj);
 
-            console.log("itemId: ", walletPrize);
+            console.log("Wallet Prize: ", walletPrize);
         } else {
             setAlertMsg({
                 message: "Please Provide Your Location and Be logged in",
@@ -82,10 +83,39 @@ function Checkin() {
     const handleAddToWallet = () => {
         console.log("Add to wallet invoked: ", walletPrize);
 
-        setAlertMsg({
-            message: "Item Added to Your Wallet!",
-            severity: "success",
-        });
+        if (
+            walletPrize.prizeDetails.pointThreshold <=
+            userBizRelationship.relationshipInfo.pointSum
+        ) {
+            db.collection("user")
+                .doc(user.uid)
+                .collection("wallet")
+                .add({
+                    businessId: storeId,
+                    businessName: business.businessName,
+                    emojiHexCode: walletPrize.prizeDetails.emojiHexCode,
+                    itemDescription: walletPrize.prizeDetails.itemDescription,
+                    itemId: walletPrize.prizeId,
+                    redeemed: false,
+                    created: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+                .then((docRef) => {
+                    console.log("Item Added to Wallet with ID: ", docRef.id);
+                })
+                .catch((error) => {
+                    console.error("Error adding prize to Wallet: ", error);
+                });
+
+            setAlertMsg({
+                message: "Item Added to Your Wallet!",
+                severity: "success",
+            });
+        } else {
+            setAlertMsg({
+                message: "Not Enouguh Points.",
+                severity: "error",
+            });
+        }
 
         setOpenClaimModal(false);
         setOpenSnackBar(true);
@@ -118,6 +148,7 @@ function Checkin() {
             // Get RealTIme Connection to that BizRelationship
             // to listen and update if/when customer decides to claim
             // a prize
+
             db.collection("user")
                 .doc(user.uid)
                 .collection("bizRelationship")
@@ -211,6 +242,7 @@ function Checkin() {
     console.log("Business info: ", business);
     console.log("Prizes: ", prizes);
     console.log("User: ", user);
+    console.log("Wallet Prize: ", walletPrize);
 
     //every time a new post is added this code fires
     const handleCheckin = () => {

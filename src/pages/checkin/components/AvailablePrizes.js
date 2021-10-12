@@ -1,18 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
+
+import AvailablePrizeItem from "../components/AvailablePrizeItem";
+
 import Divider from "@mui/material/Divider";
-import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
-import AddIcon from "@mui/icons-material/Add";
 
-import ShareIcon from "@mui/icons-material/Share";
-
-import "../../styles/checkin/available_prize_list.scss";
+import "../styles/available_prize_list.scss";
 
 function AvailablePrizes({ prizes, handleOpenClaimModal }) {
     console.log("Available Prizes: ", prizes);
@@ -25,36 +19,10 @@ function AvailablePrizes({ prizes, handleOpenClaimModal }) {
         <List className="prize-list-container">
             {prizes.map((prize, i) => (
                 <div key={i}>
-                    <ListItem className="prize-list-item">
-                        <ListItemAvatar>
-                            <span className="emoji">
-                                {String.fromCodePoint(prize.prize.emojiHexCode)}
-                            </span>
-                        </ListItemAvatar>
-                        <div>
-                            <ListItemText
-                                primary={prize.prize.itemDescription}
-                                secondary={`Points Needed: ${prize.prize.pointThreshold}`}
-                            />
-                        </div>
-                        <ListItemSecondaryAction className="list-icons-wrapper">
-                            <AddIcon
-                                className="list-icons"
-                                id={prize.prizeId}
-                                onClick={() =>
-                                    handleOpenClaimModal({
-                                        prizeId: prize.prizeId,
-                                        pointsCost: prize.prize.pointThreshold,
-                                    })
-                                }
-                            />
-                            &nbsp;&nbsp;&nbsp;
-                            <ShareIcon
-                                className="list-icons"
-                                id={prize.prizeId}
-                            />
-                        </ListItemSecondaryAction>
-                    </ListItem>
+                    <AvailablePrizeItem
+                        prize={prize}
+                        handleOpenClaimModal={handleOpenClaimModal}
+                    />
                     <Divider />
                 </div>
             ))}

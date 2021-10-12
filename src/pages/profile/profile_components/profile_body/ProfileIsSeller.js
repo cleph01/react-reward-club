@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Switch from "react-switch";
 import Button from "@mui/material/Button";
 
-import "../../../styles/profile/profile_is_seller.scss";
+import "../../styles/profile_is_seller.scss";
 
 function ProfileIsSeller() {
     const [isChecked, setIsChecked] = useState(false);
