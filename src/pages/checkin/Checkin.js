@@ -2,6 +2,11 @@ import React, { useState, useEffect, useContext, forwardRef } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import Auth from "../../Auth";
+import { InlineShareButtons } from "sharethis-reactjs";
+
+import platform from "platform-detect/os.mjs";
+
+import encodeurl from "encodeurl";
 
 import { getBizRelationship } from "./helper_functions/helper_functions";
 import { firebase, db } from "../../firebase/firebase_config";
@@ -31,6 +36,8 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+
+import ForumIcon from "@mui/icons-material/Forum";
 
 import { getDistanceBetween } from "geolocation-distance-between";
 
@@ -63,6 +70,9 @@ function Checkin() {
     // State to control Add Prize to Wallet Modal
     const [openClaimModal, setOpenClaimModal] = useState(false);
 
+    // State to control Share Modal
+    const [openShareModal, setOpenShareModal] = useState(false);
+
     const handleOpenClaimModal = (itemObj) => {
         if (goStatus.gotDistance && user) {
             setOpenClaimModal(true);
@@ -80,6 +90,12 @@ function Checkin() {
     };
     const handleCloseClaimModal = () => setOpenClaimModal(false);
 
+    const handleOpenShareModal = () => {
+        setOpenShareModal(true);
+    };
+
+    const handleCloseShareModal = () => setOpenShareModal(false);
+
     const handleAddToWallet = () => {
         console.log("Add to wallet invoked: ", walletPrize);
 
@@ -87,9 +103,13 @@ function Checkin() {
             walletPrize.prizeDetails.pointThreshold <=
             userBizRelationship.relationshipInfo.pointSum
         ) {
-            db.collection("user")
+            //Add Prize to Wallet and Update pointsSum in Biz Relationship
+            let walletRef = db
+                .collection("user")
                 .doc(user.uid)
-                .collection("wallet")
+                .collection("wallet");
+
+            walletRef
                 .add({
                     businessId: storeId,
                     businessName: business.businessName,
@@ -100,16 +120,37 @@ function Checkin() {
                     created: firebase.firestore.FieldValue.serverTimestamp(),
                 })
                 .then((docRef) => {
-                    console.log("Item Added to Wallet with ID: ", docRef.id);
+                    console.log("Prize Added to Wallet with ID: ", docRef.id);
+
+                    // Decrement Points Sum from BizRelationship
+                    let userRef = db
+                        .collection("user")
+                        .doc(user.uid)
+                        .collection("bizRelationship")
+                        .doc(userBizRelationship.realtionshipId);
+
+                    userRef
+                        .update({
+                            pointSum: firebase.firestore.FieldValue.increment(
+                                -walletPrize.prizeDetails.pointThreshold
+                            ),
+                        })
+                        .then(() => {
+                            console.log("PointSum successfully updated!");
+                        })
+                        .catch((error) => {
+                            // The document probably doesn't exist.
+                            console.error("Error updating PointSume: ", error);
+                        });
+
+                    setAlertMsg({
+                        message: "Item Added to Wallet.",
+                        severity: "success",
+                    });
                 })
                 .catch((error) => {
-                    console.error("Error adding prize to Wallet: ", error);
+                    console.error("Error adding document: ", error);
                 });
-
-            setAlertMsg({
-                message: "Item Added to Your Wallet!",
-                severity: "success",
-            });
         } else {
             setAlertMsg({
                 message: "Not Enouguh Points.",
@@ -361,10 +402,23 @@ function Checkin() {
         setOpenSnackBar(false);
     };
 
+    const encodeMsg = encodeurl(
+        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${storeId}/`
+    );
+    
+      
+    const smsMessage =
+        platform.macos || platform.ios
+            ? `sms:&body=${encodeMsg}`
+            : `sms:?body=${encodeMsg}`;
+
     if (!business) {
         return <div>...Loading</div>;
     }
 
+  if (!user) {
+        return <div>...Loading</div>;
+    }
     return (
         <div className="container">
             <Card sx={{ maxWidth: 345 }}>
@@ -398,6 +452,8 @@ function Checkin() {
                     <AvailablePrizes
                         prizes={prizes}
                         handleOpenClaimModal={handleOpenClaimModal}
+                        storeId={storeId}
+                        handleOpenShareModal={handleOpenShareModal}
                     />
                     <Typography variant="body1" color="text.secondary">
                         Login Each Time You Visit and Get a Chance to Win a
@@ -472,6 +528,99 @@ function Checkin() {
                         <Button color="error" onClick={handleCloseClaimModal}>
                             Cancel
                         </Button>
+                    </div>
+                </Box>
+            </Modal>
+
+            <Modal
+                open={openShareModal}
+                onClose={handleCloseShareModal}
+                aria-labelledby="modal2-modal-title"
+                aria-describedby="modal2-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography
+                        id="modal2-modal-title"
+                        variant="h6"
+                        component="h2"
+                        sx={{ textAlign: "center", borderColor: "#f0f0f0" }}
+                    >
+                        Shout Out Your Favorite Shops and Get Paid!
+                    </Typography>
+                    <Typography
+                        id="modal2-modal-description"
+                        sx={{ mt: 2, textAlign: "center" }}
+                    >
+                        Click Below and Go Social !!
+                    </Typography>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginTop: "15px",
+                        }}
+                    >
+                        <InlineShareButtons
+                            config={{
+                                alignment: "center", // alignment of buttons (left, center, right)
+                                color: "social", // set the color of buttons (social, white)
+                                enabled: true, // show/hide buttons (true, false)
+                                font_size: 16, // font size for the buttons
+                                labels: "cta", // button labels (cta, counts, null)
+                                language: "en", // which language to use (see LANGUAGES)
+                                networks: [
+                                    // which networks to include (see SHARING NETWORKS)
+                                    "whatsapp",
+                                    "linkedin",
+                                    "messenger",
+                                    "facebook",
+                                    "twitter",
+                                ],
+                                padding: 12, // padding within buttons (INTEGER)
+                                radius: 4, // the corner radius on each button (INTEGER)
+                                show_total: true,
+                                size: 40, // the size of each button (INTEGER)
+
+                                // OPTIONAL PARAMETERS
+                                url: `https://smartseedtech.com/${storeId}`, // (defaults to current url)
+
+                                description: `Business Name: ${business.businessName}`, // (defaults to og:description or twitter:description)
+                                title: `Business Name: ${business.businessName}`, // (defaults to og:title or twitter:title)
+                                message: `Business Name: ${business.businessName}`, // (only for email sharing)
+                                subject: `Business Name: ${business.businessName}`, // (only for email sharing)
+                            }}
+                        />
+                        <div>
+                            <center>
+                                <h3>or Send a Text! </h3>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <span
+                                        style={{
+                                            fontSize: "36px",
+                                            marginRight: "20px",
+                                        }}
+                                    >
+                                        {String.fromCodePoint(0x1f449)}
+                                    </span>
+                                    <a href={smsMessage+user.uid}>
+                                        <ForumIcon
+                                            sx={{
+                                                color: "#1c76d2",
+                                                fontSize: "52px",
+                                            }}
+                                        />
+                                    </a>
+                                </div>
+                            </center>
+                        </div>
                     </div>
                 </Box>
             </Modal>

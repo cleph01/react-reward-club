@@ -8,7 +8,7 @@ const EDIT_PROFILE = "/profile/edit/:userId"; // Private Route
 // Market
 const MARKET = "/market";
 const SHOPS = "/shops/all";
-const SHOP = "/shops/:shopId";
+const SHOP = "/shops/:shopId/:userId?";
 const CART = "/cart";
 const PRODUCT = "/product/:productId";
 

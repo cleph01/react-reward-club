@@ -17,10 +17,13 @@ function Nav() {
 
     const handleSignOut = () => {
         auth.signOut();
-        localStorage.removeItem("user");
+        
     };
 
     console.log("Nav User", user);
+
+
+    if(!user){ return <div>...Loading</div>}
 
     return (
         <div className="navbar-container">

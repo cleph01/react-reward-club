@@ -1,0 +1,17 @@
+@import "../../../styles/variables/variables";
+
+body {
+    background-image: $background-gradient;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 100px;
+
+        .MuiCardMedia-img {
+            max-width: 100%;
+            height: auto;
+        }
+    }
+}

@@ -13,7 +13,7 @@ const Wallet = lazy(() => import("./pages/wallet/Wallet.js"));
 const MyShop = lazy(() => import("./pages/MyShop.js"));
 const EditProfile = lazy(() => import("./pages/edit_profile/EditProfile.js"));
 const AllShops = lazy(() => import("./pages/AllShops.js"));
-const Shop = lazy(() => import("./pages/Shop.js"));
+const Shop = lazy(() => import("./pages/shops/Shop.js"));
 const NewShop = lazy(() => import("./pages/NewShop.js"));
 const EditShop = lazy(() => import("./pages/EditShop.js"));
 const NewProduct = lazy(() => import("./pages/NewProduct.js"));
@@ -79,7 +79,7 @@ function App() {
                             <Route path={ROUTES.WALLET} component={Wallet} />
                             <Route path={ROUTES.MY_SHOPS} component={MyShop} />
                             <Route path={ROUTES.SHOPS} component={AllShops} />
-                            <Route path={ROUTES.SHOP} component={Shop} />
+                            <Route exact path={ROUTES.SHOP} component={Shop} />
                             <Route path={ROUTES.NEW_SHOP} component={NewShop} />
                             <Route
                                 path={ROUTES.EDIT_SHOP}

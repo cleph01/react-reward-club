@@ -6,9 +6,9 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { makeStyles } from "@mui/styles";
-import Products from "../components/products/ProductsGrid";
+import Products from "../../components/products/ProductsGrid";
 
-import Nav from "../components/nav_bar/Nav";
+import Nav from "../../components/nav_bar/Nav.js";
 
 const useStyles = makeStyles((theme) => ({
     root: {
