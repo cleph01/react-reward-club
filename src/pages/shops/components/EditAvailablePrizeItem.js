@@ -1,18 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
-import AddIcon from "@mui/icons-material/Add";
-import ShareIcon from "@mui/icons-material/Share";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-function AvailablePrizeItem({
-    prize,
-    handleOpenClaimModal,
-    storeId,
-    handleOpenShareModal,
-}) {
+function EditAvailablePrizeItem({ prize, shopId, handleOpenDeleteModal }) {
     return (
         <ListItem className="prize-list-item">
             <ListItemAvatar>
@@ -25,25 +21,23 @@ function AvailablePrizeItem({
                 />
             </div>
             <ListItemSecondaryAction className="list-icons-wrapper">
-                <AddIcon
+                <Link to={`/seller/${shopId}/${prize.prizeId}/edit-prize`}>
+                    <EditIcon className="list-icons" />
+                </Link>
+                &nbsp;&nbsp;&nbsp;
+                <DeleteForeverIcon
                     className="list-icons"
                     id={prize.prizeId}
                     onClick={() =>
-                        handleOpenClaimModal({
+                        handleOpenDeleteModal({
                             prizeId: prize.prizeId,
                             prizeDetails: prize.prize,
                         })
                     }
-                />
-                &nbsp;&nbsp;&nbsp;
-                <ShareIcon
-                    className="list-icons"
-                    id={prize.prizeId}
-                    onClick={handleOpenShareModal}
                 />
             </ListItemSecondaryAction>
         </ListItem>
     );
 }
 
-export default AvailablePrizeItem;
+export default EditAvailablePrizeItem;

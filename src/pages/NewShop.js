@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 
-import NewShopLogoUpload from "../components/image_upload/NewShopLogoUpload";
+import NewShopLogoUpload from "./shops/components/NewShopLogoUpload";
 import Nav from "../components/nav_bar/Nav";
 
 import "../styles/shop/new_shop.scss";

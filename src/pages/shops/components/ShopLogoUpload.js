@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import { storage, db } from "../../firebase/firebase_config";
-import firebase from "firebase";
-import "../../styles/image_upload/profile_image_upload.scss";
+import { storage, db } from "../../../firebase/firebase_config";
 
-function ProfileImageUpload({ imgUrl, userId, username, setOpenUpload }) {
+import "../styles/shop_logo_upload.scss";
+
+import UploadIcon from "@mui/icons-material/Upload";
+
+function ShopLogoUpload({ imgUrl, businessId }) {
     const [image, setImage] = useState(null);
     const [url, setUrl] = useState(imgUrl);
     const [progress, setProgress] = useState(0);
@@ -17,7 +19,13 @@ function ProfileImageUpload({ imgUrl, userId, username, setOpenUpload }) {
 
     const handleUpload = () => {
         if (image) {
-            const uploadTask = storage.ref(`images/${image.name}`).put(image);
+            // get file extension
+            const lastDot = image.name.lastIndexOf(".");
+            const ext = image.name.substring(lastDot);
+
+            const uploadTask = storage
+                .ref(`shop/${businessId}/logo/logo${ext}`)
+                .put(image);
 
             uploadTask.on(
                 "state-changed",
@@ -37,24 +45,23 @@ function ProfileImageUpload({ imgUrl, userId, username, setOpenUpload }) {
                 () => {
                     // complete function...
                     storage
-                        .ref("images")
-                        .child(image.name)
+                        .ref(`shop/${businessId}/logo`)
+                        .child(`logo${ext}`)
                         .getDownloadURL()
                         .then((url) => {
                             // post image inside db
-                            db.collection("posts").add({
-                                timestamp:
-                                    firebase.firestore.FieldValue.serverTimestamp(),
-
-                                imageUrl: url,
-                                username: username,
-                                userId: userId,
+                            db.collection("shops").doc(businessId).update({
+                                logoUrl: url,
                             });
 
                             setProgress(0);
 
                             setImage(null);
-                            setOpenUpload(false);
+                            // setOpenUpload(false);
+                        })
+                        .catch((error) => {
+                            // The document probably doesn't exist.
+                            console.error("Error updating LogoUrl: ", error);
                         });
                 }
             );
@@ -62,10 +69,12 @@ function ProfileImageUpload({ imgUrl, userId, username, setOpenUpload }) {
             alert("Image Upload Failed");
         }
     };
+
+    console.log("Logo Upload: ", businessId);
     return (
         <div className="profile-imageupload">
             <center>
-                <img className="avatar" src={url} alt="avatar" />
+                <img className="avatar" src={imgUrl} alt="avatar" />
             </center>
 
             <progress
@@ -81,13 +90,13 @@ function ProfileImageUpload({ imgUrl, userId, username, setOpenUpload }) {
                     onChange={handleChange}
                 />
                 <label htmlFor="file">
-                    Change Image
+                    Change Logo <UploadIcon />
                     <p className="file-name"></p>
                 </label>
             </div>
 
             <Button
-                style={!image && { display: "none" }}
+                // style={!image && { display: "none" }}
                 onClick={handleUpload}
             >
                 Upload
@@ -96,4 +105,4 @@ function ProfileImageUpload({ imgUrl, userId, username, setOpenUpload }) {
     );
 }
 
-export default ProfileImageUpload;
+export default ShopLogoUpload;

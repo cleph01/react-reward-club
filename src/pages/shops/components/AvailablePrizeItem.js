@@ -7,22 +7,16 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import AddIcon from "@mui/icons-material/Add";
 import ShareIcon from "@mui/icons-material/Share";
 
-
-
 function AvailablePrizeItem({
     prize,
     handleOpenClaimModal,
     storeId,
     handleOpenShareModal,
 }) {
-   
-
     return (
         <ListItem className="prize-list-item">
             <ListItemAvatar>
-                <span className="emoji">
-                    {String.fromCodePoint(prize.prize.emojiHexCode)}
-                </span>
+                <span className="emoji">{prize.prize.emoji}</span>
             </ListItemAvatar>
             <div>
                 <ListItemText

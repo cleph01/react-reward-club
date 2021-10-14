@@ -19,7 +19,7 @@ import productPic from "../assets/images/chickenshack-product.jpg";
 import { db } from "../firebase/firebase_config";
 
 function Store() {
-    const { storeId } = useParams();
+    const { shopId } = useParams();
 
     const [businessInfo, setBusinessInfo] = useState();
 
@@ -27,7 +27,7 @@ function Store() {
 
     useEffect(() => {
         db.collection("shops")
-            .doc(storeId)
+            .doc(shopId)
             .get()
             .then((doc) => {
                 setBusinessInfo(doc.data());

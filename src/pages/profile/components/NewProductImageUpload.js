@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import { storage, db } from "../../firebase/firebase_config";
+import { storage, db } from "../../../firebase/firebase_config";
 import firebase from "firebase";
-import "../../styles/image_upload/shop_logo_upload.scss";
+import "../styles/profile_image_upload.scss";
 
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import UploadIcon from "@mui/icons-material/Upload";
 
-import logo from "../../assets/images/logos/logo.png";
-
-function ShopLogoUpload({ imgUrl, businessId }) {
+function NewProductImageUpload({ imgUrl, userId, username, setOpenUpload }) {
     const [image, setImage] = useState(null);
     const [url, setUrl] = useState(imgUrl);
     const [progress, setProgress] = useState(0);
@@ -21,13 +20,7 @@ function ShopLogoUpload({ imgUrl, businessId }) {
 
     const handleUpload = () => {
         if (image) {
-            // get file extension
-            const lastDot = image.name.lastIndexOf(".");
-            const ext = image.name.substring(lastDot);
-
-            const uploadTask = storage
-                .ref(`shop/${businessId}/logo/logo${ext}`)
-                .put(image);
+            const uploadTask = storage.ref(`images/${image.name}`).put(image);
 
             uploadTask.on(
                 "state-changed",
@@ -47,23 +40,24 @@ function ShopLogoUpload({ imgUrl, businessId }) {
                 () => {
                     // complete function...
                     storage
-                        .ref(`shop/${businessId}/logo`)
-                        .child(`logo${ext}`)
+                        .ref("images")
+                        .child(image.name)
                         .getDownloadURL()
                         .then((url) => {
                             // post image inside db
-                            db.collection("shops").doc(businessId).update({
-                                logoUrl: url,
+                            db.collection("posts").add({
+                                timestamp:
+                                    firebase.firestore.FieldValue.serverTimestamp(),
+
+                                imageUrl: url,
+                                username: username,
+                                userId: userId,
                             });
 
                             setProgress(0);
 
                             setImage(null);
-                            // setOpenUpload(false);
-                        })
-                        .catch((error) => {
-                            // The document probably doesn't exist.
-                            console.error("Error updating LogoUrl: ", error);
+                            setOpenUpload(false);
                         });
                 }
             );
@@ -71,12 +65,13 @@ function ShopLogoUpload({ imgUrl, businessId }) {
             alert("Image Upload Failed");
         }
     };
-
-    console.log("Logo Upload: ", businessId);
     return (
         <div className="profile-imageupload">
             <center>
-                <img className="avatar" src={imgUrl} alt="avatar" />
+                {/* <img className="avatar" src={logo} alt="avatar" /> */}
+                <InsertPhotoIcon
+                    style={{ fontSize: "69px", color: "#516186" }}
+                />
             </center>
 
             <progress
@@ -92,13 +87,13 @@ function ShopLogoUpload({ imgUrl, businessId }) {
                     onChange={handleChange}
                 />
                 <label htmlFor="file">
-                    Change Logo <UploadIcon />
+                    Upload Photo <UploadIcon />
                     <p className="file-name"></p>
                 </label>
             </div>
 
             <Button
-                // style={!image && { display: "none" }}
+                style={!image && { display: "none" }}
                 onClick={handleUpload}
             >
                 Upload
@@ -107,4 +102,4 @@ function ShopLogoUpload({ imgUrl, businessId }) {
     );
 }
 
-export default ShopLogoUpload;
+export default NewProductImageUpload;

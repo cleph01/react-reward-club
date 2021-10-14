@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { makeStyles } from "@mui/styles";
-import ProfileImageUpload from "../../components/image_upload/ProfileImageUpload";
+import ProfileImageUpload from "./components/ProfileImageUpload";
 import Nav from "../../components/nav_bar/Nav";
 
 import "./styles/profile_edit.scss";

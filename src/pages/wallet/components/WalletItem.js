@@ -83,7 +83,7 @@ const Wallet_Item = (props) => {
                     loading="lazy"
                 /> */}
                 <div className="wallet-item-emoji">
-                    {String.fromCodePoint(props.item_details.emojiHexCode)}
+                    {props.item_details.emoji}
                 </div>
                 <CardContent>
                     <Typography

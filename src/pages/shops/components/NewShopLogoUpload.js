@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import { storage, db } from "../../firebase/firebase_config";
+import { storage, db } from "../../../firebase/firebase_config";
 import firebase from "firebase";
-import "../../styles/image_upload/shop_logo_upload.scss";
+import "../styles/shop_logo_upload.scss";
 
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import UploadIcon from "@mui/icons-material/Upload";
 
-function NewProductImageUpload({ imgUrl, userId, username, setOpenUpload }) {
+function NewShopLogoUpload({ imgUrl, userId, username, setOpenUpload }) {
     const [image, setImage] = useState(null);
     const [url, setUrl] = useState(imgUrl);
     const [progress, setProgress] = useState(0);
@@ -87,7 +87,7 @@ function NewProductImageUpload({ imgUrl, userId, username, setOpenUpload }) {
                     onChange={handleChange}
                 />
                 <label htmlFor="file">
-                    Upload Photo <UploadIcon />
+                    Upload Logo <UploadIcon />
                     <p className="file-name"></p>
                 </label>
             </div>
@@ -102,4 +102,4 @@ function NewProductImageUpload({ imgUrl, userId, username, setOpenUpload }) {
     );
 }
 
-export default NewProductImageUpload;
+export default NewShopLogoUpload;

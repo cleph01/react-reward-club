@@ -58,7 +58,7 @@ const style = {
 function Checkin() {
     const { user } = useContext(UserContext);
 
-    const { storeId } = useParams();
+    const { shopId } = useParams();
     const [business, setBusiness] = useState();
 
     const [prizes, setPrizes] = useState();
@@ -111,9 +111,9 @@ function Checkin() {
 
             walletRef
                 .add({
-                    businessId: storeId,
+                    businessId: shopId,
                     businessName: business.businessName,
-                    emojiHexCode: walletPrize.prizeDetails.emojiHexCode,
+                    emoji: walletPrize.prizeDetails.emoji,
                     itemDescription: walletPrize.prizeDetails.itemDescription,
                     itemId: walletPrize.prizeId,
                     redeemed: false,
@@ -193,7 +193,7 @@ function Checkin() {
             db.collection("user")
                 .doc(user.uid)
                 .collection("bizRelationship")
-                .doc(storeId)
+                .doc(shopId)
                 .onSnapshot(
                     (doc) => {
                         console.log(
@@ -253,7 +253,7 @@ function Checkin() {
     useEffect(() => {
         // Get Business Info
         db.collection("shops")
-            .doc(storeId)
+            .doc(shopId)
             .get()
             .then((doc) => {
                 setBusiness(doc.data());
@@ -263,7 +263,7 @@ function Checkin() {
             });
 
         db.collection("shops")
-            .doc(storeId)
+            .doc(shopId)
             .collection("loyaltyPrizes")
             .get()
             .then((doc) => {
@@ -323,7 +323,7 @@ function Checkin() {
         db.collection("user")
             .doc(user.uid)
             .collection("bizRelationship")
-            .doc(storeId)
+            .doc(shopId)
             .get()
             .then((doc) => {
                 if (doc.exists) {
@@ -337,7 +337,7 @@ function Checkin() {
                     db.collection("user")
                         .doc(user.uid)
                         .collection("bizRelationship")
-                        .doc(storeId)
+                        .doc(shopId)
                         .update({
                             visitCount:
                                 firebase.firestore.FieldValue.increment(1),
@@ -369,7 +369,7 @@ function Checkin() {
                     db.collection("user")
                         .doc(user.uid)
                         .collection("bizRelationship")
-                        .doc(storeId)
+                        .doc(shopId)
                         .set({
                             visitCount: 1,
                             pointSum: 1,
@@ -403,10 +403,9 @@ function Checkin() {
     };
 
     const encodeMsg = encodeurl(
-        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${storeId}/`
+        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${shopId}/`
     );
-    
-      
+
     const smsMessage =
         platform.macos || platform.ios
             ? `sms:&body=${encodeMsg}`
@@ -416,7 +415,7 @@ function Checkin() {
         return <div>...Loading</div>;
     }
 
-  if (!user) {
+    if (!user) {
         return <div>...Loading</div>;
     }
     return (
@@ -452,7 +451,7 @@ function Checkin() {
                     <AvailablePrizes
                         prizes={prizes}
                         handleOpenClaimModal={handleOpenClaimModal}
-                        storeId={storeId}
+                        shopId={shopId}
                         handleOpenShareModal={handleOpenShareModal}
                     />
                     <Typography variant="body1" color="text.secondary">
@@ -584,7 +583,7 @@ function Checkin() {
                                 size: 40, // the size of each button (INTEGER)
 
                                 // OPTIONAL PARAMETERS
-                                url: `https://smartseedtech.com/${storeId}`, // (defaults to current url)
+                                url: `https://smartseedtech.com/${shopId}`, // (defaults to current url)
 
                                 description: `Business Name: ${business.businessName}`, // (defaults to og:description or twitter:description)
                                 title: `Business Name: ${business.businessName}`, // (defaults to og:title or twitter:title)
@@ -610,7 +609,7 @@ function Checkin() {
                                     >
                                         {String.fromCodePoint(0x1f449)}
                                     </span>
-                                    <a href={smsMessage+user.uid}>
+                                    <a href={smsMessage + user.uid}>
                                         <ForumIcon
                                             sx={{
                                                 color: "#1c76d2",

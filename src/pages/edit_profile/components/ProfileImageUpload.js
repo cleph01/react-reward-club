@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import { storage, db } from "../../firebase/firebase_config";
+import { storage, db } from "../../../firebase/firebase_config";
 import firebase from "firebase";
-import "../../styles/image_upload/shop_logo_upload.scss";
+import "../styles/profile_image_upload.scss";
 
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import UploadIcon from "@mui/icons-material/Upload";
-
-import logo from "../../assets/images/logos/logo.png";
-
-function NewShopLogoUpload({ imgUrl, userId, username, setOpenUpload }) {
+function ProfileImageUpload({ imgUrl, userId, username, setOpenUpload }) {
     const [image, setImage] = useState(null);
     const [url, setUrl] = useState(imgUrl);
     const [progress, setProgress] = useState(0);
@@ -70,10 +65,7 @@ function NewShopLogoUpload({ imgUrl, userId, username, setOpenUpload }) {
     return (
         <div className="profile-imageupload">
             <center>
-                {/* <img className="avatar" src={logo} alt="avatar" /> */}
-                <InsertPhotoIcon
-                    style={{ fontSize: "69px", color: "#516186" }}
-                />
+                <img className="avatar" src={url} alt="avatar" />
             </center>
 
             <progress
@@ -89,7 +81,7 @@ function NewShopLogoUpload({ imgUrl, userId, username, setOpenUpload }) {
                     onChange={handleChange}
                 />
                 <label htmlFor="file">
-                    Upload Logo <UploadIcon />
+                    Change Image
                     <p className="file-name"></p>
                 </label>
             </div>
@@ -104,4 +96,4 @@ function NewShopLogoUpload({ imgUrl, userId, username, setOpenUpload }) {
     );
 }
 
-export default NewShopLogoUpload;
+export default ProfileImageUpload;

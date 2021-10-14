@@ -1,32 +1,40 @@
-import React, { useState } from "react";
-
-import { firebase, db } from "../firebase/firebase_config";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { firebase, db } from "../../firebase/firebase_config";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 
-import Nav from "../components/nav_bar/Nav";
+import Nav from "../../components/nav_bar/Nav";
 import Picker from "emoji-picker-react";
 
-import "../styles/product/edit_loyalty_prize.scss";
+import "./styles/new_loyalty_prize.scss";
 
-function EditLoyaltyPrize() {
-    const [values, setValues] = useState({
-        emojiHexCode: "",
-        description: "",
-        open: false,
-        error: "",
-        redirectToProfile: false,
-    });
+function NewLoyaltyPrize() {
+    const { shopId, prizeId } = useParams();
+
+    const [prize, setPrize] = useState();
 
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-    const [emoji, setEmoji] = useState("0x1f35f");
+    const [chosenEmoji, setChosenEmoji] = useState("0x1f35f");
+
+    const [values, setValues] = useState({
+        emoji: "",
+        description: "",
+    });
 
     const handleChange = (name) => (event) => {
         setValues({ ...values, [name]: event.target.value });
+    };
+
+    const handleReset = () => {
+        setValues({
+            emoji: prize.emoji,
+            description: prize.itemDescription,
+        });
     };
 
     const handleSubmit = () => {
@@ -34,7 +42,7 @@ function EditLoyaltyPrize() {
             .add({
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 description: values.description,
-                emojiHexCode: emoji,
+                emoji: chosenEmoji.emoji,
             })
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
@@ -45,15 +53,40 @@ function EditLoyaltyPrize() {
     };
 
     const onEmojiClick = (event, emojiObject) => {
-        const emojiHex = "0x" + emojiObject.unified;
+        setChosenEmoji(emojiObject);
 
-        setEmoji(emojiHex);
-        console.log("Emoji: ", emoji);
+        setValues({ ...values, emoji: emojiObject.emoji });
     };
 
     const inputProps = {
         maxLength: 17,
     };
+
+    useEffect(() => {
+        const unsubscribe = db
+            .collection("shops")
+            .doc(shopId)
+            .collection("loyaltyPrizes")
+            .doc(prizeId)
+            .onSnapshot(
+                (doc) => {
+                    setPrize(doc.data());
+                },
+                (error) => {
+                    console.log("Error Getting Prize: ", error);
+                }
+            );
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
+    console.log(shopId, prizeId);
+    console.log("Prize: ", prize);
+
+    if (!prize) {
+        return <div>...Loading</div>;
+    }
 
     return (
         <div style={{ margin: "100px 0px" }}>
@@ -65,7 +98,7 @@ function EditLoyaltyPrize() {
                     </Typography>
                     <div className="emoji-wrapper">
                         <div className="emoji-preview">
-                            {String.fromCodePoint(emoji)}
+                            {values.emoji || prize.emoji}
                         </div>
                         <div
                             className="btn-wrapper"
@@ -110,9 +143,9 @@ function EditLoyaltyPrize() {
                     </div>
                     <TextField
                         label="Prize (i.e. FREE Fries) 17 Chars max"
-                        className={"textField"}
-                        value={values.description}
-                        onChange={handleChange("handle")}
+                        className="textField"
+                        value={values.description || prize.itemDescription}
+                        onChange={handleChange("description")}
                         margin="normal"
                         multiline
                         inputProps={inputProps}
@@ -128,10 +161,13 @@ function EditLoyaltyPrize() {
                 </CardContent>
                 <div className="btn-wrapper">
                     <div className="submit-btn">Submit</div>
+                    <div className="reset-btn" onClick={handleReset}>
+                        Cancel
+                    </div>
                 </div>
             </Card>
         </div>
     );
 }
 
-export default EditLoyaltyPrize;
+export default NewLoyaltyPrize;

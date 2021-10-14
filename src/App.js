@@ -15,7 +15,7 @@ const EditProfile = lazy(() => import("./pages/edit_profile/EditProfile.js"));
 const AllShops = lazy(() => import("./pages/AllShops.js"));
 const Shop = lazy(() => import("./pages/shops/Shop.js"));
 const NewShop = lazy(() => import("./pages/NewShop.js"));
-const EditShop = lazy(() => import("./pages/EditShop.js"));
+const EditShop = lazy(() => import("./pages/shops/EditShop.js"));
 const NewProduct = lazy(() => import("./pages/NewProduct.js"));
 const Market = lazy(() => import("./pages/Market.js"));
 const Product = lazy(() => import("./pages/Product.js"));
@@ -23,7 +23,7 @@ const Auction = lazy(() => import("./components/auction/FeaturedAuction.js"));
 const Auctions = lazy(() => import("./pages/Auctions.js"));
 const Store = lazy(() => import("./pages/Store.js"));
 const EditProduct = lazy(() => import("./pages/EditProduct.js"));
-const EditPrize = lazy(() => import("./pages/EditLoyaltyPrize.js"));
+const EditPrize = lazy(() => import("./pages/loyalty_prize/EditLoyaltyPrize.js"));
 // END Lazy Rendering functions
 
 function App() {

@@ -3,17 +3,17 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
+import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
-import { makeStyles } from "@mui/styles";
-import Products from "../../components/products/ProductsGrid";
+
 import YouTubeEmbed from "./components/YouTubeEmbed.js";
 import AvailablePrizes from "./components/AvailablePrizes";
 
 import { firebase, db } from "../../firebase/firebase_config";
 
-import ShareIcon from "@mui/icons-material/Share";
+import IconButton from "@mui/material/IconButton";
+
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
 import Box from "@mui/material/Box";
@@ -36,14 +36,11 @@ import "./styles/shop.scss";
 
 import Nav from "../../components/nav_bar/Nav.js";
 
-
-
 // const logoUrl = shop._id
 //           ? `/api/shops/logo/${shop._id}?${new Date().getTime()}`
 //           : '/api/shops/defaultphoto'
 
 function Shop() {
-    
     const { user } = useContext(UserContext);
 
     const { shopId } = useParams();
@@ -54,12 +51,11 @@ function Shop() {
 
     const [prizes, setPrizes] = useState();
 
-const [walletPrize, setwalletPrize] = useState();
+    const [walletPrize, setwalletPrize] = useState();
     const [shop, setShop] = useState("");
     const [products, setProducts] = useState([]);
     const [error, setError] = useState("");
 
-    
     useEffect(() => {
         // Get Business Info
         db.collection("shops")
@@ -108,7 +104,6 @@ const [walletPrize, setwalletPrize] = useState();
 
     const [openSnackBar, setOpenSnackBar] = useState(false);
 
-
     const handleOpenClaimModal = (itemObj) => {
         if (goStatus.gotDistance && user) {
             setOpenClaimModal(true);
@@ -149,7 +144,7 @@ const [walletPrize, setwalletPrize] = useState();
                 .add({
                     businessId: shopId,
                     businessName: business.businessName,
-                    emojiHexCode: walletPrize.prizeDetails.emojiHexCode,
+                    emoji: walletPrize.prizeDetails.emoji,
                     itemDescription: walletPrize.prizeDetails.itemDescription,
                     itemId: walletPrize.prizeId,
                     redeemed: false,
@@ -198,7 +193,7 @@ const [walletPrize, setwalletPrize] = useState();
         setOpenSnackBar(true);
     };
 
-const Alert = forwardRef(function Alert(props, ref) {
+    const Alert = forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
 
@@ -210,14 +205,15 @@ const Alert = forwardRef(function Alert(props, ref) {
         setOpenSnackBar(false);
     };
 
-     const encodeMsg = encodeurl(
-        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${shopId}/${(user)?user.uid : 'undefined'}`
+    const encodeMsg = encodeurl(
+        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${shopId}/${
+            user ? user.uid : "undefined"
+        }`
     );
     const smsMessage =
         platform.macos || platform.ios
             ? `sms:&body=${encodeMsg}`
             : `sms:?body=${encodeMsg}`;
-
 
     const style = {
         position: "absolute",
@@ -231,46 +227,65 @@ const Alert = forwardRef(function Alert(props, ref) {
         p: 4,
     };
 
-    console.log("Shop Id: ", shopId)
+    console.log("Shop Id: ", shopId);
 
     console.log("Business info: ", business);
     console.log("Prizes: ", prizes);
     console.log("User: ", user || "undefined");
     console.log("Wallet Prize: ", walletPrize);
 
-    if(!business){ return <div>...Loading</div>}
+    if (!business) {
+        return <div>...Loading</div>;
+    }
 
     return (
         <div className="container">
-            
             <Nav />
-            
-                    <Card sx={{ maxWidth: 345 }}>
-                        <CardContent>
-                        <h2>{business.businessName}</h2>
-                        <YouTubeEmbed youtubeId={business.youtubeId} />
-                        <h3>About Us </h3>
-                                
-                            <div>{business.description}</div>
-                            
-                            
-                            
-                            <h3>Available Prizes </h3>
-                            <AvailablePrizes
+
+            <Card sx={{ maxWidth: 345 }}>
+                <CardHeader
+                    avatar={
+                        <Avatar
+                            loading="lazy"
+                            alt={business.businessName}
+                            src={business.logoUrl}
+                            sx={{
+                                /* bgcolor: red[500],*/
+                                width: 50,
+                                height: 50,
+                                margin: "auto",
+                                padding: "10px",
+                                border: "1px solid #f0f0f0",
+                            }}
+                        />
+                    }
+                    action={
+                        <IconButton aria-label="add to favorites">
+                            <LocalFireDepartmentIcon />
+                        </IconButton>
+                    }
+                    title="Chick Shack"
+                    subheader="36-19 Broadway, Astoria NY"
+                />
+                <CardContent>
+                    <YouTubeEmbed youtubeId={business.youtubeId} />
+                    <h3>About Us </h3>
+
+                    <div>{business.description}</div>
+
+                    <h3>Free Prizes </h3>
+                    <AvailablePrizes
                         prizes={prizes}
                         handleOpenClaimModal={handleOpenClaimModal}
                         storeId={shopId}
                         handleOpenShareModal={handleOpenShareModal}
                     />
 
-                            <br />
+                    <br />
+                </CardContent>
+            </Card>
 
-                        </CardContent>
-
-                        <div>El Pipo</div>
-                    </Card>
-
-                    <Modal
+            <Modal
                 open={openClaimModal}
                 onClose={handleCloseClaimModal}
                 aria-labelledby="modal-modal-title"
@@ -417,7 +432,6 @@ const Alert = forwardRef(function Alert(props, ref) {
                     </Alert>
                 </Snackbar>
             </Stack>
-               
         </div>
     );
 }

@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
-import NewProductImageUpload from "../components/image_upload/NewProductImageUpload";
+import NewProductImageUpload from "./profile/components/NewProductImageUpload";
 import Nav from "../components/nav_bar/Nav";
 
 import "../styles/product/new_product.scss";

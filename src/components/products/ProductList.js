@@ -15,7 +15,7 @@ import "../../styles/product/product_list.scss";
 
 const itemData = [
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -24,7 +24,7 @@ const itemData = [
         shopName: "@bkristastucchio",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -33,7 +33,7 @@ const itemData = [
         shopName: "@rollelflex_graphy726",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -42,7 +42,7 @@ const itemData = [
         shopName: "@helloimnik",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -51,7 +51,7 @@ const itemData = [
         shopName: "@nolanissac",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -60,7 +60,7 @@ const itemData = [
         shopName: "@hjrc33",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -69,7 +69,7 @@ const itemData = [
         shopName: "@arwinneil",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -78,7 +78,7 @@ const itemData = [
         shopName: "@tjdragotta",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -87,7 +87,7 @@ const itemData = [
         shopName: "@katie_wasserman",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -96,7 +96,7 @@ const itemData = [
         shopName: "@silverdalex",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -106,7 +106,7 @@ const itemData = [
         shopName: "@shelleypauls",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -115,7 +115,7 @@ const itemData = [
         shopName: "@peterlaster",
     },
     {
-        emojiHexCode: "0x1F32E",
+        emoji: "🍟",
         quantity: 20,
         price: 1.0,
         _id: "p001",
@@ -133,9 +133,7 @@ function ProductList() {
                     <Divider />
                     <ListItem className="product-list-item">
                         <ListItemAvatar>
-                            <span>
-                                {String.fromCodePoint(shop.emojiHexCode)}
-                            </span>
+                            <span>{shop.emoji}</span>
                         </ListItemAvatar>
                         <div className="bla">
                             <ListItemText

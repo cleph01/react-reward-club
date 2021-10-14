@@ -4,9 +4,9 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 
-import ShopLogoUpload from "../../components/image_upload/ShopLogoUpload";
+import ShopLogoUpload from "./ShopLogoUpload";
 
-import "../../styles/shop/edit_shop_mod.scss";
+import "../styles/edit_shop_mod.scss";
 
 const imgUrl =
     "https://firebasestorage.googleapis.com/v0/b/socialiite-instagram-clone.appspot.com/o/images%2FIMG_82B4B1E571E6-1.jpeg?alt=media&token=4db7c353-d0a5-47c9-bc8a-31cdbbdad1e9";
@@ -14,17 +14,22 @@ const imgUrl =
 function EditShopMod(props) {
     const [values, setValues] = useState({
         businessName: props.businessData.info.businessName,
-        handle: "",
-        email: "",
-        bio: "",
-        open: false,
-        error: "",
-        redirectToProfile: false,
+
+        aboutUs: props.businessData.info.description,
     });
 
     const handleChange = (name) => (event) => {
         setValues({ ...values, [name]: event.target.value });
     };
+
+    const handleReset = () => {
+        setValues({
+            businessName: props.businessData.info.businessName,
+            aboutUs: props.businessData.info.description,
+        });
+    };
+
+    console.log("Values: ", values);
 
     return (
         <div className="edit-shop-mod-container">
@@ -40,18 +45,21 @@ function EditShopMod(props) {
                 <center>
                     <TextField
                         id="shopname"
+                        name="businessName"
                         label="Shop Name"
                         value={values.businessName}
-                        onChange={handleChange("handle")}
+                        onChange={handleChange("businessName")}
                         margin="normal"
                     />
                     <br />
                     <TextField
-                        id="description"
-                        label="Description"
-                        value={values.businessName}
-                        onChange={handleChange("bio")}
+                        id="about-us"
+                        name="aboutUs"
+                        label="About Us"
+                        value={values.aboutUs}
+                        onChange={handleChange("aboutUs")}
                         margin="normal"
+                        multiline
                     />
                     <br />{" "}
                     {values.error && (
@@ -62,11 +70,12 @@ function EditShopMod(props) {
                     )}
                 </center>
             </CardContent>
-            <center>
-                <h3>Owner: Super Mahn</h3>
-            </center>
+
             <div className="btn-wrapper">
                 <div className="submit-btn">Update</div>
+                <div className="cancel-btn" onClick={handleReset}>
+                    Cancel
+                </div>
             </div>
         </div>
     );
