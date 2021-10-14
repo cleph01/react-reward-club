@@ -23,7 +23,10 @@ const Auction = lazy(() => import("./components/auction/FeaturedAuction.js"));
 const Auctions = lazy(() => import("./pages/Auctions.js"));
 const Store = lazy(() => import("./pages/Store.js"));
 const EditProduct = lazy(() => import("./pages/EditProduct.js"));
-const EditPrize = lazy(() => import("./pages/loyalty_prize/EditLoyaltyPrize.js"));
+const EditPrize = lazy(() =>
+    import("./pages/loyalty_prize/EditLoyaltyPrize.js")
+);
+const NewPrize = lazy(() => import("./pages/loyalty_prize/NewLoyaltyPrize.js"));
 // END Lazy Rendering functions
 
 function App() {
@@ -108,6 +111,11 @@ function App() {
                             <Route
                                 path={ROUTES.EDIT_PRIZE}
                                 component={EditPrize}
+                            />
+
+                            <Route
+                                path={ROUTES.NEW_PRIZE}
+                                component={NewPrize}
                             />
                         </Switch>
                     </Suspense>

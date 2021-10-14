@@ -32,8 +32,9 @@ function NewLoyaltyPrize() {
 
     const handleReset = () => {
         setValues({
-            emoji: prize.emoji,
-            description: prize.itemDescription,
+            emoji: "",
+            description: "",
+            pointThreshold: "",
         });
     };
 
@@ -62,31 +63,7 @@ function NewLoyaltyPrize() {
         maxLength: 17,
     };
 
-    useEffect(() => {
-        const unsubscribe = db
-            .collection("shops")
-            .doc(shopId)
-            .collection("loyaltyPrizes")
-            .doc(prizeId)
-            .onSnapshot(
-                (doc) => {
-                    setPrize(doc.data());
-                },
-                (error) => {
-                    console.log("Error Getting Prize: ", error);
-                }
-            );
-        return () => {
-            unsubscribe();
-        };
-    }, []);
-
-    console.log(shopId, prizeId);
-    console.log("Prize: ", prize);
-
-    if (!prize) {
-        return <div>...Loading</div>;
-    }
+    console.log("Shop Id: ", shopId);
 
     return (
         <div style={{ margin: "100px 0px" }}>
@@ -94,11 +71,11 @@ function NewLoyaltyPrize() {
             <Card className={"card"}>
                 <CardContent>
                     <Typography variant="h5" className="title">
-                        Edit Prize
+                        Create New Prize
                     </Typography>
                     <div className="emoji-wrapper">
                         <div className="emoji-preview">
-                            {values.emoji || prize.emoji}
+                            {values.emoji || ""}
                         </div>
                         <div
                             className="btn-wrapper"
@@ -112,7 +89,7 @@ function NewLoyaltyPrize() {
                                     setShowEmojiPicker(!showEmojiPicker);
                                 }}
                             >
-                                Change Emoji
+                                Choose Emoji
                             </div>
                         </div>
                         <div
@@ -142,22 +119,27 @@ function NewLoyaltyPrize() {
                         </div>
                     </div>
                     <TextField
-                        label="Prize (i.e. FREE Fries) 17 Chars max"
+                        label="Prize Description (17 Chars max)"
                         className="textField"
-                        value={values.description || prize.itemDescription}
+                        value={values.description}
                         onChange={handleChange("description")}
                         margin="normal"
                         multiline
                         inputProps={inputProps}
                         style={{ width: "100%" }}
                     />
+                    <TextField
+                        label="Point Threshold"
+                        className="textField"
+                        type="number"
+                        value={values.pointThreshold}
+                        onChange={handleChange("pointThreshold")}
+                        margin="normal"
+                        multiline
+                        inputProps={inputProps}
+                        style={{ width: "100%" }}
+                    />
                     <br />{" "}
-                    {values.error && (
-                        <Typography component="p" color="error">
-                            <div className="error">error</div>
-                            {values.error}
-                        </Typography>
-                    )}
                 </CardContent>
                 <div className="btn-wrapper">
                     <div className="submit-btn">Submit</div>

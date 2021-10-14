@@ -151,7 +151,7 @@ function EditShop() {
                     <CardContent>
                         <div className="edit-product-wrapper">
                             <h3>Promotions</h3>
-                            <Link to="/google">
+                            <Link to={`/seller/${shopId}/prizes/new`}>
                                 <NewPromoButton />
                             </Link>
                         </div>

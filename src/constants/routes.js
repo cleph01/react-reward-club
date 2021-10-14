@@ -32,6 +32,7 @@ const NEW_SHOP = "/seller/shop/new"; // private route"
 const EDIT_SHOP = "/seller/shop/edit/:shopId"; // private route
 const NEW_PRODUCT = "/seller/:shopId/products/new"; // private route
 const EDIT_PRODUCT = "/seller/:shopId/:productId/edit"; // private route
+const NEW_PRIZE = "/seller/:shopId/prizes/new"; // private route
 const EDIT_PRIZE = "/seller/:shopId/:prizeId/edit-prize"; // private route
 
 // Socialiite
@@ -60,6 +61,7 @@ export {
     EDIT_SHOP,
     NEW_PRODUCT,
     EDIT_PRODUCT,
+    NEW_PRIZE,
     EDIT_PRIZE,
     MY_SHOPS,
     CHECKIN,
