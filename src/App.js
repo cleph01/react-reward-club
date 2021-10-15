@@ -1,37 +1,16 @@
-import { lazy, Suspense, useReducer, useState, useEffect } from "react";
+import React, { lazy, Suspense, useState, useEffect } from "react";
+
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserContext } from "./contexts/UserContext";
 import { auth } from "./firebase/firebase_config";
-import * as ROUTES from "./constants/routes";
+import * as ROUTES from "./routing/routes";
+import * as COMPONENTS from "./routing/routeComponents";
 
-// START Lazy Rendering functions
-const Home = lazy(() => import("./pages/home/Home.js"));
-
-const Profile = lazy(() => import("./pages/profile/Profile.js"));
-const Checkin = lazy(() => import("./pages/checkin/Checkin.js"));
-const Wallet = lazy(() => import("./pages/wallet/Wallet.js"));
-const MyShop = lazy(() => import("./pages/MyShop.js"));
-const EditProfile = lazy(() => import("./pages/edit_profile/EditProfile.js"));
-const AllShops = lazy(() => import("./pages/AllShops.js"));
-const Shop = lazy(() => import("./pages/shops/Shop.js"));
-const NewShop = lazy(() => import("./pages/NewShop.js"));
-const EditShop = lazy(() => import("./pages/shops/EditShop.js"));
-const NewProduct = lazy(() => import("./pages/NewProduct.js"));
-const Market = lazy(() => import("./pages/Market.js"));
-const Product = lazy(() => import("./pages/Product.js"));
-const Auction = lazy(() => import("./components/auction/FeaturedAuction.js"));
-const Auctions = lazy(() => import("./pages/Auctions.js"));
-const Store = lazy(() => import("./pages/Store.js"));
-const EditProduct = lazy(() => import("./pages/EditProduct.js"));
-const EditPrize = lazy(() =>
-    import("./pages/loyalty_prize/EditLoyaltyPrize.js")
-);
-const NewPrize = lazy(() => import("./pages/loyalty_prize/NewLoyaltyPrize.js"));
-// END Lazy Rendering functions
+const Nav = lazy(() => import("./components/nav_bar/Nav"));
 
 function App() {
     const [user, setUser] = useState(null);
-    const [username, setUsername] = useState("");
+    // const [username, setUsername] = useState("");
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -70,52 +49,100 @@ function App() {
             <UserContext.Provider value={{ user, setUser }}>
                 <Router>
                     <Suspense fallback={<p>Loading...</p>}>
+                        {user && <Nav />}
                         <Switch>
-                            <Route exact path={ROUTES.HOME} component={Home} />
+                            {/**
+                             *  Auth Routes
+                             *  Public
+                             */}
+                            <Route
+                                exact
+                                path={ROUTES.HOME}
+                                component={COMPONENTS.Home}
+                            />
+                            <Route
+                                exact
+                                path={ROUTES.LOGIN}
+                                component={COMPONENTS.Login}
+                            />
+                            {/**
+                             * Dashboard Routes
+                             * Private
+                             */}
+                            <Route
+                                exact
+                                path={ROUTES.DASHBOARD}
+                                component={COMPONENTS.Dashboard}
+                            />
+                            {/**
+                             *  User Profile
+                             *  Private
+                             */}
                             <Route
                                 exact
                                 path={ROUTES.PROFILE}
-                                component={Profile}
-                            />
-
-                            <Route path={ROUTES.CHECKIN} component={Checkin} />
-                            <Route path={ROUTES.WALLET} component={Wallet} />
-                            <Route path={ROUTES.MY_SHOPS} component={MyShop} />
-                            <Route path={ROUTES.SHOPS} component={AllShops} />
-                            <Route exact path={ROUTES.SHOP} component={Shop} />
-                            <Route path={ROUTES.NEW_SHOP} component={NewShop} />
-                            <Route
-                                path={ROUTES.EDIT_SHOP}
-                                component={EditShop}
-                            />
-                            <Route
-                                path={ROUTES.NEW_PRODUCT}
-                                component={NewProduct}
+                                component={COMPONENTS.Profile}
                             />
                             <Route
                                 path={ROUTES.EDIT_PROFILE}
-                                component={EditProfile}
+                                component={COMPONENTS.EditProfile}
                             />
-                            <Route path={ROUTES.MARKET} component={Market} />
-                            <Route path={ROUTES.PRODUCT} component={Product} />
-                            <Route path={ROUTES.AUCTION} component={Auction} />
+                            {/**
+                             *  Digital Wallet Routes
+                             *  Private
+                             */}
                             <Route
-                                path={ROUTES.AUCTIONS}
-                                component={Auctions}
+                                path={ROUTES.WALLET}
+                                component={COMPONENTS.Wallet}
                             />
-                            <Route path={ROUTES.STORE} component={Store} />
+                            {/**
+                             *  Shops Community
+                             *  Public Routes
+                             */}
                             <Route
-                                path={ROUTES.EDIT_PRODUCT}
-                                component={EditProduct}
+                                path={ROUTES.SHOPS}
+                                component={COMPONENTS.AllShops}
+                            />
+                            <Route
+                                exact
+                                path={ROUTES.SHOP}
+                                component={COMPONENTS.Shop}
+                            />
+                            {/**
+                             *  Store QR Code Routes
+                             *  Public Routes
+                             */}
+                            <Route
+                                path={ROUTES.STORE}
+                                component={COMPONENTS.Store}
+                            />
+                            <Route
+                                path={ROUTES.CHECKIN}
+                                component={COMPONENTS.Checkin}
+                            />
+                            {/**
+                             *  User Ownerd Shop Routes
+                             *  Private Routes
+                             */}
+                            <Route
+                                path={ROUTES.MY_SHOPS}
+                                component={COMPONENTS.MyShop}
+                            />
+                            <Route
+                                path={ROUTES.NEW_SHOP}
+                                component={COMPONENTS.NewShop}
+                            />
+                            <Route
+                                path={ROUTES.EDIT_SHOP}
+                                component={COMPONENTS.EditShop}
+                            />
+                            <Route
+                                path={ROUTES.NEW_PRIZE}
+                                component={COMPONENTS.NewPrize}
                             />
                             <Route
                                 path={ROUTES.EDIT_PRIZE}
-                                component={EditPrize}
-                            />
-
-                            <Route
-                                path={ROUTES.NEW_PRIZE}
-                                component={NewPrize}
+                                component={COMPONENTS.EditPrize}
                             />
                         </Switch>
                     </Suspense>

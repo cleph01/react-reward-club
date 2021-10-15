@@ -1,6 +1,6 @@
 import React, { forwardRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./styles/wallet.scss";
 import { firebase, db } from "../../firebase/firebase_config";
 
@@ -96,8 +96,6 @@ const Wallet = (props) => {
     };
 
     console.log("Wallet: ", wallet);
-
-    const history = useHistory();
 
     return (
         <>

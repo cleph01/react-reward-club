@@ -1,17 +1,21 @@
 import React, { useContext } from "react";
-import Auth from "../../Auth";
+
 import { Redirect } from "react-router";
+
+import Auth from "../../Auth";
 
 import { UserContext } from "../../contexts/UserContext";
 
-import "./styles/home.scss";
+import "./styles/login.scss";
 
 import logo from "../../assets/images/logos/logo.png";
 
-function Home() {
+function Login() {
     const { user } = useContext(UserContext);
 
-    user ? console.log("Home User Id:", user.uid) : console.log("No User");
+    user
+        ? console.log("Login User Id:", user.uid)
+        : console.log("No User at Login");
 
     if (user) {
         return <Redirect to={`/dashboard/${user.uid}`} />;
@@ -33,4 +37,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default Login;

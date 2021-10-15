@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import "../styles/wallet-item.scss";
 
 import Card from "@mui/material/Card";

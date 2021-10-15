@@ -3,8 +3,6 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { UserContext } from "./contexts/UserContext";
 import { firebase, auth, db } from "./firebase/firebase_config";
 
-// let uiConfig = ;
-
 function Auth() {
     const { user, setUser } = useContext(UserContext);
 

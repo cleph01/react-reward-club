@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../assets/images/logos/logo_white_text.png";
 import "./styles/nav_bar.scss";
 import HomeIcon from "@mui/icons-material/Home";
@@ -11,19 +11,11 @@ import { UserContext } from "../../contexts/UserContext";
 import { auth } from "../../firebase/firebase_config";
 
 function Nav() {
-    const history = useHistory();
-
     const { user } = useContext(UserContext);
 
     const handleSignOut = () => {
         auth.signOut();
-        
     };
-
-    console.log("Nav User", user);
-
-
-    if(!user){ return <div>...Loading</div>}
 
     return (
         <div className="navbar-container">
