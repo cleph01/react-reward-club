@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import logo from "../../assets/images/logos/logo_white_text.png";
 import "./styles/nav_bar.scss";
 import HomeIcon from "@mui/icons-material/Home";
-import CartIcon from "@mui/icons-material/ShoppingCart";
-import Badge from "@mui/material/Badge";
 
 import { UserContext } from "../../contexts/UserContext";
 
@@ -13,8 +11,11 @@ import { auth } from "../../firebase/firebase_config";
 function Nav() {
     const { user } = useContext(UserContext);
 
+    let history = useHistory();
+
     const handleSignOut = () => {
         auth.signOut();
+        history.push("/login");
     };
 
     return (

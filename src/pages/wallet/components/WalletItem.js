@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
 import "../styles/wallet-item.scss";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
+
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 
@@ -23,34 +19,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import logo from "../../../assets/images/logos/chicken_shack_logo.png";
 
 const Wallet_Item = (props) => {
-    const history = useHistory();
-
-    //Handle Login Click
-    function handleLoginClick() {
-        history.push("/login");
-    }
-
-    //Handle Checkin Click
-    function handleCheckInClick() {
-        history.push("/checkin");
-    }
-
-    //Hold
-    // const [wallet, setWallet] = useState([
-    //     {
-    //         walletId: 1,
-    //         emoji: "ring",
-    //         item: "10% OFF",
-    //     },
-    //     {
-    //         walletId: 2,
-    //         emoji: "ring",
-    //         item: "10% OFF",
-    //     },
-    // ]);
-
-    console.log("Props at Wallet Item: ", props);
-
     return (
         <>
             <Card sx={{ maxWidth: 345, marginBottom: "20px" }}>

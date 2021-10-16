@@ -1,23 +1,22 @@
 import React, { useState, useEffect, useContext, forwardRef } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
-import Auth from "../../Auth";
+
 import { InlineShareButtons } from "sharethis-reactjs";
 
 import platform from "platform-detect/os.mjs";
 
 import encodeurl from "encodeurl";
 
-import { getBizRelationship } from "./helper_functions/helper_functions";
 import { firebase, db } from "../../firebase/firebase_config";
-import productPic from "../../assets/images/chickenshack-product.jpg";
+
 import GetLocation from "./components/GetLocation";
 import CheckinAuth from "./components/CheckInAuth";
 import AvailablePrizes from "./components/AvailablePrizes";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
+
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Divider from "@mui/material/Divider";
@@ -415,9 +414,6 @@ function Checkin() {
         return <div>...Loading</div>;
     }
 
-    if (!user) {
-        return <div>...Loading</div>;
-    }
     return (
         <div className="container">
             <Card sx={{ maxWidth: 345 }}>

@@ -1,16 +1,25 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    useHistory,
+} from "react-router-dom";
 import { UserContext } from "./contexts/UserContext";
 import { auth } from "./firebase/firebase_config";
 import * as ROUTES from "./routing/routes";
 import * as COMPONENTS from "./routing/routeComponents";
+import PrivateRoute from "./routing/PrivateRoute";
 
 const Nav = lazy(() => import("./components/nav_bar/Nav"));
 
 function App() {
     const [user, setUser] = useState(null);
-    // const [username, setUsername] = useState("");
+    // Adding this as a auth status flag for protected route condition
+    // prevents infinite re-rendering
+
+    let history = useHistory();
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -21,6 +30,7 @@ function App() {
                 // onAuthStateChanged listener uses cookie tracking
                 // to persist this state (state by default is not persistent)
                 setUser(authUser);
+                // Switches Flag Off for Protected Route logic
 
                 // if (authUser.displayName) {
                 //     // don't update username
@@ -69,32 +79,26 @@ function App() {
                              * Dashboard Routes
                              * Private
                              */}
-                            <Route
-                                exact
-                                path={ROUTES.DASHBOARD}
-                                component={COMPONENTS.Dashboard}
-                            />
+                            <PrivateRoute path={ROUTES.DASHBOARD}>
+                                <COMPONENTS.Dashboard />
+                            </PrivateRoute>
                             {/**
                              *  User Profile
                              *  Private
                              */}
-                            <Route
-                                exact
-                                path={ROUTES.PROFILE}
-                                component={COMPONENTS.Profile}
-                            />
-                            <Route
-                                path={ROUTES.EDIT_PROFILE}
-                                component={COMPONENTS.EditProfile}
-                            />
+                            <PrivateRoute path={ROUTES.PROFILE}>
+                                <COMPONENTS.Profile />
+                            </PrivateRoute>
+                            <PrivateRoute path={ROUTES.EDIT_PROFILE}>
+                                <COMPONENTS.EditProfile />
+                            </PrivateRoute>
                             {/**
                              *  Digital Wallet Routes
                              *  Private
                              */}
-                            <Route
-                                path={ROUTES.WALLET}
-                                component={COMPONENTS.Wallet}
-                            />
+                            <PrivateRoute path={ROUTES.WALLET}>
+                                <COMPONENTS.Wallet />
+                            </PrivateRoute>
                             {/**
                              *  Shops Community
                              *  Public Routes
@@ -124,26 +128,21 @@ function App() {
                              *  User Ownerd Shop Routes
                              *  Private Routes
                              */}
-                            <Route
-                                path={ROUTES.MY_SHOPS}
-                                component={COMPONENTS.MyShop}
-                            />
-                            <Route
-                                path={ROUTES.NEW_SHOP}
-                                component={COMPONENTS.NewShop}
-                            />
-                            <Route
-                                path={ROUTES.EDIT_SHOP}
-                                component={COMPONENTS.EditShop}
-                            />
-                            <Route
-                                path={ROUTES.NEW_PRIZE}
-                                component={COMPONENTS.NewPrize}
-                            />
-                            <Route
-                                path={ROUTES.EDIT_PRIZE}
-                                component={COMPONENTS.EditPrize}
-                            />
+                            <PrivateRoute path={ROUTES.MY_SHOPS}>
+                                <COMPONENTS.MyShop />
+                            </PrivateRoute>
+                            <PrivateRoute path={ROUTES.NEW_SHOP}>
+                                <COMPONENTS.NewShop />
+                            </PrivateRoute>
+                            <PrivateRoute path={ROUTES.EDIT_SHOP}>
+                                <COMPONENTS.EditShop />
+                            </PrivateRoute>
+                            <PrivateRoute path={ROUTES.NEW_PRIZE}>
+                                <COMPONENTS.NewPrize />
+                            </PrivateRoute>
+                            <PrivateRoute path={ROUTES.EDIT_PRIZE}>
+                                <COMPONENTS.EditPrize />
+                            </PrivateRoute>
                         </Switch>
                     </Suspense>
                 </Router>

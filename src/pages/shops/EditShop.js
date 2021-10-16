@@ -85,7 +85,7 @@ function EditShop() {
             .catch((err) => {
                 console.log("Error getting Prizes: ", err);
             });
-    }, []);
+    }, [shopId]);
 
     const handleOpenEditModal = (itemObj) => {
         setOpenEditModal(true);
@@ -159,7 +159,7 @@ function EditShop() {
                         <EditAvailablePrizes
                             prizes={prizes}
                             shopId={shopId}
-                            handleOpenDeleteModal={handleOpenDeleteModal}
+                            handleOpenEditModal={handleOpenEditModal}
                         />
                     </CardContent>
                 </Card>
