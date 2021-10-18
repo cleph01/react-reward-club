@@ -18,7 +18,11 @@ import CheckIcon from "@mui/icons-material/Check";
 
 import logo from "../../../assets/images/logos/chicken_shack_logo.png";
 
-const Wallet_Item = (props) => {
+const Wallet_Item = ({
+    itemDetails,
+    setShareBusiness,
+    handleOpenClaimModal,
+}) => {
     return (
         <>
             <Card sx={{ maxWidth: 345, marginBottom: "20px" }}>
@@ -51,16 +55,14 @@ const Wallet_Item = (props) => {
                     alt="Paella dish"
                     loading="lazy"
                 /> */}
-                <div className="wallet-item-emoji">
-                    {props.item_details.emoji}
-                </div>
+                <div className="wallet-item-emoji">{itemDetails.emoji}</div>
                 <CardContent>
                     <Typography
                         className="description"
                         variant="h4"
                         color="text.secondary"
                     >
-                        {props.item_details.itemDescription}
+                        {itemDetails.itemDescription}
                     </Typography>
                     <br />
                     <Typography
@@ -77,14 +79,20 @@ const Wallet_Item = (props) => {
                     </IconButton> */}
                     <IconButton
                         aria-label="share"
-                        onClick={(e) => console.log(e.target.id)}
+                        onClick={setShareBusiness({
+                            businessId: itemDetails.businessId,
+                            businessName: itemDetails.businessName,
+                        })}
                     >
-                        <ShareIcon id={props.itemId} className="icon" />
+                        <ShareIcon className="icon" />
                     </IconButton>
                     <IconButton aria-label="trade">
                         <CompareArrowsIcon className="icon" />
                     </IconButton>
-                    <IconButton aria-label="redeem" onClick={props.handleOpen}>
+                    <IconButton
+                        aria-label="redeem"
+                        onClick={handleOpenClaimModal}
+                    >
                         <CheckIcon className="icon" />
                     </IconButton>
                 </CardActions>

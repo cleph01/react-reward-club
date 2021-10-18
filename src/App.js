@@ -86,12 +86,26 @@ function App() {
                              *  User Profile
                              *  Private
                              */}
-                            <PrivateRoute path={ROUTES.PROFILE}>
+                            <PrivateRoute exact path={ROUTES.PROFILE}>
                                 <COMPONENTS.Profile />
                             </PrivateRoute>
-                            <PrivateRoute path={ROUTES.EDIT_PROFILE}>
+                            <PrivateRoute exact path={ROUTES.EDIT_PROFILE}>
                                 <COMPONENTS.EditProfile />
                             </PrivateRoute>
+                            {/**
+                             *  Shoutout Posts
+                             *  Private
+                             */}
+                            <PrivateRoute exact path={ROUTES.NEW_POST}>
+                                <COMPONENTS.NewPost />
+                            </PrivateRoute>
+                            <PrivateRoute exact path={ROUTES.POST}>
+                                <COMPONENTS.Post />
+                            </PrivateRoute>
+                            <PrivateRoute exact path={ROUTES.USER_POSTS}>
+                                <COMPONENTS.UserPosts />
+                            </PrivateRoute>
+
                             {/**
                              *  Digital Wallet Routes
                              *  Private

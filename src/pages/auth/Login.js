@@ -20,7 +20,7 @@ function Login() {
         : console.log("No User at Login");
 
     if (user) {
-        return <Redirect to={`/dashboard/${user.uid}`} />;
+        return <Redirect to={`/profile/${user.uid}`} />;
     }
 
     return (

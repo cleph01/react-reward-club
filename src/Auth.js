@@ -3,53 +3,8 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { UserContext } from "./contexts/UserContext";
 import { firebase, auth, db } from "./firebase/firebase_config";
 
-import {
-    GoogleLoginButton,
-    FacebookLoginButton,
-    TwitterLoginButton,
-} from "react-social-login-buttons";
-
 function Auth() {
     const { user, setUser } = useContext(UserContext);
-
-    // const login = async (provider) => {
-    //     try {
-    //         switch (provider) {
-    //             case "google":
-    //                 const providerr = new firebase.auth.GoogleAuthProvider();
-
-    //                 const result = await firebase
-    //                     .auth()
-    //                     .signInWithPopup(providerr);
-
-    //                 // This gives you a Google Access Token. You can use it to access the Google API.
-    //                 const token = result.credential.accessToken;
-    //                 // The signed-in user info.
-    //                 var user = result.user;
-
-    //                 // Set Authenticated Status in LocalStorage
-    //                 if (user) {
-    //                     localStorage.setItem("isAuthenticated", true);
-    //                 }
-    //                 console.log(user);
-
-    //                 break;
-
-    //             case "facebook":
-    //                 console.log("Login with Google");
-
-    //                 break;
-
-    //             case "twitter":
-    //                 console.log("Login with Google");
-
-    //                 break;
-
-    //             default:
-    //                 break;
-    //         }
-    //     } catch (error) {}
-    // };
 
     const handleSignOut = (e) => {
         e.preventDefault();
@@ -67,18 +22,6 @@ function Auth() {
                     <button onClick={handleSignOut}>Sign Out</button>
                 </div>
             ) : (
-                // <div
-                //     style={{
-                //         display: "flex",
-                //         flexDirection: "column",
-                //         alignItems: "center",
-                //         justifyContent: "space-between",
-                //     }}
-                // >
-                //     <GoogleLoginButton onClick={() => login("google")} />
-                //     <FacebookLoginButton />
-                //     <TwitterLoginButton />
-                // </div>
                 <StyledFirebaseAuth
                     uiConfig={{
                         signInFlow: "popup",
@@ -106,6 +49,7 @@ function Auth() {
                                                 avatarUrl:
                                                     authUser.user.photoURL,
                                                 seller: false,
+                                                email: authUser.user.email,
                                                 created:
                                                     firebase.firestore.FieldValue.serverTimestamp(),
                                             };

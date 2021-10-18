@@ -9,6 +9,7 @@ function PrivateRoute({ children, pendingAuth, ...rest }) {
 
     return (
         <Route
+            exact
             {...rest}
             render={({ location }) => {
                 return !!user ? (

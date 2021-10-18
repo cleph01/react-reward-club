@@ -11,6 +11,11 @@ const Dashboard = lazy(() => import("../pages/dashboard/Dashboard.js"));
 const Profile = lazy(() => import("../pages/profile/Profile.js"));
 const EditProfile = lazy(() => import("../pages/edit_profile/EditProfile.js"));
 
+// Shoutout Posts
+const NewPost = lazy(() => import("../pages/post/AddPost.js"));
+const Post = lazy(() => import("../pages/post/Post.js"));
+const UserPosts = lazy(() => import("../pages/post/UserPosts.js"));
+
 // Digital Wallet
 const Wallet = lazy(() => import("../pages/wallet/Wallet.js"));
 
@@ -47,6 +52,9 @@ export {
     Dashboard,
     Profile,
     EditProfile,
+    NewPost,
+    Post,
+    UserPosts,
     Wallet,
     AllShops,
     Shop,

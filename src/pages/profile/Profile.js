@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
-import { db } from "../../firebase/firebase_config";
+import { useParams } from "react-router-dom";
+import { Route } from "react-router-dom";
+
+import { db, storage } from "../../firebase/firebase_config";
 import ProfileTabs from "./profile_components/profile_body/ProfileTabs";
 
-import ProfileBodyLeft from "./profile_components/profile_body/ProfileBodyLeft";
+import ProfileBodyTop from "./profile_components/profile_body/ProfileBodyTop";
 
 import ProfileBio from "./profile_components/profile_bio/ProfileBio";
 import ProfileRecentActivity from "./profile_components/profile_recent_activity/ProfileRecentActivity.js";
@@ -16,64 +18,75 @@ import "./styles/profile.scss";
 
 const itemData = [
     {
-        img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-        title: "Breakfast",
-        author: "@bkristastucchio",
+        img: "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
+
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-        title: "Burger",
-        author: "@rollelflex_graphy726",
+        img: "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-        title: "Camera",
-        author: "@helloimnik",
+        youtubeId: "T3V97M2PZD0",
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-        title: "Coffee",
-        author: "@nolanissac",
+        youtubeId: "T3V97M2PZD0",
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-        title: "Hats",
-        author: "@hjrc33",
+        youtubeId: "T3V97M2PZD0",
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-        title: "Honey",
-        author: "@arwinneil",
+        youtubeId: "T3V97M2PZD0",
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-        title: "Basketball",
-        author: "@tjdragotta",
+        youtubeId: "T3V97M2PZD0",
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-        title: "Fern",
-        author: "@katie_wasserman",
+        youtubeId: "T3V97M2PZD0",
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-        title: "Mushrooms",
-        author: "@silverdalex",
+        youtubeId: "T3V97M2PZD0",
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-        title: "Tomato basil",
-        author: "@shelleypauls",
+        youtubeId: "T3V97M2PZD0",
+        caption:
+            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-        title: "Sea star",
-        author: "@peterlaster",
+        img: "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
+        caption: "Sea star",
+        businessName: "The Chicken Shack",
     },
     {
-        img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
-        title: "Bike",
-        author: "@southside_customs",
+        img: "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
+        caption: "Bike",
+        businessName: "The Chicken Shack",
     },
 ];
 
@@ -112,10 +125,10 @@ function Profile() {
                 >
                     <CardContent className="card-content">
                         <div className="profile-body-wrapper">
-                            <ProfileBodyLeft user={user} />
+                            <ProfileBodyTop user={user} userId={userId} />
                         </div>
-                        <ProfileBio />
-                        <ProfileRecentActivity />
+                        <ProfileBio user={user} />
+                        <ProfileRecentActivity userId={userId} />
                         <ProfileTabs user={itemData} posts={itemData} />
                     </CardContent>
                 </Card>

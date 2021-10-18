@@ -1,0 +1,86 @@
+.add-post-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 100px 0px;
+
+    .youtube-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+        flex: 1;
+
+        input {
+            width: 300px;
+        }
+
+        .submit-youtube-btn {
+            display: block;
+            position: relative;
+            width: 150px;
+            height: auto;
+            padding: 5px;
+            border-radius: 25px;
+            background: #1c76d2;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f9f9f9;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
+            margin-top: 15px;
+        }
+    }
+
+    .imageupload-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+        .upload-image-btn {
+            display: block;
+            position: relative;
+            width: 150px;
+            height: auto;
+            padding: 5px;
+            border-radius: 25px;
+            background: #1c76d2;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f9f9f9;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
+            margin-top: 15px;
+        }
+    }
+
+    .toggle-youtube-input-btn {
+        display: block;
+        position: relative;
+        width: 225px;
+        height: auto;
+        padding: 15px;
+        border-radius: 25px;
+        background: #f9f9f9;
+        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1c76d2;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease-out;
+        margin-top: 15px;
+    }
+
+    .imageupload__progress {
+        width: 100%;
+    }
+}

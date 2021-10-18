@@ -32,8 +32,8 @@ function ProfileTabs({ user, posts }) {
                     textColor="inherit"
                     variant="fullWidth"
                 >
-                    <Tab className="tab" label="Posts" />
-                    <Tab className="tab" label="Following" />
+                    <Tab className="tab" label="ShoutOuts" />
+                    <Tab className="tab" label="Entourage" />
                     <Tab className="tab" label="Followers" />
                 </Tabs>
             </AppBar>

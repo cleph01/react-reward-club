@@ -5,4 +5,13 @@
     border-bottom: 1px solid lightgrey;
     margin: 10px 50px;
     padding: 10px 15px;
+
+    .profile__bio-textArea {
+        min-height: 150px;
+        width: 225px;
+        border: 1px solid #eeebeb;
+        border-radius: 10px;
+        padding-left: 10px;
+        margin-bottom: 10px;
+    }
 }

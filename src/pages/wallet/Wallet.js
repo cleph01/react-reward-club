@@ -14,9 +14,16 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 
+import ForumIcon from "@mui/icons-material/Forum";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+
+import platform from "platform-detect/os.mjs";
+
+import encodeurl from "encodeurl";
+
+import { InlineShareButtons } from "sharethis-reactjs";
 
 const style = {
     position: "absolute",
@@ -38,16 +45,23 @@ const Wallet = (props) => {
     const [wallet, setWallet] = useState([]);
     const [walletItemId, setWalletItemId] = useState();
 
-    const [open, setOpen] = useState(false);
+    // businessId for share modal
+    const [shareBusiness, setShareBusiness] = useState();
+
+    const [openClaimModal, setOpenClaimModal] = useState(false);
+    // State to control Share Modal
+    const [openShareModal, setOpenShareModal] = useState(false);
     const [openSnackBar, setOpenSnackBar] = useState(false);
 
     const handleOpen = (itemId) => {
-        setOpen(true);
+        setOpenClaimModal(true);
         setWalletItemId(itemId);
 
         console.log("itemId: ", itemId);
     };
-    const handleClose = () => setOpen(false);
+    const handleCloseClaimModal = () => setOpenClaimModal(false);
+
+    const handleCloseShareModal = () => setOpenShareModal(false);
 
     //every time a new post is added this code fires
     useEffect(() => {
@@ -74,7 +88,7 @@ const Wallet = (props) => {
             })
             .then(() => {
                 console.log("Document successfully updated!");
-                setOpen(false);
+                setOpenClaimModal(false);
                 setOpenSnackBar(true);
             })
             .catch((error) => {
@@ -95,6 +109,16 @@ const Wallet = (props) => {
         setOpenSnackBar(false);
     };
 
+    const encodeMsg = encodeurl(
+        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${
+            shareBusiness.businessId
+        }/${userId ? userId : "undefined"}`
+    );
+    const smsMessage =
+        platform.macos || platform.ios
+            ? `sms:&body=${encodeMsg}`
+            : `sms:?body=${encodeMsg}`;
+
     console.log("Wallet: ", wallet);
 
     return (
@@ -111,11 +135,12 @@ const Wallet = (props) => {
                             <WalletItem
                                 key={index}
                                 itemId={item.walletItemId}
-                                item_details={item.walletItem}
+                                itemDetails={item.walletItem}
                                 handleOpen={() => {
                                     handleOpen(item.walletItemId);
                                 }}
-                                handleClose={handleClose}
+                                handleCloseClaimModal={handleCloseClaimModal}
+                                setShareBusiness={setShareBusiness}
                             />
                         ))
                     ) : (
@@ -124,8 +149,8 @@ const Wallet = (props) => {
                 </div>
             </div>
             <Modal
-                open={open}
-                onClose={handleClose}
+                open={openClaimModal}
+                onClose={handleCloseClaimModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
@@ -155,9 +180,102 @@ const Wallet = (props) => {
                         <Button color="primary" onClick={handleRedeem}>
                             Claim Prize
                         </Button>
-                        <Button color="error" onClick={handleClose}>
+                        <Button color="error" onClick={handleCloseClaimModal}>
                             Cancel
                         </Button>
+                    </div>
+                </Box>
+            </Modal>
+
+            <Modal
+                open={openShareModal}
+                onClose={handleCloseShareModal}
+                aria-labelledby="modal2-modal-title"
+                aria-describedby="modal2-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography
+                        id="modal2-modal-title"
+                        variant="h6"
+                        component="h2"
+                        sx={{ textAlign: "center", borderColor: "#f0f0f0" }}
+                    >
+                        Shout Out Your Favorite Shops and Get Paid!
+                    </Typography>
+                    <Typography
+                        id="modal2-modal-description"
+                        sx={{ mt: 2, textAlign: "center" }}
+                    >
+                        Click Below and Go Social !!
+                    </Typography>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginTop: "15px",
+                        }}
+                    >
+                        <InlineShareButtons
+                            config={{
+                                alignment: "center", // alignment of buttons (left, center, right)
+                                color: "social", // set the color of buttons (social, white)
+                                enabled: true, // show/hide buttons (true, false)
+                                font_size: 16, // font size for the buttons
+                                labels: "cta", // button labels (cta, counts, null)
+                                language: "en", // which language to use (see LANGUAGES)
+                                networks: [
+                                    // which networks to include (see SHARING NETWORKS)
+                                    "whatsapp",
+                                    "linkedin",
+                                    "messenger",
+                                    "facebook",
+                                    "twitter",
+                                ],
+                                padding: 12, // padding within buttons (INTEGER)
+                                radius: 4, // the corner radius on each button (INTEGER)
+                                show_total: true,
+                                size: 40, // the size of each button (INTEGER)
+
+                                // OPTIONAL PARAMETERS
+                                url: `https://smartseedtech.com/${shareBusiness.businessId}`, // (defaults to current url)
+
+                                description: `Business Name: ${shareBusiness.businessName}`, // (defaults to og:description or twitter:description)
+                                title: `Business Name: ${shareBusiness.businessName}`, // (defaults to og:title or twitter:title)
+                                message: `Business Name: ${shareBusiness.businessName}`, // (only for email sharing)
+                                subject: `Business Name: ${shareBusiness.businessName}`, // (only for email sharing)
+                            }}
+                        />
+                        <div>
+                            <center>
+                                <h3>or Send a Text! </h3>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <span
+                                        style={{
+                                            fontSize: "36px",
+                                            marginRight: "20px",
+                                        }}
+                                    >
+                                        {String.fromCodePoint(0x1f449)}
+                                    </span>
+                                    <a href={smsMessage}>
+                                        <ForumIcon
+                                            sx={{
+                                                color: "#1c76d2",
+                                                fontSize: "52px",
+                                            }}
+                                        />
+                                    </a>
+                                </div>
+                            </center>
+                        </div>
                     </div>
                 </Box>
             </Modal>

@@ -1,8 +1,14 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import "../../styles/profile_recent_activity.scss";
 
-function ProfileRecentActivity() {
-    return <div className="profile__recent-activity">Recent Activity Here</div>;
+function ProfileRecentActivity({ userId }) {
+    return (
+        <div className="profile__recent-activity">
+            <Link to={`/post/${userId}/new`}>
+                <div className="post-shoutout-btn">Post a Shoutout</div>
+            </Link>
+        </div>
+    );
 }
 
 export default ProfileRecentActivity;

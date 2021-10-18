@@ -1,0 +1,51 @@
+@import "../../../styles/variables/variables";
+
+.profile-body__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    a {
+        text-decoration: none;
+    }
+
+    .edit-profile-btn {
+        display: block;
+        position: relative;
+        width: 150px;
+        height: 40px;
+        border-radius: 25px;
+        background: #f9f9f9;
+        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1c76d2;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s ease-out;
+        margin-top: 15px;
+    }
+
+    .profile__personal-details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        div {
+            margin: 5px 0px;
+        }
+        .name {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .handle {
+            font-style: italic;
+        }
+
+        .emai {
+            color: lightgrey;
+        }
+    }
+}

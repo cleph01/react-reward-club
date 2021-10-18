@@ -1,14 +1,12 @@
-import React from "react";
-
 function YouTubeEmbed({ youtubeId }) {
     return (
         <div
-            className="video"
             style={{
                 position: "relative",
                 paddingBottom: "56.25%" /* 16:9 */,
                 paddingTop: 25,
                 height: 0,
+                width: "100%",
             }}
         >
             <iframe
@@ -20,8 +18,10 @@ function YouTubeEmbed({ youtubeId }) {
                     width: "100%",
                     height: "100%",
                 }}
-                src={`https://www.youtube.com/embed/${youtubeId}`}
+                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
                 frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
             />
         </div>
     );
