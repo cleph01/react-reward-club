@@ -35,6 +35,7 @@ const style = {
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    color: "#637b97",
 };
 
 const Wallet = (props) => {
@@ -111,7 +112,7 @@ const Wallet = (props) => {
 
     const encodeMsg = encodeurl(
         `Wanted to share this with you. Check them out. http://localhost:3000/shop/${
-            shareBusiness.businessId
+            shareBusiness ? shareBusiness.businessId : "undefined"
         }/${userId ? userId : "undefined"}`
     );
     const smsMessage =
@@ -128,7 +129,7 @@ const Wallet = (props) => {
 
                 <div className="wallet-wrapper">
                     <div className="header">
-                        <h3>&#x1F4B0; Digital Wallet &#x1F4B0;</h3>
+                        <div className="emoji">&#x1F4B0;</div>
                     </div>
                     {wallet.length > 0 ? (
                         wallet.map((item, index) => (
@@ -136,9 +137,7 @@ const Wallet = (props) => {
                                 key={index}
                                 itemId={item.walletItemId}
                                 itemDetails={item.walletItem}
-                                handleOpen={() => {
-                                    handleOpen(item.walletItemId);
-                                }}
+                                handleOpen={handleOpen}
                                 handleCloseClaimModal={handleCloseClaimModal}
                                 setShareBusiness={setShareBusiness}
                             />
@@ -177,10 +176,18 @@ const Wallet = (props) => {
                             marginTop: "15px",
                         }}
                     >
-                        <Button color="primary" onClick={handleRedeem}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleRedeem}
+                        >
                             Claim Prize
                         </Button>
-                        <Button color="error" onClick={handleCloseClaimModal}>
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={handleCloseClaimModal}
+                        >
                             Cancel
                         </Button>
                     </div>
@@ -239,12 +246,28 @@ const Wallet = (props) => {
                                 size: 40, // the size of each button (INTEGER)
 
                                 // OPTIONAL PARAMETERS
-                                url: `https://smartseedtech.com/${shareBusiness.businessId}`, // (defaults to current url)
-
-                                description: `Business Name: ${shareBusiness.businessName}`, // (defaults to og:description or twitter:description)
-                                title: `Business Name: ${shareBusiness.businessName}`, // (defaults to og:title or twitter:title)
-                                message: `Business Name: ${shareBusiness.businessName}`, // (only for email sharing)
-                                subject: `Business Name: ${shareBusiness.businessName}`, // (only for email sharing)
+                                // url: `https://smartseedtech.com/${shareBusiness.businessId}`, // (defaults to current url)
+                                url: "https://www.chickenshacknyc.com/",
+                                description: `Business Name: ${
+                                    shareBusiness
+                                        ? shareBusiness.businessName
+                                        : "undefined"
+                                }`, // (defaults to og:description or twitter:description)
+                                title: `Business Name: ${
+                                    shareBusiness
+                                        ? shareBusiness.businessName
+                                        : "undefined"
+                                }`, // (defaults to og:title or twitter:title)
+                                message: `Business Name: ${
+                                    shareBusiness
+                                        ? shareBusiness.businessName
+                                        : "undefined"
+                                }`, // (only for email sharing)
+                                subject: `Business Name: ${
+                                    shareBusiness
+                                        ? shareBusiness.businessName
+                                        : "undefined"
+                                }`, // (only for email sharing)
                             }}
                         />
                         <div>

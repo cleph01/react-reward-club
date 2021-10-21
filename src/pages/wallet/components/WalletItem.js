@@ -18,11 +18,7 @@ import CheckIcon from "@mui/icons-material/Check";
 
 import logo from "../../../assets/images/logos/chicken_shack_logo.png";
 
-const Wallet_Item = ({
-    itemDetails,
-    setShareBusiness,
-    handleOpenClaimModal,
-}) => {
+const Wallet_Item = ({ itemDetails, setShareBusiness, handleOpen, itemId }) => {
     return (
         <>
             <Card sx={{ maxWidth: 345, marginBottom: "20px" }}>
@@ -79,10 +75,12 @@ const Wallet_Item = ({
                     </IconButton> */}
                     <IconButton
                         aria-label="share"
-                        onClick={setShareBusiness({
-                            businessId: itemDetails.businessId,
-                            businessName: itemDetails.businessName,
-                        })}
+                        onClick={() =>
+                            setShareBusiness({
+                                businessId: itemDetails.businessId,
+                                businessName: itemDetails.businessName,
+                            })
+                        }
                     >
                         <ShareIcon className="icon" />
                     </IconButton>
@@ -91,7 +89,7 @@ const Wallet_Item = ({
                     </IconButton>
                     <IconButton
                         aria-label="redeem"
-                        onClick={handleOpenClaimModal}
+                        onClick={() => handleOpen(itemId)}
                     >
                         <CheckIcon className="icon" />
                     </IconButton>

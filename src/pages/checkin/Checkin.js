@@ -351,6 +351,16 @@ function Checkin() {
                             console.log(
                                 "BizRelationship Points Successfully Updated!"
                             );
+
+                            setAlertMsg({
+                                message: `Checkin Successful. New Points: ${
+                                    userBizRelationship.relationshipInfo
+                                        .pointSum + 1
+                                }`,
+                                severity: "success",
+                            });
+
+                            setOpenSnackBar(true);
                         })
                         .catch((error) => {
                             // The document probably doesn't exist.
@@ -402,7 +412,9 @@ function Checkin() {
     };
 
     const encodeMsg = encodeurl(
-        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${shopId}/`
+        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${shopId}/${
+            user ? user.uid : "undefined"
+        }`
     );
 
     const smsMessage =
@@ -481,11 +493,13 @@ function Checkin() {
 
                     <CheckinAuth user={user} handleCheckin={handleCheckin} />
                 </div>
-            ) : (
+            ) : user ? (
                 <GetLocation
                     handleGeoLocation={handleGeoLocation}
                     goStatus={goStatus}
                 />
+            ) : (
+                <CheckinAuth user={user} handleCheckin={handleCheckin} />
             )}
 
             <Modal
@@ -579,8 +593,8 @@ function Checkin() {
                                 size: 40, // the size of each button (INTEGER)
 
                                 // OPTIONAL PARAMETERS
-                                url: `https://smartseedtech.com/${shopId}`, // (defaults to current url)
-
+                                // url: `https://smartseedtech.com/${shopId}`, // (defaults to current url)
+                                url: "https://www.chickenshacknyc.com/",
                                 description: `Business Name: ${business.businessName}`, // (defaults to og:description or twitter:description)
                                 title: `Business Name: ${business.businessName}`, // (defaults to og:title or twitter:title)
                                 message: `Business Name: ${business.businessName}`, // (only for email sharing)
@@ -605,7 +619,7 @@ function Checkin() {
                                     >
                                         {String.fromCodePoint(0x1f449)}
                                     </span>
-                                    <a href={smsMessage + user.uid}>
+                                    <a href={smsMessage}>
                                         <ForumIcon
                                             sx={{
                                                 color: "#1c76d2",

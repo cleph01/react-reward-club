@@ -14,7 +14,7 @@ function Home() {
     user ? console.log("Home User Id:", user.uid) : console.log("No User");
 
     if (user) {
-        return <Redirect to={`/dashboard/${user.uid}`} />;
+        return <Redirect to={`/wallet/${user.uid}`} />;
     }
 
     return (

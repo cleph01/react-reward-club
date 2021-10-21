@@ -376,8 +376,8 @@ function Shop() {
                                 size: 40, // the size of each button (INTEGER)
 
                                 // OPTIONAL PARAMETERS
-                                url: `https://smartseedtech.com/${shopId}`, // (defaults to current url)
-
+                                // url: `https://smartseedtech.com/${shopId}`, // (defaults to current url)
+                                url: "https://www.chickenshacknyc.com/",
                                 description: `Business Name: ${business.businessName}`, // (defaults to og:description or twitter:description)
                                 title: `Business Name: ${business.businessName}`, // (defaults to og:title or twitter:title)
                                 message: `Business Name: ${business.businessName}`, // (only for email sharing)

@@ -18,10 +18,8 @@ function YouTubeEmbed({ youtubeId }) {
                     width: "100%",
                     height: "100%",
                 }}
-                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
+                src={`https://www.youtube.com/embed/${youtubeId}`}
                 frameBorder="0"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
             />
         </div>
     );

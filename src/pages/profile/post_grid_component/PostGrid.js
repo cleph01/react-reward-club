@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -6,26 +6,26 @@ import YouTubeEmbed from "../components/YouTubeEmbed";
 
 import "./styles/post_grid.scss";
 
-function PostGrid(props) {
+function PostGrid({ posts }) {
     return (
         <div className="follow-grid-container">
             <ImageList sx={{ width: 500, height: 450 }}>
-                {props.itemData.map((item, i) => (
+                {posts.map((item, i) => (
                     <ImageListItem key={i}>
-                        {item.youtubeId ? (
-                            <YouTubeEmbed youtubeId={item.youtubeId} />
+                        {item.post.youtubeId ? (
+                            <YouTubeEmbed youtubeId={item.post.youtubeId} />
                         ) : (
                             <img
-                                src={`${item.img}`}
-                                srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                                alt={item.title}
+                                src={`${item.post.imageUrl}`}
+                                srcSet={`${item.post.imageUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                                alt={item.post.title}
                                 loading="lazy"
                             />
                         )}
 
                         <ImageListItemBar
-                            title={`${item.caption.slice(0, 10)}...`}
-                            subtitle={item.businessName}
+                            title={`${item.post.caption.slice(0, 10)}...`}
+                            subtitle={item.post.businessName}
                             position="below"
                         />
                     </ImageListItem>

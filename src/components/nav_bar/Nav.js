@@ -24,7 +24,7 @@ function Nav() {
                 <img className="logo" src={logo} alt="logo" />
             </div>
             <div className="navbar__body">
-                <Link to={`/profile/${user.uid}`}>
+                <Link to={`/profile/${user ? user.uid : "undefined"}`}>
                     <div>
                         <HomeIcon />
                     </div>
@@ -50,7 +50,7 @@ function Nav() {
                     <div>My Shop</div>
                 </Link> */}
 
-                <Link to={`/wallet/${user.uid}`}>
+                <Link to={`/wallet/${user ? user.uid : "undefined"}`}>
                     <div>Wallet</div>
                 </Link>
                 {user ? (

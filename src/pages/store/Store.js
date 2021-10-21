@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import QRcodeGen from "../components/QRcodeGen";
+import QRcodeGen from "./components/QRcodeGen";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -11,12 +11,12 @@ import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 
-import "../styles/store.scss";
-import logo from "../assets/images/logos/chicken_shack_logo.png";
-import socialiite from "../assets/images/logos/logo_white_text.png";
-import productPic from "../assets/images/chickenshack-product.jpg";
+import "./styles/store.scss";
 
-import { db } from "../firebase/firebase_config";
+import socialiite from "../../assets/images/logos/logo_white_text.png";
+import productPic from "../../assets/images/chickenshack-product.jpg";
+
+import { db } from "../../firebase/firebase_config";
 
 function Store() {
     const { shopId } = useParams();

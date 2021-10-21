@@ -24,7 +24,7 @@ const AllShops = lazy(() => import("../pages/AllShops.js"));
 const Shop = lazy(() => import("../pages/shops/Shop.js"));
 
 // QR / Checkin
-const Store = lazy(() => import("../pages/Store.js"));
+const Store = lazy(() => import("../pages/store/Store.js"));
 const Checkin = lazy(() => import("../pages/checkin/Checkin.js"));
 
 // Shop Related
