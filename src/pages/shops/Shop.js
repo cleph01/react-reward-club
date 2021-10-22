@@ -56,6 +56,9 @@ function Shop() {
     const [products, setProducts] = useState([]);
     const [error, setError] = useState("");
 
+    const [comment, setComment] = useState([]);
+    const [comments, setComments] = useState([]);
+
     useEffect(() => {
         // Get Business Info
         db.collection("shops")
@@ -227,6 +230,18 @@ function Shop() {
         p: 4,
     };
 
+    const postComment = (event) => {
+        event.preventDefault();
+
+        db.collection("shops").doc(shopId).collection("comments").add({
+            text: comment,
+            username: user.user.displayName,
+            timestamp: db.FieldValue.serverTimestamp(),
+        });
+
+        setComment("");
+    };
+
     console.log("Shop Id: ", shopId);
 
     console.log("Business info: ", business);
@@ -281,7 +296,35 @@ function Shop() {
                         handleOpenShareModal={handleOpenShareModal}
                     />
 
-                    <br />
+                    <div className="shop__comments">
+                        {comments.map((comment, index) => (
+                            <p key={index}>
+                                <strong>{comment.username}</strong>{" "}
+                                {comment.text}
+                            </p>
+                        ))}
+                    </div>
+
+                    {user && (
+                        <form className="shop__commentBox">
+                            <input
+                                className="shop__input"
+                                type="text"
+                                placeholder="Add a comment..."
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                            />
+
+                            <button
+                                disabled={!comment}
+                                className="post__button"
+                                type="submit"
+                                onClick={postComment}
+                            >
+                                Post
+                            </button>
+                        </form>
+                    )}
                 </CardContent>
             </Card>
 

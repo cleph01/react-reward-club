@@ -15,6 +15,7 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
 
     const [businessList, setBusinessList] = useState([]);
     const [prizes, setPrizes] = useState([]);
+    const [numPrizes, setNumPrizes] = useState([]);
 
     const getItems = (item_ids, callback) => {
         let itemRefs = item_ids.map((id) => {
@@ -64,17 +65,21 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
     };
 
     const handleSettingPrizes = (items) => {
-        items.forEach((docs) => {
-            console.log("Remap Doc: ", docs);
-
-            docs.forEach((item, index) => {
-                setPrizes((prevState) => {
-                    return [
-                        ...prevState,
-                        { prizeId: item.id, prizeInfo: item.data() },
-                    ];
-                });
+        items.forEach((docs, index) => {
+            setNumPrizes((prevState) => {
+                return [...prevState, docs.length];
             });
+            // console.log("Remap Doc: ", docs.length);
+
+            // How to set value from Collection
+            // docs.forEach((item) => {
+            //     setPrizes((prevState) => {
+            //         return [
+            //             ...prevState,
+            //             { prizeId: item.id, prizeInfo: item.data() },
+            //         ];
+            //     });
+            // });
         });
     };
 
@@ -96,6 +101,7 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
 
     console.log("Business Info: ", businessList);
     console.log("Prize List: ", prizes);
+    console.log("Num Prizes: ", numPrizes);
     return (
         <List className="prize-list-container">
             {businessList.map((business, i) => (
@@ -103,6 +109,7 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
                     <FollowListItem
                         business={business}
                         handleOpenShareModal={handleOpenShareModal}
+                        numPrizes={numPrizes[i]}
                     />
                     <Divider />
                 </div>

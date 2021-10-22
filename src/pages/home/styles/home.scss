@@ -1,9 +1,7 @@
 @import "../../../styles/variables/variables";
 
 body {
-    color: $text-color;
     background-image: $background-gradient;
-    // background-color: #f9f9f9;
 }
 .container {
     display: flex;

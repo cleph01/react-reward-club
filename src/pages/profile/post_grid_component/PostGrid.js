@@ -2,14 +2,15 @@ import { Link } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
+import LinkIcon from "@mui/icons-material/Link";
 import YouTubeEmbed from "../components/YouTubeEmbed";
 
 import "./styles/post_grid.scss";
 
-function PostGrid({ posts }) {
+function PostGrid({ posts, userId }) {
     return (
         <div className="follow-grid-container">
-            <ImageList sx={{ width: 500, height: 450 }}>
+            <ImageList sx={{ width: 500 }}>
                 {posts.map((item, i) => (
                     <ImageListItem key={i}>
                         {item.post.youtubeId ? (
@@ -22,12 +23,14 @@ function PostGrid({ posts }) {
                                 loading="lazy"
                             />
                         )}
-
-                        <ImageListItemBar
-                            title={`${item.post.caption.slice(0, 10)}...`}
-                            subtitle={item.post.businessName}
-                            position="below"
-                        />
+                        <Link to={`/post/${userId}/${item.postId}`}>
+                            <ImageListItemBar
+                                title={`${item.post.caption.slice(0, 10)}...`}
+                                subtitle={item.post.businessName}
+                                position="below"
+                                actionIcon={<LinkIcon />}
+                            />
+                        </Link>
                     </ImageListItem>
                 ))}
             </ImageList>

@@ -35,7 +35,6 @@ const style = {
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
-    color: "#637b97",
 };
 
 const Wallet = (props) => {
@@ -157,7 +156,6 @@ const Wallet = (props) => {
                     <Typography
                         id="modal-modal-title"
                         variant="h6"
-                        component="h2"
                         sx={{ textAlign: "center", borderColor: "#f0f0f0" }}
                     >
                         Please Show to Attendant
@@ -168,6 +166,13 @@ const Wallet = (props) => {
                     >
                         Sure About Claiming Prize?
                     </Typography>
+
+                    <Typography
+                        id="modal-modal-sub-description"
+                        sx={{ mt: 2, textAlign: "center", fontSize: "46px" }}
+                    >
+                        Cannot Be Reversed
+                    </Typography>
                     <div
                         style={{
                             display: "flex",
@@ -176,16 +181,11 @@ const Wallet = (props) => {
                             marginTop: "15px",
                         }}
                     >
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleRedeem}
-                        >
+                        <Button className="claim__btn" onClick={handleRedeem}>
                             Claim Prize
                         </Button>
                         <Button
-                            variant="outlined"
-                            color="error"
+                            className="cancel__btn"
                             onClick={handleCloseClaimModal}
                         >
                             Cancel

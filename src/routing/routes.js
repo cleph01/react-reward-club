@@ -30,7 +30,7 @@ const EDIT_PROFILE = "/profile/edit/:userId"; // Private Route
 // Add New Post
 const NEW_POST = "/post/:userId/new";
 // Display Post by PostId
-const POST = "/post/:postId";
+const POST = "/post/:userId/:postId";
 // Display All Posts by a specific User
 const USER_POSTS = "/posts/:userId";
 /**

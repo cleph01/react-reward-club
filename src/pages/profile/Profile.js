@@ -40,111 +40,6 @@ const style = {
     p: 4,
 };
 
-const itemData = [
-    {
-        img: "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
-
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        img: "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        youtubeId: "T3V97M2PZD0",
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        youtubeId: "T3V97M2PZD0",
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        youtubeId: "T3V97M2PZD0",
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        youtubeId: "T3V97M2PZD0",
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        youtubeId: "T3V97M2PZD0",
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        youtubeId: "T3V97M2PZD0",
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        youtubeId: "T3V97M2PZD0",
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        youtubeId: "T3V97M2PZD0",
-        caption:
-            "There may be situations where you don't need the actual data for a stored file, but rather will want the URL. You can do this in a similar fashion as the last two examples by using the getDownloadUrl() method on your StorageReference, which will give you a Uri pointing to the file's location.",
-        businessName: "The Chicken Shack",
-    },
-    {
-        img: "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
-        caption: "Sea star",
-        businessName: "The Chicken Shack",
-    },
-    {
-        img: "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
-        caption: "Bike",
-        businessName: "The Chicken Shack",
-    },
-];
-
-const businessList = [
-    {
-        businessId: "RlXadqupuRGrvxy2SORx",
-        logoUrl:
-            "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
-        businessName: "The Chicken Shack",
-        numPrizes: "3",
-    },
-    {
-        businessId: "RlXadqupuRGrvxy2SORx",
-        logoUrl:
-            "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
-        businessName: "The Chicken Shack",
-        numPrizes: "3",
-    },
-    {
-        businessId: "RlXadqupuRGrvxy2SORx",
-        logoUrl:
-            "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
-        businessName: "The Chicken Shack",
-        numPrizes: "3",
-    },
-    {
-        businessId: "RlXadqupuRGrvxy2SORx",
-        logoUrl:
-            "https://firebasestorage.googleapis.com/v0/b/reward-club-defbe.appspot.com/o/shop%2FRlXadqupuRGrvxy2SORx%2Flogo%2Flogo.png?alt=media&token=ca23b49d-c79c-4355-b982-021a7fb8cb1c",
-        businessName: "The Chicken Shack",
-        numPrizes: "3",
-    },
-];
-
 function Profile() {
     const [user, setUser] = useState();
 
@@ -250,6 +145,7 @@ function Profile() {
                         <ProfileRecentActivity userId={userId} />
                         {posts ? (
                             <ProfileTabs
+                                userId={userId}
                                 posts={posts}
                                 bizRelationships={bizRelationships}
                                 handleOpenShareModal={handleOpenShareModal}

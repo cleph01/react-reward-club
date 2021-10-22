@@ -1,9 +1,7 @@
 @import "../../../styles/variables/variables";
 
 body {
-    color: $text-color;
     background-image: $background-gradient;
-    // background-color: #f9f9f9;
 }
 .container {
     display: flex;
@@ -17,6 +15,7 @@ body {
         justify-content: space-between;
         width: 100%;
         margin-top: 75px;
+        color: $text-color;
 
         .logo {
             width: 350px;

@@ -7,8 +7,6 @@ import "../styles/profile_tabs.scss";
 import PostGrid from "../post_grid_component/PostGrid";
 import FollowList from "../follow_list_component/FollowList";
 
-
-
 const TabContainer = (props) => {
     return (
         <Typography component="div" style={{ padding: 8 * 2 }}>
@@ -17,15 +15,17 @@ const TabContainer = (props) => {
     );
 };
 
-function ProfileTabs({ user, posts, bizRelationships, handleOpenShareModal }) {
+function ProfileTabs({
+    userId,
+    posts,
+    bizRelationships,
+    handleOpenShareModal,
+}) {
     const [tab, setTab] = useState(0);
 
-    
     const handleTabChange = (event, value) => {
         setTab(value);
     };
-
-    
 
     return (
         <div className="profile-tabs-container">
@@ -44,7 +44,7 @@ function ProfileTabs({ user, posts, bizRelationships, handleOpenShareModal }) {
             </AppBar>
             {tab === 0 && (
                 <TabContainer>
-                    <PostGrid posts={posts} />
+                    <PostGrid posts={posts} userId={userId} />
                 </TabContainer>
             )}
             {tab === 1 && (

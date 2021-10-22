@@ -1,4 +1,4 @@
-import "../styles/wallet-item.scss";
+import { useEffect, useState } from "react";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -16,9 +16,31 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import CheckIcon from "@mui/icons-material/Check";
 
+import { db } from "../../../firebase/firebase_config";
+
+import "../styles/wallet-item.scss";
+
 import logo from "../../../assets/images/logos/chicken_shack_logo.png";
 
 const Wallet_Item = ({ itemDetails, setShareBusiness, handleOpen, itemId }) => {
+    const [business, setBusiness] = useState();
+
+    useEffect(() => {
+        db.collection("shops")
+            .doc(itemDetails.businessId)
+            .get()
+            .then((doc) => {
+                setBusiness(doc.data());
+            })
+            .catch((err) => {
+                console.log("Error geting Business Info: ", err);
+            });
+    }, []);
+
+    if (!business) {
+        return <div>...Loading</div>;
+    }
+
     return (
         <>
             <Card sx={{ maxWidth: 345, marginBottom: "20px" }}>
@@ -26,7 +48,7 @@ const Wallet_Item = ({ itemDetails, setShareBusiness, handleOpen, itemId }) => {
                     className="header"
                     avatar={
                         <Avatar
-                            src={logo}
+                            src={business.logoUrl}
                             sx={{
                                 width: 50,
                                 height: 50,
@@ -41,8 +63,8 @@ const Wallet_Item = ({ itemDetails, setShareBusiness, handleOpen, itemId }) => {
                             <PhoneIcon />
                         </IconButton>
                     }
-                    title="Chick Shack"
-                    subheader="36-19 Broadway, Astoria NY"
+                    title={business.businessName}
+                    subheader={`${business.address}, ${business.city} ${business.state}`}
                 />
                 {/* <CardMedia
                     component="img"
@@ -85,7 +107,8 @@ const Wallet_Item = ({ itemDetails, setShareBusiness, handleOpen, itemId }) => {
                         <ShareIcon className="icon" />
                     </IconButton>
                     <IconButton aria-label="trade">
-                        <CompareArrowsIcon className="icon" />
+                        {/* <CompareArrowsIcon className="icon" /> */}
+                        <div>&nbsp;</div>
                     </IconButton>
                     <IconButton
                         aria-label="redeem"

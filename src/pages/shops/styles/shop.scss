@@ -13,5 +13,26 @@ body {
             max-width: 100%;
             height: auto;
         }
+
+        .shop__comments {
+            padding: 0px 0px 20px 20px;
+        }
+        .shop__commentBox {
+            display: flex;
+            margin-top: 10px;
+        }
+        .shop__input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            border-top: 1px solid lightgray;
+        }
+        .post__button {
+            flex: 0;
+            border: none;
+            color: #6082a3;
+            background-color: transparent;
+            border-top: 1px solid lightgray;
+        }
     }
 }

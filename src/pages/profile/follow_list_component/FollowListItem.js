@@ -8,7 +8,7 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import AddIcon from "@mui/icons-material/Add";
 import ShareIcon from "@mui/icons-material/Share";
 
-function FollowListItem({ business, handleOpenShareModal }) {
+function FollowListItem({ business, handleOpenShareModal, numPrizes }) {
     console.log("FollowListItem: ", business);
     return (
         <ListItem className="prize-list-item">
@@ -23,7 +23,7 @@ function FollowListItem({ business, handleOpenShareModal }) {
 
             <ListItemText
                 primary={business.businessInfo.businessName}
-                secondary={`# of Prizes: ${business.businessInfo.numPrizes}`}
+                secondary={`# of Prizes: ${numPrizes}`}
             />
 
             <ListItemSecondaryAction className="list-icons-wrapper">

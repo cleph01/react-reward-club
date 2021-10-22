@@ -27,3 +27,41 @@
         }
     }
 }
+
+.claim__btn {
+    display: block;
+    position: relative;
+    width: 150px;
+    height: auto;
+    padding: 5px;
+    border-radius: 25px;
+    background: #1c76d2;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f9f9f9;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease-out;
+    margin-top: 15px;
+}
+
+.cancel__btn {
+    display: block;
+    position: relative;
+    width: 150px;
+    height: auto;
+    padding: 5px;
+    border-radius: 25px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1c76d2;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease-out;
+    margin-top: 15px;
+}
