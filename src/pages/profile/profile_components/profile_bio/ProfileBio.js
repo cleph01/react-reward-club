@@ -1,4 +1,3 @@
-import React from "react";
 import "../../styles/profile_bio.scss";
 
 function ProfileBio({ user }) {
@@ -8,8 +7,7 @@ function ProfileBio({ user }) {
     return (
         <div className="profile__bio">
             <div className="profile__bio-textArea">
-                <h3>About Me</h3>
-                {user.userInfo.bio || "Tell Us Something"}
+                {user.userInfo.aboutMe || "Tell Us Something About You"}
             </div>
             <div className="profile__bio-joined">Joined: {dateJoined}</div>
         </div>

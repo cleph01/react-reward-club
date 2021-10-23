@@ -1,95 +1,111 @@
-import React, { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useParams } from "react-router";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import { makeStyles } from "@mui/styles";
+
 import ProfileImageUpload from "./components/ProfileImageUpload";
-import Nav from "../../components/nav_bar/Nav";
+
+import { db } from "../../firebase/firebase_config";
 
 import "./styles/profile_edit.scss";
 
-const useStyles = makeStyles((theme) => ({
-    card: {
-        maxWidth: 600,
-        margin: "auto",
-        textAlign: "center",
-        marginTop: "10px",
-        paddingBottom: "10px",
-    },
-    title: {
-        margin: "50px",
-        color: "#213b77",
-    },
-    error: {
-        verticalAlign: "middle",
-    },
-    textField: {
-        marginLeft: "10px",
-        marginRight: "10px",
-        width: 300,
-    },
-    submit: {
-        margin: "auto",
-        marginBottom: "10px",
-    },
-}));
-
 function EditProfile() {
-    const classes = useStyles();
-    const [values, setValues] = useState({
-        name: "",
-        handle: "",
-        email: "",
-        bio: "",
-        open: false,
-        error: "",
-        redirectToProfile: false,
-    });
+    const { userId } = useParams();
+
+    const [user, setUser] = useState();
+
+    const [updateObj, setUpdateObj] = useState({});
 
     const handleChange = (name) => (event) => {
-        setValues({ ...values, [name]: event.target.value });
+        setUpdateObj({ ...updateObj, [name]: event.target.value });
     };
 
-    const imgUrl =
-        "https://firebasestorage.googleapis.com/v0/b/socialiite-instagram-clone.appspot.com/o/images%2FIMG_82B4B1E571E6-1.jpeg?alt=media&token=4db7c353-d0a5-47c9-bc8a-31cdbbdad1e9";
+    const handleUdate = () => {
+        if (!!!updateObj.displayName && !!!updateObj.aboutMe) {
+            console.log("Not Empty Updates");
+        } else if (!!updateObj.displayName) {
+            console.log("Update Object: ", updateObj);
+            //Check if Display Name is Available
+            db.collection("user")
+                .where("displayName", "==", updateObj.displayName)
+                .get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.docs.length > 0) {
+                        console.log("Display Name Already Exists");
+                    } else {
+                        console.log("Display Name is Available");
+                    }
+                })
+                .catch((error) => {
+                    console.log("error checking display name: ", error);
+                });
+        } else if (!!!updateObj.displayName && !!updateObj.aboutMe) {
+            //update db directly
+        }
+    };
+    useEffect(() => {
+        db.collection("user")
+            .doc(userId)
+            .onSnapshot(
+                (doc) => {
+                    setUser(doc.data());
+                },
+                (error) => {
+                    console.log("Error setting User: ", error);
+                }
+            );
+    }, []);
+
+    if (!user) {
+        return <div>...Loading</div>;
+    }
+
     return (
-        <div style={{ margin: "100px 0px" }}>
-            <Nav />
-            <Card className={classes.card}>
-                <CardContent>
-                    <Typography variant="h5" className={classes.title}>
-                        Edit Profile
-                    </Typography>
-                    <ProfileImageUpload imgUrl={imgUrl} />
+        <div className="edit-profile-container">
+            <Card className="card">
+                <CardContent className="card-content">
+                    <Typography variant="h5">Edit Profile</Typography>
+                    <ProfileImageUpload imgUrl={user.avatarUrl} />
                     <TextField
-                        id="handle"
-                        label="Handle"
-                        className={classes.textField}
-                        value={values.handle}
-                        onChange={handleChange("handle")}
+                        id="displayName"
+                        label="Display Name"
+                        value={updateObj.displayName || user.displayName}
+                        onChange={handleChange("displayName")}
                         margin="normal"
                     />
+                    <div
+                        style={{
+                            color: "#55ab6e",
+                            display: !!updateObj.displayName ? "block" : "none",
+                        }}
+                    >
+                        <small>Original Details</small>
+                    </div>
                     <br />
                     <TextField
-                        id="bio"
-                        label="Bio"
-                        className={classes.textField}
-                        value={values.bio}
-                        onChange={handleChange("bio")}
+                        id="aboutMe"
+                        label="About Me"
+                        value={updateObj.aboutMe || user.aboutMe}
+                        onChange={handleChange("aboutMe")}
                         margin="normal"
+                        multiline
                     />
+                    <div
+                        style={{
+                            color: "#55ab6e",
+                            display: !!updateObj.displayName ? "block" : "none",
+                        }}
+                    >
+                        <small>Original Details</small>
+                    </div>
                     <br />{" "}
-                    {values.error && (
-                        <Typography component="p" color="error">
-                            <div className={classes.error}>error</div>
-                            {values.error}
-                        </Typography>
-                    )}
                 </CardContent>
                 <div className="btn-wrapper">
-                    <div className="submit-btn">Submit</div>
+                    <div className="submit-btn" onClick={handleUdate}>
+                        Submit
+                    </div>
                 </div>
             </Card>
         </div>

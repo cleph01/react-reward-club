@@ -130,7 +130,6 @@ function Profile() {
 
     return (
         <>
-            <Nav />
             <div className="profile-container">
                 <Card
                     sx={{
