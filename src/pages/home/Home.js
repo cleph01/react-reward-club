@@ -9,12 +9,10 @@ import "./styles/home.scss";
 import logo from "../../assets/images/logos/logo.png";
 
 function Home() {
-    const { user } = useContext(UserContext);
+    const { userState } = useContext(UserContext);
 
-    user ? console.log("Home User Id:", user.uid) : console.log("No User");
-
-    if (user) {
-        return <Redirect to={`/wallet/${user.uid}`} />;
+    if (userState.isAuthenticated) {
+        return <Redirect to={`/profile/${userState.userId}`} />;
     }
 
     return (

@@ -1,13 +1,13 @@
 import "../../styles/profile_bio.scss";
 
 function ProfileBio({ user }) {
-    console.log("User in Bio", user);
+    console.log("User at Bio: ", user);
 
-    const dateJoined = user.userInfo.created.toDate().toDateString();
+    const dateJoined = user.created.toDateString();
     return (
         <div className="profile__bio">
             <div className="profile__bio-textArea">
-                {user.userInfo.aboutMe || "Tell Us Something About You"}
+                {user.aboutMe || "Tell Us Something About You"}
             </div>
             <div className="profile__bio-joined">Joined: {dateJoined}</div>
         </div>

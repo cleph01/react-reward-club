@@ -41,7 +41,7 @@ import Nav from "../../components/nav_bar/Nav.js";
 //           : '/api/shops/defaultphoto'
 
 function Shop() {
-    const { user } = useContext(UserContext);
+    const { userState } = useContext(UserContext);
 
     const { shopId } = useParams();
 
@@ -76,7 +76,6 @@ function Shop() {
             .collection("loyaltyPrizes")
             .get()
             .then((doc) => {
-                console.log("docs: ", doc);
                 setPrizes(
                     doc.docs.map((doc) => ({
                         prizeId: doc.id,
@@ -108,11 +107,9 @@ function Shop() {
     const [openSnackBar, setOpenSnackBar] = useState(false);
 
     const handleOpenClaimModal = (itemObj) => {
-        if (goStatus.gotDistance && user) {
+        if (goStatus.gotDistance && userState.isAuthenticated) {
             setOpenClaimModal(true);
             setwalletPrize(itemObj);
-
-            console.log("Wallet Prize: ", walletPrize);
         } else {
             setAlertMsg({
                 message: "Please Provide Your Location and Be logged in",
@@ -131,8 +128,6 @@ function Shop() {
     const handleCloseShareModal = () => setOpenShareModal(false);
 
     const handleAddToWallet = () => {
-        console.log("Add to wallet invoked: ", walletPrize);
-
         if (
             walletPrize.prizeDetails.pointThreshold <=
             userBizRelationship.relationshipInfo.pointSum
@@ -140,7 +135,7 @@ function Shop() {
             //Add Prize to Wallet and Update pointsSum in Biz Relationship
             let walletRef = db
                 .collection("user")
-                .doc(user.uid)
+                .doc(userState.userId)
                 .collection("wallet");
 
             walletRef
@@ -154,12 +149,10 @@ function Shop() {
                     created: firebase.firestore.FieldValue.serverTimestamp(),
                 })
                 .then((docRef) => {
-                    console.log("Prize Added to Wallet with ID: ", docRef.id);
-
                     // Decrement Points Sum from BizRelationship
                     let userRef = db
                         .collection("user")
-                        .doc(user.uid)
+                        .doc(userState.userId)
                         .collection("bizRelationship")
                         .doc(userBizRelationship.realtionshipId);
 
@@ -210,7 +203,7 @@ function Shop() {
 
     const encodeMsg = encodeurl(
         `Wanted to share this with you. Check them out. http://localhost:3000/shop/${shopId}/${
-            user ? user.uid : "undefined"
+            userState.isAuthenticated ? userState.userId : "undefined"
         }`
     );
     const smsMessage =
@@ -230,24 +223,34 @@ function Shop() {
         p: 4,
     };
 
+    useEffect(() => {
+        let unsubscribe;
+
+        unsubscribe = db
+            .collection("shops")
+            .doc(shopId)
+            .collection("comments")
+            .orderBy("timestamp", "desc")
+            .onSnapshot((snapshot) => {
+                setComments(snapshot.docs.map((doc) => doc.data()));
+            });
+
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
     const postComment = (event) => {
         event.preventDefault();
 
         db.collection("shops").doc(shopId).collection("comments").add({
             text: comment,
-            username: user.user.displayName,
-            timestamp: db.FieldValue.serverTimestamp(),
+            username: userState.displayName,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
         setComment("");
     };
-
-    console.log("Shop Id: ", shopId);
-
-    console.log("Business info: ", business);
-    console.log("Prizes: ", prizes);
-    console.log("User: ", user || "undefined");
-    console.log("Wallet Prize: ", walletPrize);
 
     if (!business) {
         return <div>...Loading</div>;
@@ -297,6 +300,7 @@ function Shop() {
                     />
 
                     <div className="shop__comments">
+                        <small>Comments:</small>
                         {comments.map((comment, index) => (
                             <p key={index}>
                                 <strong>{comment.username}</strong>{" "}
@@ -305,7 +309,7 @@ function Shop() {
                         ))}
                     </div>
 
-                    {user && (
+                    {userState.isAuthenticated && (
                         <form className="shop__commentBox">
                             <input
                                 className="shop__input"

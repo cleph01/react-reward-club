@@ -79,14 +79,13 @@ function EditLoyaltyPrize() {
         };
     }, []);
 
-    console.log(shopId, prizeId);
-    console.log("Prize: ", prize);
+    
 
     if (!prize) {
         return <div>...Loading</div>;
     }
 
-    console.log("Emoji: ", chosenEmoji.emoji);
+    
 
     return (
         <div style={{ margin: "100px 0px" }}>

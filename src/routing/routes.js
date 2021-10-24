@@ -19,9 +19,9 @@ const DASHBOARD = "/dashboard/:userId";
  *  Private
  */
 // Display User Profile Details
-const PROFILE = "/profile/:userId";
+const PROFILE = "/profile";
 // Edit User Profile Details
-const EDIT_PROFILE = "/profile/edit/:userId"; // Private Route
+const EDIT_PROFILE = "/profile/edit/"; // Private Route
 
 /**
  *  Shoutout Posts
@@ -30,7 +30,7 @@ const EDIT_PROFILE = "/profile/edit/:userId"; // Private Route
 // Add New Post
 const NEW_POST = "/post/:userId/new";
 // Display Post by PostId
-const POST = "/post/:userId/:postId";
+const POST = "/post/:postId";
 // Display All Posts by a specific User
 const USER_POSTS = "/posts/:userId";
 /**
@@ -38,7 +38,7 @@ const USER_POSTS = "/posts/:userId";
  *  Private
  */
 // Display User's Digital Wallet
-const WALLET = "/wallet/:userId";
+const WALLET = "/wallet";
 
 /**
  *  Shops Community
@@ -47,7 +47,7 @@ const WALLET = "/wallet/:userId";
 // Display All Shops on Socialiite
 const SHOPS = "/shops/all";
 // Shop Profile Page - Allow for Referrer Tracking When CTA Follow
-const SHOP = "/shops/:shopId/:userId?";
+const SHOP = "/shops/:shopId";
 
 /**
  *  Store QR Code Routes

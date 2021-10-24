@@ -9,10 +9,9 @@ import AddIcon from "@mui/icons-material/Add";
 import ShareIcon from "@mui/icons-material/Share";
 
 function FollowListItem({ business, handleOpenShareModal, numPrizes }) {
-    console.log("FollowListItem: ", business);
     return (
         <ListItem className="prize-list-item">
-            <Link to={`/shop/${business.businessId}`}>
+            <Link to={`/shops/${business.businessId}`}>
                 <ListItemAvatar>
                     <Avatar
                         alt={business.businessInfo.businessName}

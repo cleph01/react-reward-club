@@ -18,13 +18,13 @@ import { firebase, db } from "../../firebase/firebase_config";
 
 import "./styles/post.scss";
 
-function Post({ username, caption, imageUrl, index }) {
-    const { user } = useContext(UserContext);
+function Post() {
+    const { userState } = useContext(UserContext);
 
-    const { postId, userId } = useParams();
+    const { postId } = useParams();
 
     // function Post(props) {
-    const [postUser, setPostUser] = useState();
+
     const [post, setPost] = useState();
     const [comment, setComment] = useState([]);
     const [comments, setComments] = useState([]);
@@ -36,16 +36,13 @@ function Post({ username, caption, imageUrl, index }) {
         imageUrl: "",
     });
 
-    // const user = useContext(UserContext)
-
     useEffect(() => {
         db.collection("user")
-            .doc(userId)
+            .doc(userState.userId)
             .collection("posts")
             .doc(postId)
             .get()
             .then((doc) => {
-                console.log("Post Data: ", doc);
                 setPost(doc.data());
             })
             .catch((err) => {
@@ -54,23 +51,11 @@ function Post({ username, caption, imageUrl, index }) {
     }, []);
 
     useEffect(() => {
-        db.collection("user")
-            .doc(userId)
-            .get()
-            .then((doc) => {
-                setPostUser(doc.data());
-            })
-            .catch((err) => {
-                console.log("Error geting User: ", err);
-            });
-    }, []);
-
-    useEffect(() => {
         let unsubscribe;
 
         unsubscribe = db
             .collection("user")
-            .doc(userId)
+            .doc(userState.userId)
             .collection("posts")
             .doc(postId)
             .collection("comments")
@@ -96,20 +81,18 @@ function Post({ username, caption, imageUrl, index }) {
         event.preventDefault();
 
         db.collection("user")
-            .doc(userId)
+            .doc(userState.userId)
             .collection("posts")
             .doc(postId)
             .collection("comments")
             .add({
                 text: comment,
-                username: user.displayName,
+                username: userState.displayName,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
 
         setComment("");
     };
-
-    console.log("Post & Comments", post, " - ", comments, " - ", postUser);
 
     if (!post) {
         return <div>...Loading</div>;
@@ -127,8 +110,8 @@ function Post({ username, caption, imageUrl, index }) {
                     avatar={
                         <Avatar
                             loading="lazy"
-                            alt={postUser.displayName}
-                            src={postUser.photoURL}
+                            alt={userState.displayName}
+                            src={userState.photoURL}
                         />
                     }
                     action={
@@ -141,7 +124,7 @@ function Post({ username, caption, imageUrl, index }) {
                             </sup>
                         </IconButton>
                     }
-                    title={postUser.displayName}
+                    title={userState.displayName}
                     subheader={post.businessName}
                 />
                 <CardContent className="youtube-wrapper">
@@ -154,7 +137,7 @@ function Post({ username, caption, imageUrl, index }) {
                     )}
 
                     <h4 className="post__text">
-                        <strong>{postUser.displayName} </strong>
+                        <strong>{userState.displayName} </strong>
                         {post.caption}
                     </h4>
 
@@ -169,7 +152,7 @@ function Post({ username, caption, imageUrl, index }) {
                         ))}
                     </div>
 
-                    {user && (
+                    {userState.isAuthenticated && (
                         <form className="post__commentBox">
                             <input
                                 className="post__input"

@@ -70,7 +70,6 @@ function ShopLogoUpload({ imgUrl, businessId }) {
         }
     };
 
-    console.log("Logo Upload: ", businessId);
     return (
         <div className="profile-imageupload">
             <center>

@@ -23,7 +23,7 @@ function PostGrid({ posts, userId }) {
                                 loading="lazy"
                             />
                         )}
-                        <Link to={`/post/${userId}/${item.postId}`}>
+                        <Link to={`/post/${item.postId}`}>
                             <ImageListItemBar
                                 title={`${item.post.caption.slice(0, 10)}...`}
                                 subtitle={item.post.businessName}

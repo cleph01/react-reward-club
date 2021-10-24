@@ -13,14 +13,10 @@ import "./styles/login.scss";
 import logo from "../../assets/images/logos/logo.png";
 
 function Login() {
-    const { user } = useContext(UserContext);
+    const { userState } = useContext(UserContext);
 
-    user
-        ? console.log("Login User Id:", user.uid)
-        : console.log("No User at Login");
-
-    if (user) {
-        return <Redirect to={`/profile/${user.uid}`} />;
+    if (userState.isAuthenticated) {
+        return <Redirect to="/profile" />;
     }
 
     return (

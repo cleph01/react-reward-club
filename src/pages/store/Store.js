@@ -37,7 +37,7 @@ function Store() {
             });
     }, []);
 
-    console.log("Business Info: ", businessInfo);
+
 
     if (!businessInfo) {
         return <div>...Loading</div>;

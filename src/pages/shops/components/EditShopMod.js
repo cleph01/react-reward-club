@@ -29,8 +29,6 @@ function EditShopMod(props) {
         });
     };
 
-    console.log("Values: ", values);
-
     return (
         <div className="edit-shop-mod-container">
             <CardContent>

@@ -1,6 +1,7 @@
-import React, { forwardRef, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import React, { forwardRef, useState, useEffect, useContext } from "react";
+
+import { UserContext } from "../../contexts/UserContext";
+
 import "./styles/wallet.scss";
 import { firebase, db } from "../../firebase/firebase_config";
 
@@ -30,7 +31,7 @@ const style = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 350,
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -40,7 +41,7 @@ const style = {
 const Wallet = (props) => {
     // State to hold post data from Firebase call
 
-    const { userId } = useParams();
+    const { userState } = useContext(UserContext);
 
     const [wallet, setWallet] = useState([]);
     const [walletItemId, setWalletItemId] = useState();
@@ -65,7 +66,7 @@ const Wallet = (props) => {
 
     //every time a new post is added this code fires
     useEffect(() => {
-        db.collection(`user/${userId}/wallet`)
+        db.collection(`user/${userState.userId}/wallet`)
             .where("redeemed", "==", false)
             .onSnapshot((snapshot) => {
                 setWallet(
@@ -79,7 +80,7 @@ const Wallet = (props) => {
 
     const handleRedeem = () => {
         db.collection("user")
-            .doc(userId)
+            .doc(userState.userId)
             .collection("wallet")
             .doc(walletItemId)
             .update({
@@ -112,7 +113,7 @@ const Wallet = (props) => {
     const encodeMsg = encodeurl(
         `Wanted to share this with you. Check them out. http://localhost:3000/shop/${
             shareBusiness ? shareBusiness.businessId : "undefined"
-        }/${userId ? userId : "undefined"}`
+        }/${userState.isAuthenticated ? userState.userId : "undefined"}`
     );
     const smsMessage =
         platform.macos || platform.ios
@@ -124,8 +125,6 @@ const Wallet = (props) => {
     return (
         <>
             <div className="container">
-                <Nav />
-
                 <div className="wallet-wrapper">
                     <div className="header">
                         <div className="emoji">&#x1F4B0;</div>

@@ -14,7 +14,7 @@ function AvailablePrizes({
     storeId,
     handleOpenShareModal,
 }) {
-    console.log("Available Prizes: ", prizes);
+    
 
     if (!prizes) {
         return <div>...Loading</div>;

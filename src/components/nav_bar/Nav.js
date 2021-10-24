@@ -8,13 +8,14 @@ import { UserContext } from "../../contexts/UserContext";
 
 import { auth } from "../../firebase/firebase_config";
 
-function Nav() {
-    const { user } = useContext(UserContext);
+function Nav({ isAuthenticated }) {
+    const { userState, userDispatch } = useContext(UserContext);
 
     let history = useHistory();
 
     const handleSignOut = () => {
         auth.signOut();
+        userDispatch({ type: "AUTH/LOGOUT" });
         history.push("/login");
     };
 
@@ -24,7 +25,7 @@ function Nav() {
                 <img className="logo" src={logo} alt="logo" />
             </div>
             <div className="navbar__body">
-                <Link to={`/profile/${user ? user.uid : "undefined"}`}>
+                <Link to="/profile">
                     <div>
                         <HomeIcon />
                     </div>
@@ -50,13 +51,19 @@ function Nav() {
                     <div>My Shop</div>
                 </Link> */}
 
-                <Link to={`/wallet/${user ? user.uid : "undefined"}`}>
+                <Link
+                    to={`/wallet/${
+                        userState.Authenticated ? userState.userId : "undefined"
+                    }`}
+                >
                     <div>Wallet</div>
                 </Link>
-                {user ? (
+                {isAuthenticated ? (
                     <span onClick={handleSignOut}>Sign Out</span>
                 ) : (
-                    <span>User No Esta</span>
+                    <Link to="/login">
+                        <span>Login</span>
+                    </Link>
                 )}
             </div>
         </div>

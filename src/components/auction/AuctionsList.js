@@ -181,8 +181,6 @@ function AuctionsList() {
     };
 
     const auctionState = (auction) => {
-        // console.log("AuctionBids: ", auction.bids.length);
-
         return (
             <span>
                 {currentDate < new Date(auction.bidStart) &&

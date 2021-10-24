@@ -1,10 +1,17 @@
 import React, { useState } from "react";
+import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import { storage, db } from "../../../firebase/firebase_config";
 import firebase from "firebase";
 import "../styles/profile_image_upload.scss";
 
-function ProfileImageUpload({ imgUrl, userId, username, setOpenUpload }) {
+function ProfileImageUpload({
+    imgUrl,
+    userId,
+    username,
+    setOpenUpload,
+    altName,
+}) {
     const [image, setImage] = useState(null);
     const [url, setUrl] = useState(imgUrl);
     const [progress, setProgress] = useState(0);
@@ -65,7 +72,11 @@ function ProfileImageUpload({ imgUrl, userId, username, setOpenUpload }) {
     return (
         <div className="profile-imageupload">
             <center>
-                <img className="avatar" src={url} alt="avatar" />
+                <Avatar
+                    src={url}
+                    alt={altName}
+                    sx={{ width: 56, height: 56 }}
+                />
             </center>
 
             <progress

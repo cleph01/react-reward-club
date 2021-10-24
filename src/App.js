@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect } from "react";
+import React, { lazy, Suspense, useState, useReducer, useEffect } from "react";
 
 import {
     BrowserRouter as Router,
@@ -7,59 +7,117 @@ import {
     useHistory,
 } from "react-router-dom";
 import { UserContext } from "./contexts/UserContext";
-import { auth } from "./firebase/firebase_config";
+// Import AuthReducer to manage state change in Context API
+import UserReducer from "./reducers/user-reducer/userReducer.js";
+import { auth, db, firebase } from "./firebase/firebase_config";
 import * as ROUTES from "./routing/routes";
 import * as COMPONENTS from "./routing/routeComponents";
 import PrivateRoute from "./routing/PrivateRoute";
 
 const Nav = lazy(() => import("./components/nav_bar/Nav"));
 
+const initialState = {
+    isAuthenticated: false,
+    userId: null,
+    displayName: null,
+    email: null,
+    aboutMe: null,
+    avatarUrl: null,
+    created: null,
+    seller: null,
+    isLoading: true,
+};
+
 function App() {
-    const [user, setUser] = useState(null);
+    const [userState, userDispatch] = useReducer(UserReducer, initialState);
+
     // Adding this as a auth status flag for protected route condition
     // prevents infinite re-rendering
 
-    let history = useHistory();
-
+    // Authenticate/Signin User
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((authUser) => {
             if (authUser) {
                 // user has logged in...
-                console.log(authUser);
+                console.log("Auth User at App: ", authUser);
                 // this state survives a refresh
                 // onAuthStateChanged listener uses cookie tracking
                 // to persist this state (state by default is not persistent)
-                setUser(authUser);
-                // Switches Flag Off for Protected Route logic
-
-                // if (authUser.displayName) {
-                //     // don't update username
-                // } else {
-                //     // update profile name
-                //     return authUser.updateProfile({
-                //         displayName: username,
-                //     });
-                // }
+                // userDispatch({ type: "AUTH/LOGIN", payload: authUser });
+                userExists(authUser);
             } else {
                 // user has logged out...
-                setUser(null);
+
+                userDispatch({ type: "AUTH/LOGOUT" });
             }
         });
         return () => {
-            // perform some cleanup actions
-            // i.e. detaches the listener previously attached
-            // from initial useEffect call since we are listening
-            // to frontend changes to user & username variables
             unsubscribe();
         };
-    }, [user]);
+    }, []);
 
+    // Update User Object if they exist in the DB
+
+    const userExists = async (authUser) => {
+        try {
+            const result = await db.collection("user").doc(authUser.uid).get();
+
+            if (result.exists) {
+                // If USer exists, update state with db Record
+                userDispatch({
+                    type: "USER/SET_EXISTING_DETAILS",
+                    payload: { ...result.data(), userId: authUser.uid },
+                });
+
+                console.log("User State after Setting: ", userState);
+            } else {
+                // If User does not Exist, Create New User
+                const newUserData = {
+                    displayName: authUser.displayName,
+                    avatarUrl: authUser.photoURL,
+                    seller: false,
+                    email: authUser.email,
+                    phoneNumber: authUser.phoneNumber,
+                    created: firebase.firestore.FieldValue.serverTimestamp(),
+                    aboutMe: "Tell Us Something About You!! 🙌",
+                };
+
+                createNewUser(newUserData, authUser.uid);
+            }
+        } catch (error) {
+            console.log("Error Checking User Exists: ", error);
+        }
+    };
+
+    const createNewUser = (userData, userId) => {
+        db.collection("user")
+            .doc(userId)
+            .set(userData)
+            .then(() => {
+                console.log("New User Created!");
+                userDispatch({
+                    type: "USER/SET_NEW_USER",
+                    payload: { ...userData, userId: userId },
+                });
+            })
+            .catch((error) => {
+                console.error("Error Creating User: ", error);
+            });
+    };
+
+    console.log("useReducer User: ", userState);
+
+    if (userState.isLoading) {
+        return <div>...Loading</div>;
+    }
     return (
         <div className="App">
-            <UserContext.Provider value={{ user, setUser }}>
+            <UserContext.Provider value={{ userState, userDispatch }}>
                 <Router>
                     <Suspense fallback={<p>Loading...</p>}>
-                        {user && <Nav />}
+                        {userState.isAuthenticated && (
+                            <Nav isAuthenticated={userState.isAuthenticated} />
+                        )}
                         <Switch>
                             {/**
                              *  Auth Routes
@@ -79,30 +137,53 @@ function App() {
                              * Dashboard Routes
                              * Private
                              */}
-                            <PrivateRoute path={ROUTES.DASHBOARD}>
+                            <PrivateRoute
+                                path={ROUTES.DASHBOARD}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.Dashboard />
                             </PrivateRoute>
                             {/**
                              *  User Profile
                              *  Private
                              */}
-                            <PrivateRoute exact path={ROUTES.PROFILE}>
+                            <PrivateRoute
+                                exact
+                                path={ROUTES.PROFILE}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.Profile />
                             </PrivateRoute>
-                            <PrivateRoute exact path={ROUTES.EDIT_PROFILE}>
+                            <PrivateRoute
+                                exact
+                                path={ROUTES.EDIT_PROFILE}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.EditProfile />
                             </PrivateRoute>
                             {/**
                              *  Shoutout Posts
                              *  Private
                              */}
-                            <PrivateRoute exact path={ROUTES.NEW_POST}>
+                            <PrivateRoute
+                                exact
+                                path={ROUTES.NEW_POST}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.NewPost />
                             </PrivateRoute>
-                            <PrivateRoute exact path={ROUTES.POST}>
+                            <PrivateRoute
+                                exact
+                                path={ROUTES.POST}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.Post />
                             </PrivateRoute>
-                            <PrivateRoute exact path={ROUTES.USER_POSTS}>
+                            <PrivateRoute
+                                exact
+                                path={ROUTES.USER_POSTS}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.UserPosts />
                             </PrivateRoute>
 
@@ -110,7 +191,10 @@ function App() {
                              *  Digital Wallet Routes
                              *  Private
                              */}
-                            <PrivateRoute path={ROUTES.WALLET}>
+                            <PrivateRoute
+                                path={ROUTES.WALLET}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.Wallet />
                             </PrivateRoute>
                             {/**
@@ -142,19 +226,34 @@ function App() {
                              *  User Ownerd Shop Routes
                              *  Private Routes
                              */}
-                            <PrivateRoute path={ROUTES.MY_SHOPS}>
+                            <PrivateRoute
+                                path={ROUTES.MY_SHOPS}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.MyShop />
                             </PrivateRoute>
-                            <PrivateRoute path={ROUTES.NEW_SHOP}>
+                            <PrivateRoute
+                                path={ROUTES.NEW_SHOP}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.NewShop />
                             </PrivateRoute>
-                            <PrivateRoute path={ROUTES.EDIT_SHOP}>
+                            <PrivateRoute
+                                path={ROUTES.EDIT_SHOP}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.EditShop />
                             </PrivateRoute>
-                            <PrivateRoute path={ROUTES.NEW_PRIZE}>
+                            <PrivateRoute
+                                path={ROUTES.NEW_PRIZE}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.NewPrize />
                             </PrivateRoute>
-                            <PrivateRoute path={ROUTES.EDIT_PRIZE}>
+                            <PrivateRoute
+                                path={ROUTES.EDIT_PRIZE}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
                                 <COMPONENTS.EditPrize />
                             </PrivateRoute>
                         </Switch>

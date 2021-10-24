@@ -74,7 +74,6 @@ function EditShop() {
             .collection("loyaltyPrizes")
             .get()
             .then((doc) => {
-                console.log("docs: ", doc);
                 setPrizes(
                     doc.docs.map((doc) => ({
                         prizeId: doc.id,
@@ -90,8 +89,6 @@ function EditShop() {
     const handleOpenEditModal = (itemObj) => {
         setOpenEditModal(true);
         setPromoDetails(itemObj);
-
-        console.log("Promo Details: ", itemObj);
     };
     const handleCloseEditModal = () => setOpenEditModal(false);
 
@@ -107,8 +104,6 @@ function EditShop() {
     const handleOpenDeleteModal = (itemObj) => {
         setOpenDeleteModal(true);
         setPromoDetails(itemObj);
-
-        console.log("Promo Details: ", itemObj);
     };
 
     const handleCloseDeleteModal = () => setOpenDeleteModal(false);
@@ -133,9 +128,6 @@ function EditShop() {
 
         setOpenSnackBar(false);
     };
-
-    console.log("Store Id: ", shopId);
-    console.log("Business Data: ", businessData);
 
     if (!businessData) {
         return <div>...Loading</div>;

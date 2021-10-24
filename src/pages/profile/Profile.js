@@ -1,16 +1,13 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
-import { useParams } from "react-router-dom";
-import { Route } from "react-router-dom";
-
-import { db, storage } from "../../firebase/firebase_config";
+import { db } from "../../firebase/firebase_config";
 import ProfileTabs from "./profile_components/ProfileTabs";
 
 import ProfileBodyTop from "./profile_components/profile_body/ProfileBodyTop";
 
 import ProfileBio from "./profile_components/profile_bio/ProfileBio";
 import ProfileRecentActivity from "./profile_components/profile_recent_activity/ProfileRecentActivity.js";
-import Nav from "../../components/nav_bar/Nav";
+
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -24,6 +21,8 @@ import { InlineShareButtons } from "sharethis-reactjs";
 
 import platform from "platform-detect/os.mjs";
 import encodeurl from "encodeurl";
+
+import { UserContext } from "../../contexts/UserContext";
 
 import "./styles/profile.scss";
 
@@ -41,9 +40,7 @@ const style = {
 };
 
 function Profile() {
-    const [user, setUser] = useState();
-
-    const { userId } = useParams();
+    const { userState } = useContext(UserContext);
 
     // State to Hold Posts
     const [posts, setPosts] = useState();
@@ -70,7 +67,7 @@ function Profile() {
                   ": http://localhost:3000/shops/" +
                   shareBusiness.businessId
                 : "undefined"
-        }/${userId}`
+        }/${userState.userId}`
     );
     const smsMessage =
         platform.macos || platform.ios
@@ -79,19 +76,9 @@ function Profile() {
 
     //every time a new post is added this code fires
     useEffect(() => {
-        // Get User Info
-        db.collection("user")
-            .doc(userId)
-            .onSnapshot((doc) => {
-                setUser({
-                    userId: doc.id,
-                    userInfo: doc.data(),
-                });
-            });
-
         // Get Posts
         db.collection("user")
-            .doc(userId)
+            .doc(userState.userId)
             .collection("posts")
             .onSnapshot((snapshot) => {
                 setPosts(
@@ -105,7 +92,7 @@ function Profile() {
         // Get BizRelationsip Following
         // Get Posts
         db.collection("user")
-            .doc(userId)
+            .doc(userState.userId)
             .collection("bizRelationship")
             .onSnapshot((snapshot) => {
                 setBizRelationships(
@@ -116,18 +103,12 @@ function Profile() {
                 );
             });
     }, []);
-    // const { user } = useContext(UserContext);
 
-    console.log("Profile user: ", user);
+    // if (!userState.userId) {
+    //     return <div>...Loading</div>;
+    // }
 
-    console.log("Posts: ", posts);
-
-    console.log("Biz Relationships Profile: ", bizRelationships);
-
-    if (!user) {
-        return <div>...Loading</div>;
-    }
-
+    console.log("user state at Profile: ", userState);
     return (
         <>
             <div className="profile-container">
@@ -138,13 +119,13 @@ function Profile() {
                 >
                     <CardContent className="card-content">
                         <div className="profile-body-wrapper">
-                            <ProfileBodyTop user={user} userId={userId} />
+                            <ProfileBodyTop user={userState} />
                         </div>
-                        <ProfileBio user={user} />
-                        <ProfileRecentActivity userId={userId} />
+                        <ProfileBio user={userState} />
+                        <ProfileRecentActivity userId={userState.userId} />
                         {posts ? (
                             <ProfileTabs
-                                userId={userId}
+                                userId={userState.userId}
                                 posts={posts}
                                 bizRelationships={bizRelationships}
                                 handleOpenShareModal={handleOpenShareModal}

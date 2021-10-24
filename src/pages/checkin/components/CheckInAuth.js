@@ -16,10 +16,10 @@ const style = {
     cursor: "pointer",
     transition: "transform 0.2s ease-out",
 };
-function CheckInAuth({ user, handleCheckin }) {
+function CheckInAuth({ isAuthenticated, handleCheckin }) {
     let component;
 
-    if (user) {
+    if (isAuthenticated) {
         component = (
             <div>
                 <center>

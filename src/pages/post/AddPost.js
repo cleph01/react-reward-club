@@ -14,11 +14,10 @@ import { storage, db } from "../../firebase/firebase_config";
 
 import YouTubeEmbed from "./components/YouTubeEmbed";
 
-import firebase from "firebase";
 import "./styles/add_post.scss";
 
 function AddPost({ userId, username, setOpenUpload }) {
-    const { user } = useContext(UserContext);
+    const { userState } = useContext(UserContext);
 
     const [image, setImage] = useState(null);
     const [url, setUrl] = useState("");
@@ -54,7 +53,7 @@ function AddPost({ userId, username, setOpenUpload }) {
 
     const handleUpload = () => {
         const uploadTask = storage
-            .ref(`user/${user.uid}/posts/${image.name}`)
+            .ref(`user/${userState.userId}/posts/${image.name}`)
             .put(image);
 
         uploadTask.on(
@@ -75,13 +74,13 @@ function AddPost({ userId, username, setOpenUpload }) {
             () => {
                 // complete function...
                 storage
-                    .ref(`user/${user.uid}/posts`)
+                    .ref(`user/${userState.userId}/posts`)
                     .child(image.name)
                     .getDownloadURL()
                     .then((url) => {
                         // post image inside db
                         db.collection("user")
-                            .doc(user.uid)
+                            .doc(userState.userId)
                             .collection("posts")
                             .add({
                                 timestamp: db.FieldValue.serverTimestamp(),
@@ -123,8 +122,8 @@ function AddPost({ userId, username, setOpenUpload }) {
                         avatar={
                             <Avatar
                                 loading="lazy"
-                                alt={user.displayName}
-                                src={user.photoURL}
+                                alt={userState.displayName}
+                                src={userState.avatarUrl}
                             />
                         }
                         action={
@@ -134,7 +133,7 @@ function AddPost({ userId, username, setOpenUpload }) {
                                 />
                             </IconButton>
                         }
-                        title={user.displayName}
+                        title={userState.displayName}
                         subheader="The Chicken Shack"
                     />
                     <CardContent className="youtube-wrapper">

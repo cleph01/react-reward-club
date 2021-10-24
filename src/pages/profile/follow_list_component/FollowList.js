@@ -11,8 +11,6 @@ import Divider from "@mui/material/Divider";
 import "./styles/follow_list.scss";
 
 function FollowList({ bizRelationships, handleOpenShareModal }) {
-    console.log("Available Prizes: ", bizRelationships);
-
     const [businessList, setBusinessList] = useState([]);
     const [prizes, setPrizes] = useState([]);
     const [numPrizes, setNumPrizes] = useState([]);
@@ -24,7 +22,6 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
         Promise.all(itemRefs)
             .then((docs) => {
                 let items = docs.map((doc) => {
-                    console.log("doc in promis: ", doc);
                     return { businessId: doc.id, businessInfo: doc.data() };
                 });
                 callback(items);
@@ -33,7 +30,6 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
     };
 
     const handleSettingBusinessList = (items) => {
-        console.log("Items List: ", items);
         setBusinessList(
             items.map((item) => ({
                 businessId: item.businessId,
@@ -52,11 +48,7 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
         });
         Promise.all(itemRefs)
             .then((docs) => {
-                console.log("Big DOC: ", docs);
                 let items = docs.map((doc) => {
-                    console.log(" Mapped DOC: ", doc.id, " - ", doc);
-                    console.log("mapped doc.docs", doc.docs);
-
                     return doc.docs;
                 });
                 callback(items);
@@ -88,8 +80,6 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
             (relationship) => relationship.relationshipId
         );
 
-        console.log("BizIds: ", bizIds);
-
         getItems(bizIds, handleSettingBusinessList);
 
         getPrizes(bizIds, handleSettingPrizes);
@@ -99,9 +89,6 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
         return <div>...Loading</div>;
     }
 
-    console.log("Business Info: ", businessList);
-    console.log("Prize List: ", prizes);
-    console.log("Num Prizes: ", numPrizes);
     return (
         <List className="prize-list-container">
             {businessList.map((business, i) => (

@@ -55,7 +55,7 @@ const style = {
 };
 
 function Checkin() {
-    const { user } = useContext(UserContext);
+    const { userState } = useContext(UserContext);
 
     const { shopId } = useParams();
     const [business, setBusiness] = useState();
@@ -73,7 +73,7 @@ function Checkin() {
     const [openShareModal, setOpenShareModal] = useState(false);
 
     const handleOpenClaimModal = (itemObj) => {
-        if (goStatus.gotDistance && user) {
+        if (goStatus.gotDistance && userState.userId) {
             setOpenClaimModal(true);
             setwalletPrize(itemObj);
 
@@ -105,7 +105,7 @@ function Checkin() {
             //Add Prize to Wallet and Update pointsSum in Biz Relationship
             let walletRef = db
                 .collection("user")
-                .doc(user.uid)
+                .doc(userState.userId)
                 .collection("wallet");
 
             walletRef
@@ -124,7 +124,7 @@ function Checkin() {
                     // Decrement Points Sum from BizRelationship
                     let userRef = db
                         .collection("user")
-                        .doc(user.uid)
+                        .doc(userState.userId)
                         .collection("bizRelationship")
                         .doc(userBizRelationship.realtionshipId);
 
@@ -190,7 +190,7 @@ function Checkin() {
             // a prize
 
             db.collection("user")
-                .doc(user.uid)
+                .doc(userState.userId)
                 .collection("bizRelationship")
                 .doc(shopId)
                 .onSnapshot(
@@ -281,8 +281,8 @@ function Checkin() {
 
     console.log("Business info: ", business);
     console.log("Prizes: ", prizes);
-    console.log("User: ", user);
     console.log("Wallet Prize: ", walletPrize);
+    console.log("Reducer User: ", userState);
 
     //every time a new post is added this code fires
     const handleCheckin = () => {
@@ -304,7 +304,8 @@ function Checkin() {
         console.log("Difference in Minutes: ", diffInMinutes);
 
         // First Check if Proximity is confirmed and user is logged in
-        const goodToGo = goStatus.gotDistance && user ? true : false;
+        const goodToGo =
+            goStatus.gotDistance && !!userState.userId ? true : false;
 
         if (!goodToGo) {
             setGoStatus({
@@ -320,7 +321,7 @@ function Checkin() {
 
         // Check if Relationship with business exists
         db.collection("user")
-            .doc(user.uid)
+            .doc(userState.userId)
             .collection("bizRelationship")
             .doc(shopId)
             .get()
@@ -334,7 +335,7 @@ function Checkin() {
                     const timeStamp = new Date(Date.now());
                     // Update Counts and Log
                     db.collection("user")
-                        .doc(user.uid)
+                        .doc(userState.useId)
                         .collection("bizRelationship")
                         .doc(shopId)
                         .update({
@@ -376,7 +377,7 @@ function Checkin() {
                     const timeStamp = new Date(Date.now());
                     // Add New Relationship Doc Here
                     db.collection("user")
-                        .doc(user.uid)
+                        .doc(userState.userId)
                         .collection("bizRelationship")
                         .doc(shopId)
                         .set({
@@ -413,7 +414,7 @@ function Checkin() {
 
     const encodeMsg = encodeurl(
         `Wanted to share this with you. Check them out. http://localhost:3000/shop/${shopId}/${
-            user ? user.uid : "undefined"
+            userState.userId ? userState.userId : "undefined"
         }`
     );
 
@@ -491,15 +492,21 @@ function Checkin() {
                         </h3>
                     )}
 
-                    <CheckinAuth user={user} handleCheckin={handleCheckin} />
+                    <CheckinAuth
+                        isAuthenticated={userState.isAuthenticated}
+                        handleCheckin={handleCheckin}
+                    />
                 </div>
-            ) : user ? (
+            ) : userState.isAuthenticated ? (
                 <GetLocation
                     handleGeoLocation={handleGeoLocation}
                     goStatus={goStatus}
                 />
             ) : (
-                <CheckinAuth user={user} handleCheckin={handleCheckin} />
+                <CheckinAuth
+                    isAuthenticated={userState.isAuthenticated}
+                    handleCheckin={handleCheckin}
+                />
             )}
 
             <Modal
