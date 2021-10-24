@@ -32,9 +32,10 @@ const UserReducer = (state, action) => {
                 seller: action.payload.seller,
                 aboutMe: action.payload.aboutMe,
                 email: action.payload.email,
-                created: action.payload.created.toDate(),
+                created: action.payload.created,
                 isLoading: false,
                 isAuthenticated: true,
+                socials: action.payload.socials,
             };
         default:
             return state;

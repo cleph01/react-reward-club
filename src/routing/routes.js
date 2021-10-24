@@ -18,8 +18,11 @@ const DASHBOARD = "/dashboard/:userId";
  *  User Profile
  *  Private
  */
-// Display User Profile Details
-const PROFILE = "/profile";
+// Display Current User Profile Details
+const MY_PROFILE = "/profile";
+// Display Other User Profile Details
+const USER_PROFILE = "/profile/:otherUserId";
+
 // Edit User Profile Details
 const EDIT_PROFILE = "/profile/edit/"; // Private Route
 
@@ -104,7 +107,8 @@ export {
     HOME,
     LOGIN,
     DASHBOARD,
-    PROFILE,
+    MY_PROFILE,
+    USER_PROFILE,
     EDIT_PROFILE,
     NEW_POST,
     POST,

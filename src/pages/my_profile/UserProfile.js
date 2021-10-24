@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-
+import { useParams } from "react-router-dom";
 import { db } from "../../firebase/firebase_config";
 import ProfileTabs from "./profile_components/ProfileTabs";
 
@@ -39,8 +39,13 @@ const style = {
     p: 4,
 };
 
-function Profile() {
+function UserProfile() {
     const { userState } = useContext(UserContext);
+
+    const { otherUserId } = useParams();
+
+    // State to Hold Other User Info
+    const [otherUser, setOtherUser] = useState();
 
     // State to Hold Posts
     const [posts, setPosts] = useState();
@@ -76,9 +81,24 @@ function Profile() {
 
     //every time a new post is added this code fires
     useEffect(() => {
+        // Get User Info
+        db.collection("user")
+            .doc(otherUserId)
+            .get()
+            .then((doc) => {
+                if (doc.exists) {
+                    setOtherUser(doc.data());
+                } else {
+                    return <div>User Not Found</div>;
+                }
+            })
+            .catch((err) => {
+                console.log("Error Getting Other User Info");
+            });
+
         // Get Posts
         db.collection("user")
-            .doc(userState.userId)
+            .doc(otherUserId)
             .collection("posts")
             .onSnapshot((snapshot) => {
                 setPosts(
@@ -90,9 +110,8 @@ function Profile() {
             });
 
         // Get BizRelationsip Following
-        // Get Posts
         db.collection("user")
-            .doc(userState.userId)
+            .doc(otherUserId)
             .collection("bizRelationship")
             .onSnapshot((snapshot) => {
                 setBizRelationships(
@@ -104,11 +123,12 @@ function Profile() {
             });
     }, []);
 
-    // if (!userState.userId) {
-    //     return <div>...Loading</div>;
-    // }
+    if (!otherUser) {
+        return <div>...Loading</div>;
+    }
 
-    console.log("user state at Profile: ", userState);
+    console.log("Other user useState at User Profile: ", otherUser);
+
     return (
         <>
             <div className="profile-container">
@@ -119,13 +139,13 @@ function Profile() {
                 >
                     <CardContent className="card-content">
                         <div className="profile-body-wrapper">
-                            <ProfileBodyTop user={userState} />
+                            <ProfileBodyTop user={otherUser} />
                         </div>
-                        <ProfileBio user={userState} />
-                        <ProfileRecentActivity userId={userState.userId} />
+                        <ProfileBio user={otherUser} />
+                        <ProfileRecentActivity userId={otherUserId} />
                         {posts ? (
                             <ProfileTabs
-                                userId={userState.userId}
+                                userId={otherUserId}
                                 posts={posts}
                                 bizRelationships={bizRelationships}
                                 handleOpenShareModal={handleOpenShareModal}
@@ -253,4 +273,4 @@ function Profile() {
     );
 }
 
-export default Profile;
+export default UserProfile;

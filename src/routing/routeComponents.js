@@ -8,7 +8,8 @@ const Login = lazy(() => import("../pages/auth/Login.js"));
 const Dashboard = lazy(() => import("../pages/dashboard/Dashboard.js"));
 
 // user Profile
-const Profile = lazy(() => import("../pages/profile/Profile.js"));
+const MyProfile = lazy(() => import("../pages/my_profile/MyProfile.js"));
+const UserProfile = lazy(() => import("../pages/my_profile/UserProfile.js"));
 const EditProfile = lazy(() => import("../pages/edit_profile/EditProfile.js"));
 
 // Shoutout Posts
@@ -50,7 +51,8 @@ export {
     Home,
     Login,
     Dashboard,
-    Profile,
+    MyProfile,
+    UserProfile,
     EditProfile,
     NewPost,
     Post,

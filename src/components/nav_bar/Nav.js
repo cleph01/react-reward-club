@@ -51,11 +51,7 @@ function Nav({ isAuthenticated }) {
                     <div>My Shop</div>
                 </Link> */}
 
-                <Link
-                    to={`/wallet/${
-                        userState.Authenticated ? userState.userId : "undefined"
-                    }`}
-                >
+                <Link to="/wallet">
                     <div>Wallet</div>
                 </Link>
                 {isAuthenticated ? (

@@ -9,24 +9,6 @@
         text-decoration: none;
     }
 
-    .edit-profile-btn {
-        display: block;
-        position: relative;
-        width: 150px;
-        height: 40px;
-        border-radius: 25px;
-        background: #f9f9f9;
-        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #1c76d2;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform 0.2s ease-out;
-        margin-top: 15px;
-    }
-
     .profile__personal-details {
         display: flex;
         flex-direction: column;
@@ -46,6 +28,32 @@
 
         .emai {
             color: lightgrey;
+        }
+    }
+
+    .socials__wrapper {
+        margin-top: 15px;
+
+        .facebook {
+            color: #1877f2;
+        }
+        .instagram {
+            color: #e4405f;
+        }
+        .linkedin {
+            color: #0a66c2;
+        }
+        .twitter {
+            color: #1da1f2;
+        }
+        .youtube {
+            color: #cd201f;
+        }
+        .github {
+            color: #34465d;
+        }
+        .web {
+            color: #0061ff;
         }
     }
 }

@@ -73,13 +73,14 @@ function App() {
             } else {
                 // If User does not Exist, Create New User
                 const newUserData = {
-                    displayName: authUser.displayName,
+                    displayName: authUser.email,
                     avatarUrl: authUser.photoURL,
                     seller: false,
                     email: authUser.email,
                     phoneNumber: authUser.phoneNumber,
                     created: firebase.firestore.FieldValue.serverTimestamp(),
                     aboutMe: "Tell Us Something About You!! 🙌",
+                    socials: {},
                 };
 
                 createNewUser(newUserData, authUser.uid);
@@ -144,15 +145,26 @@ function App() {
                                 <COMPONENTS.Dashboard />
                             </PrivateRoute>
                             {/**
-                             *  User Profile
+                             *  My Profile
                              *  Private
                              */}
                             <PrivateRoute
                                 exact
-                                path={ROUTES.PROFILE}
+                                path={ROUTES.MY_PROFILE}
                                 isAuthenticated={userState.isAuthenticated}
                             >
-                                <COMPONENTS.Profile />
+                                <COMPONENTS.MyProfile />
+                            </PrivateRoute>
+                            {/**
+                             *  Other User Profile
+                             *  Private
+                             */}
+                            <PrivateRoute
+                                exact
+                                path={ROUTES.USER_PROFILE}
+                                isAuthenticated={userState.isAuthenticated}
+                            >
+                                <COMPONENTS.UserProfile />
                             </PrivateRoute>
                             <PrivateRoute
                                 exact
