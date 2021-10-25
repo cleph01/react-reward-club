@@ -24,7 +24,6 @@ function AllShops() {
 
     return (
         <div className="shop-container">
-            <Nav />
             <Card className={classes.card}>
                 <CardContent>
                     <Typography variant="h5">All Shops</Typography>

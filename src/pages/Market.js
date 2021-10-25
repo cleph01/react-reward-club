@@ -9,7 +9,6 @@ import "../styles/market-place.scss";
 function Market() {
     return (
         <div>
-            <Nav />
             <div className="root-container-grid">
                 <div className="col col1">
                     <Search />

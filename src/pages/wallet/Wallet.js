@@ -27,11 +27,14 @@ import encodeurl from "encodeurl";
 import { InlineShareButtons } from "sharethis-reactjs";
 
 const style = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 350,
+    width: 355,
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -111,10 +114,15 @@ const Wallet = (props) => {
     };
 
     const encodeMsg = encodeurl(
-        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${
-            shareBusiness ? shareBusiness.businessId : "undefined"
-        }/${userState.isAuthenticated ? userState.userId : "undefined"}`
+        `Wanted to share this with you. Check them out. ${
+            shareBusiness
+                ? shareBusiness.businessName +
+                  ": http://localhost:3000/shops/" +
+                  shareBusiness.businessId
+                : "undefined"
+        }/${userState.userId}`
     );
+
     const smsMessage =
         platform.macos || platform.ios
             ? `sms:&body=${encodeMsg}`
@@ -138,6 +146,7 @@ const Wallet = (props) => {
                                 handleOpen={handleOpen}
                                 handleCloseClaimModal={handleCloseClaimModal}
                                 setShareBusiness={setShareBusiness}
+                                setOpenShareModal={setOpenShareModal}
                             />
                         ))
                     ) : (
@@ -166,12 +175,7 @@ const Wallet = (props) => {
                         Sure About Claiming Prize?
                     </Typography>
 
-                    <Typography
-                        id="modal-modal-sub-description"
-                        sx={{ mt: 2, textAlign: "center", fontSize: "46px" }}
-                    >
-                        Cannot Be Reversed
-                    </Typography>
+                    <h3>Cannot Be Reversed</h3>
                     <div
                         style={{
                             display: "flex",

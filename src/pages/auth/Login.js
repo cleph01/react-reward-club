@@ -1,8 +1,8 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 
 import { Redirect } from "react-router";
 
-import { useLocation } from "react-router";
+import { useParams } from "react-router-dom";
 
 import Auth from "../../Auth";
 
@@ -15,9 +15,13 @@ import logo from "../../assets/images/logos/logo.png";
 function Login() {
     const { userState } = useContext(UserContext);
 
+    const { referrerId } = useParams();
+
     if (userState.isAuthenticated) {
         return <Redirect to="/profile" />;
     }
+
+    console.log("ReferrerId: ", referrerId);
 
     return (
         <div className="container">
@@ -29,7 +33,7 @@ function Login() {
                 <h3>Win Stuff, Trade Stuff, Share Stuff</h3>
                 <h3>and Get Paid</h3>
 
-                <Auth />
+                <Auth referrerId={referrerId} />
             </div>
         </div>
     );

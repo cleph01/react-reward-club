@@ -31,7 +31,6 @@ const product = {
 function Product() {
     return (
         <div>
-            <Nav />
             <div className="root-container-grid">
                 <div className="col col1">
                     <Card className="card">

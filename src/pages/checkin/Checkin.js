@@ -413,9 +413,13 @@ function Checkin() {
     };
 
     const encodeMsg = encodeurl(
-        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${shopId}/${
-            userState.userId ? userState.userId : "undefined"
-        }`
+        `Wanted to share this with you. Check them out. ${
+            business
+                ? business.businessName +
+                  ": http://localhost:3000/shops/" +
+                  business.businessId
+                : "undefined"
+        }/${userState.userId}`
     );
 
     const smsMessage =

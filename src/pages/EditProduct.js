@@ -35,7 +35,6 @@ function EditProduct() {
 
     return (
         <div style={{ margin: "100px 0px" }}>
-            <Nav />
             <Card className={"card"}>
                 <CardContent>
                     <Typography variant="h5" className="title">

@@ -31,7 +31,7 @@
 .claim__btn {
     display: block;
     position: relative;
-    width: 125px;
+    width: 115px;
     height: auto;
     padding: 5px;
     border-radius: 25px;
@@ -50,7 +50,7 @@
 .cancel__btn {
     display: block;
     position: relative;
-    width: 125px;
+    width: 115px;
     height: auto;
     padding: 5px;
     border-radius: 25px;
@@ -64,4 +64,5 @@
     cursor: pointer;
     transition: transform 0.2s ease-out;
     margin-top: 15px;
+    margin-left: 10px;
 }

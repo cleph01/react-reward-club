@@ -22,7 +22,13 @@ import "../styles/wallet-item.scss";
 
 import logo from "../../../assets/images/logos/chicken_shack_logo.png";
 
-const Wallet_Item = ({ itemDetails, setShareBusiness, handleOpen, itemId }) => {
+const Wallet_Item = ({
+    itemDetails,
+    setShareBusiness,
+    handleOpen,
+    itemId,
+    setOpenShareModal,
+}) => {
     const [business, setBusiness] = useState();
 
     useEffect(() => {
@@ -59,9 +65,11 @@ const Wallet_Item = ({ itemDetails, setShareBusiness, handleOpen, itemId }) => {
                         />
                     }
                     action={
-                        <IconButton aria-label="settings">
-                            <PhoneIcon />
-                        </IconButton>
+                        <a href={`tel:${business.phone}`}>
+                            <IconButton aria-label="settings">
+                                <PhoneIcon />
+                            </IconButton>
+                        </a>
                     }
                     title={business.businessName}
                     subheader={`${business.address}, ${business.city} ${business.state}`}
@@ -97,12 +105,17 @@ const Wallet_Item = ({ itemDetails, setShareBusiness, handleOpen, itemId }) => {
                     </IconButton> */}
                     <IconButton
                         aria-label="share"
-                        onClick={() =>
+                        onClick={() => {
                             setShareBusiness({
                                 businessId: itemDetails.businessId,
                                 businessName: itemDetails.businessName,
-                            })
-                        }
+                            });
+                            setOpenShareModal(true);
+                            console.log(
+                                "Business at Wallet Item: ",
+                                itemDetails.businessId
+                            );
+                        }}
                     >
                         <ShareIcon className="icon" />
                     </IconButton>

@@ -58,7 +58,6 @@ function Shop() {
 
     return (
         <div className={classes.root} style={{ height: "100vh" }}>
-            <Nav />
             <Grid container spacing={8}>
                 <Grid item xs={4} sm={4}>
                     <Card

@@ -134,7 +134,6 @@ function EditShop() {
     }
     return (
         <div>
-            <Nav />
             <div className="edit-shop-container">
                 <Card sx={{ maxWidth: 345, minWidth: 345 }}>
                     <EditShopMod businessData={businessData} />

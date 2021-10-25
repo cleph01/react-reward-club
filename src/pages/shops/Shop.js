@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, forwardRef } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -14,7 +14,9 @@ import { firebase, db } from "../../firebase/firebase_config";
 
 import IconButton from "@mui/material/IconButton";
 
+import AddIcon from "@mui/icons-material/Add";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import LoginIcon from "@mui/icons-material/Login";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -202,9 +204,13 @@ function Shop() {
     };
 
     const encodeMsg = encodeurl(
-        `Wanted to share this with you. Check them out. http://localhost:3000/shop/${shopId}/${
-            userState.isAuthenticated ? userState.userId : "undefined"
-        }`
+        `Wanted to share this with you. Check them out. ${
+            business
+                ? business.businessName +
+                  ": http://localhost:3000/shops/" +
+                  business.businessId
+                : "undefined"
+        }/${userState.userId}`
     );
     const smsMessage =
         platform.macos || platform.ios
@@ -252,14 +258,20 @@ function Shop() {
         setComment("");
     };
 
+    const handleFollow = () => {
+        if (userState.isAuthenticated) {
+            console.log("User is Logged IN");
+        } else {
+            console.log("Push to Login Page");
+        }
+    };
+
     if (!business) {
         return <div>...Loading</div>;
     }
 
     return (
         <div className="container">
-            <Nav />
-
             <Card sx={{ maxWidth: 345 }}>
                 <CardHeader
                     avatar={
@@ -287,9 +299,29 @@ function Shop() {
                 />
                 <CardContent>
                     <YouTubeEmbed youtubeId={business.youtubeId} />
-                    <h3>About Us </h3>
+                    <div className="aboutUs-header">
+                        <h3>About Us </h3>
 
-                    <div>{business.description}</div>
+                        {userState.isAuthenticated ? (
+                            <div className="follow-btn" onClick={handleFollow}>
+                                <AddIcon /> Follow
+                            </div>
+                        ) : (
+                            <Link
+                                to="/login"
+                                style={{ textDecoration: "none" }}
+                            >
+                                <div className="follow-btn">
+                                    <LoginIcon />
+                                    &nbsp;Login
+                                </div>
+                            </Link>
+                        )}
+                    </div>
+
+                    <div className="business-description">
+                        {business.description}
+                    </div>
 
                     <h3>Free Prizes </h3>
                     <AvailablePrizes

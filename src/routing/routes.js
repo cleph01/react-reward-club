@@ -5,7 +5,7 @@
 // Display a Publics Facing Home Page
 const HOME = "/";
 // Display the Login Page
-const LOGIN = "/login";
+const LOGIN = "/login/:referrerId?";
 
 /**
  * Dashboard Routes
@@ -50,7 +50,7 @@ const WALLET = "/wallet";
 // Display All Shops on Socialiite
 const SHOPS = "/shops/all";
 // Shop Profile Page - Allow for Referrer Tracking When CTA Follow
-const SHOP = "/shops/:shopId";
+const SHOP = "/shops/:shopId/:referrerId?";
 
 /**
  *  Store QR Code Routes

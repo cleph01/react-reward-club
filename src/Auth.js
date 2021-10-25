@@ -4,7 +4,7 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { UserContext } from "./contexts/UserContext";
 import { firebase, auth } from "./firebase/firebase_config";
 
-function Auth() {
+function Auth({referrerId}) {
     const { userState } = useContext(UserContext);
 
     const history = useHistory();

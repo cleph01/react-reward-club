@@ -33,7 +33,6 @@ const product = {
 function Auctions() {
     return (
         <div>
-            <Nav />
             <div className="root-container-grid">
                 <div className="card-wrapper">
                     <div className="headline">

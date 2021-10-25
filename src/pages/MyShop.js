@@ -30,7 +30,6 @@ function Shop() {
 
     return (
         <div className="shop-container">
-            <Nav />
             <Card className={classes.card}>
                 <CardContent>
                     <div className="shop-header">
@@ -38,12 +37,11 @@ function Shop() {
                             <Avatar alt="Charlie" src={imageSrc} />
                             <h3>Your Shops</h3>
                         </div>
-                        <Link to="/seller/shop/new" >
-                        <div className="add-shop-btn">
-                            
-                            <AddBoxIcon />
-                            New Shop
-                        </div>
+                        <Link to="/seller/shop/new">
+                            <div className="add-shop-btn">
+                                <AddBoxIcon />
+                                New Shop
+                            </div>
                         </Link>
                     </div>
                     <Suspense fallback={<div>Loading...</div>}>

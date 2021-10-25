@@ -30,7 +30,6 @@ function NewShop() {
 
     return (
         <div className="new-shop-container">
-            <Nav />
             <Card className="card-wrapper">
                 <CardContent>
                     <center>

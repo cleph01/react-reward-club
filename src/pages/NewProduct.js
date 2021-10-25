@@ -31,7 +31,6 @@ function NewProduct() {
 
     return (
         <div className="new-product-container">
-            <Nav />
             <Card className="card-wrapper">
                 <CardContent>
                     <center>
