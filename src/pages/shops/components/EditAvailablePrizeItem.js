@@ -16,7 +16,7 @@ function EditAvailablePrizeItem({ prize, shopId, handleOpenDeleteModal }) {
             </ListItemAvatar>
             <div>
                 <ListItemText
-                    primary={prize.prize.itemDescription}
+                    primary={prize.prize.prizeDescription}
                     secondary={`Points Needed: ${prize.prize.pointThreshold}`}
                 />
             </div>

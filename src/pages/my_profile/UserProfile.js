@@ -65,6 +65,14 @@ function UserProfile() {
         setOpenShareModal(true);
     };
 
+    const handleFollow = () => {
+        console.log("Handle Follow");
+    };
+
+    const handleUnFollow = () => {
+        console.log("Handle UnFollow");
+    };
+
     const encodeMsg = encodeurl(
         `Wanted to share this with you. Check them out. ${
             shareBusiness
@@ -127,7 +135,7 @@ function UserProfile() {
         return <div>...Loading</div>;
     }
 
-    console.log("Other user useState at User Profile: ", otherUser);
+    console.log("Other user at User Profile: ", otherUser);
 
     return (
         <>
@@ -141,7 +149,12 @@ function UserProfile() {
                         <div className="profile-body-wrapper">
                             <ProfileBodyTop user={otherUser} />
                         </div>
-                        <ProfileBio user={otherUser} />
+                        <ProfileBio
+                            user={otherUser}
+                            otherUserId={otherUserId}
+                            handleFollow={handleFollow}
+                            handleUnFollow={handleUnFollow}
+                        />
                         <ProfileRecentActivity userId={otherUserId} />
                         {posts ? (
                             <ProfileTabs

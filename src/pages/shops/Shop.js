@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, forwardRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -15,6 +15,7 @@ import { firebase, db } from "../../firebase/firebase_config";
 import IconButton from "@mui/material/IconButton";
 
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import LoginIcon from "@mui/icons-material/Login";
 
@@ -36,13 +37,13 @@ import encodeurl from "encodeurl";
 
 import "./styles/shop.scss";
 
-import Nav from "../../components/nav_bar/Nav.js";
-
 // const logoUrl = shop._id
 //           ? `/api/shops/logo/${shop._id}?${new Date().getTime()}`
 //           : '/api/shops/defaultphoto'
 
 function Shop() {
+    const history = useHistory();
+
     const { userState } = useContext(UserContext);
 
     const { shopId } = useParams();
@@ -76,6 +77,7 @@ function Shop() {
         db.collection("shops")
             .doc(shopId)
             .collection("loyaltyPrizes")
+            .where("incentive", "==", true)
             .get()
             .then((doc) => {
                 setPrizes(
@@ -109,6 +111,12 @@ function Shop() {
     const [openSnackBar, setOpenSnackBar] = useState(false);
 
     const handleOpenClaimModal = (itemObj) => {
+        if (!userState.isAuthenticated) {
+            console.log("Open Claim Modal");
+
+            history.push("/login");
+        }
+
         if (goStatus.gotDistance && userState.isAuthenticated) {
             setOpenClaimModal(true);
             setwalletPrize(itemObj);
@@ -124,6 +132,11 @@ function Shop() {
     const handleCloseClaimModal = () => setOpenClaimModal(false);
 
     const handleOpenShareModal = () => {
+        if (!userState.isAuthenticated) {
+            console.log("Open Claim Modal");
+            history.push("/login");
+        }
+
         setOpenShareModal(true);
     };
 
@@ -145,7 +158,7 @@ function Shop() {
                     businessId: shopId,
                     businessName: business.businessName,
                     emoji: walletPrize.prizeDetails.emoji,
-                    itemDescription: walletPrize.prizeDetails.itemDescription,
+                    itemDescription: walletPrize.prizeDetails.prizeDescription,
                     itemId: walletPrize.prizeId,
                     redeemed: false,
                     created: firebase.firestore.FieldValue.serverTimestamp(),
@@ -208,7 +221,7 @@ function Shop() {
             business
                 ? business.businessName +
                   ": http://localhost:3000/shops/" +
-                  business.businessId
+                  shopId
                 : "undefined"
         }/${userState.userId}`
     );
@@ -266,6 +279,8 @@ function Shop() {
         }
     };
 
+    console.log("Business at Shop page: ", business);
+
     if (!business) {
         return <div>...Loading</div>;
     }
@@ -294,18 +309,35 @@ function Shop() {
                             <LocalFireDepartmentIcon />
                         </IconButton>
                     }
-                    title="Chick Shack"
-                    subheader="36-19 Broadway, Astoria NY"
+                    title={business.businessName}
+                    subheader={`${business.address}, ${business.city} ${business.state}`}
                 />
                 <CardContent>
                     <YouTubeEmbed youtubeId={business.youtubeId} />
                     <div className="aboutUs-header">
-                        <h3>About Us </h3>
+                        <div>
+                            <h3>About Us </h3>
+                            <div className="numFollowers">
+                                {business.followers.length} followers
+                            </div>
+                        </div>
 
                         {userState.isAuthenticated ? (
-                            <div className="follow-btn" onClick={handleFollow}>
-                                <AddIcon /> Follow
-                            </div>
+                            !userState.followingBusinesses.includes(shopId) ? (
+                                <div
+                                    className="follow-btn"
+                                    onClick={handleFollow}
+                                >
+                                    <AddIcon /> Follow
+                                </div>
+                            ) : (
+                                <div
+                                    className="follow-btn"
+                                    onClick={handleFollow}
+                                >
+                                    <RemoveIcon /> UnFollow
+                                </div>
+                            )
                         ) : (
                             <Link
                                 to="/login"
@@ -313,7 +345,7 @@ function Shop() {
                             >
                                 <div className="follow-btn">
                                     <LoginIcon />
-                                    &nbsp;Login
+                                    &nbsp;&nbsp;Login
                                 </div>
                             </Link>
                         )}

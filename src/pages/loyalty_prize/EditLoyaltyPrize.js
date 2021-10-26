@@ -33,7 +33,7 @@ function EditLoyaltyPrize() {
     const handleReset = () => {
         setValues({
             emoji: prize.emoji,
-            description: prize.itemDescription,
+            description: prize.prizeDescription,
         });
     };
 
@@ -142,7 +142,7 @@ function EditLoyaltyPrize() {
                     <TextField
                         label="Prize (i.e. FREE Fries) 17 Chars max"
                         className="textField"
-                        value={values.description || prize.itemDescription}
+                        value={values.description || prize.prizeDescription}
                         onChange={handleChange("description")}
                         margin="normal"
                         multiline

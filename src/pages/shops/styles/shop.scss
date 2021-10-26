@@ -15,10 +15,15 @@ body {
             align-items: center;
             margin: 10px 0px;
 
+            .numFollowers {
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+
             .follow-btn {
                 display: block;
                 position: relative;
-                width: 100px;
+                width: 115px;
                 height: 40px;
                 border-radius: 25px;
                 background: $secondary;

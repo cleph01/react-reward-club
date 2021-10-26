@@ -116,6 +116,16 @@ function ProfileBodyTop({ user }) {
                     </a>
                 )}
             </Stack>
+            <div
+                style={{
+                    fontStyle: "italic",
+                    marginTop: "10px",
+                    display:
+                        Object.keys(user.socials).length > 0 ? "block" : "none",
+                }}
+            >
+                👆 <small>My Other Socials</small> 👆
+            </div>
         </div>
     );
 }

@@ -15,6 +15,9 @@ const UserReducer = (state, action) => {
                 create: action.payload.created,
                 aboutMe: action.payload.aboutMe,
                 isLoading: false,
+                followers: [],
+                followingBusinesses: [],
+                followingFriends: [],
             };
 
         case "AUTH/LOGOUT":
@@ -36,7 +39,18 @@ const UserReducer = (state, action) => {
                 isLoading: false,
                 isAuthenticated: true,
                 socials: action.payload.socials,
+                followers: action.payload.followers,
+                followingBusinesses: action.payload.followingBusinesses,
+                followingFriends: action.payload.followingFriends,
             };
+
+        case "USER/SET_REFERRER":
+            console.log("Setting Details: ", action.payload);
+            return {
+                ...state,
+                referredBy: action.payload.referrerId,
+            };
+
         default:
             return state;
     }

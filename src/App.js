@@ -157,15 +157,14 @@ function App() {
                             </PrivateRoute>
                             {/**
                              *  Other User Profile
-                             *  Private
+                             *  Public
                              */}
-                            <PrivateRoute
+                            <Route
                                 exact
                                 path={ROUTES.USER_PROFILE}
-                                isAuthenticated={userState.isAuthenticated}
-                            >
-                                <COMPONENTS.UserProfile />
-                            </PrivateRoute>
+                                component={COMPONENTS.UserProfile}
+                            />
+
                             <PrivateRoute
                                 exact
                                 path={ROUTES.EDIT_PROFILE}
@@ -174,7 +173,7 @@ function App() {
                                 <COMPONENTS.EditProfile />
                             </PrivateRoute>
                             {/**
-                             *  Shoutout Posts
+                             *  Shoutout Add NewPosts
                              *  Private
                              */}
                             <PrivateRoute
@@ -184,13 +183,16 @@ function App() {
                             >
                                 <COMPONENTS.NewPost />
                             </PrivateRoute>
-                            <PrivateRoute
+                            {/**
+                             *  Shoutout Display Post
+                             *  Public
+                             */}
+                            <Route
                                 exact
                                 path={ROUTES.POST}
-                                isAuthenticated={userState.isAuthenticated}
-                            >
-                                <COMPONENTS.Post />
-                            </PrivateRoute>
+                                component={COMPONENTS.Post}
+                            />
+
                             <PrivateRoute
                                 exact
                                 path={ROUTES.USER_POSTS}

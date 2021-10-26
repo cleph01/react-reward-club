@@ -4,8 +4,8 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { UserContext } from "./contexts/UserContext";
 import { firebase, auth } from "./firebase/firebase_config";
 
-function Auth({referrerId}) {
-    const { userState } = useContext(UserContext);
+function Auth({ referrerId }) {
+    const { userState, userDispatch } = useContext(UserContext);
 
     const history = useHistory();
 
@@ -33,6 +33,10 @@ function Auth({referrerId}) {
                         ],
                         callbacks: {
                             signInSuccessWithAuthResult: (authUser) => {
+                                userDispatch({
+                                    type: "USER/SET_REFERRER",
+                                    payload: { referrerId: referrerId },
+                                });
                                 history.push("/profile");
                             },
                         },

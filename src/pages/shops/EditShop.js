@@ -229,7 +229,7 @@ function EditShop() {
                         </div>
                         <div style={{ fontSize: "26px" }}>
                             {promoDetails
-                                ? promoDetails.prizeDetails.itemDescription
+                                ? promoDetails.prizeDetails.prizeDescription
                                 : "undefined"}
                         </div>
                     </div>

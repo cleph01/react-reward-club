@@ -65,7 +65,10 @@ const Wallet_Item = ({
                         />
                     }
                     action={
-                        <a href={`tel:${business.phone}`}>
+                        <a
+                            href={`tel:${business.phone}`}
+                            style={{ textDecoration: "none" }}
+                        >
                             <IconButton aria-label="settings">
                                 <PhoneIcon />
                             </IconButton>

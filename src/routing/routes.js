@@ -21,7 +21,7 @@ const DASHBOARD = "/dashboard/:userId";
 // Display Current User Profile Details
 const MY_PROFILE = "/profile";
 // Display Other User Profile Details
-const USER_PROFILE = "/profile/:otherUserId";
+const USER_PROFILE = "/user/:otherUserId";
 
 // Edit User Profile Details
 const EDIT_PROFILE = "/profile/edit/"; // Private Route

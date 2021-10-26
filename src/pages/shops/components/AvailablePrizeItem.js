@@ -20,8 +20,8 @@ function AvailablePrizeItem({
             </ListItemAvatar>
             <div>
                 <ListItemText
-                    primary={prize.prize.itemDescription}
-                    secondary={`Points Needed: ${prize.prize.pointThreshold}`}
+                    primary={prize.prize.prizeDescription}
+                    secondary={`Valued at ${prize.prize.pointThreshold} points`}
                 />
             </div>
             <ListItemSecondaryAction className="list-icons-wrapper">
