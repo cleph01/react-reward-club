@@ -4,13 +4,15 @@ import List from "@mui/material/List";
 
 import { db } from "../../../firebase/firebase_config";
 
-import FollowListItem from "./FollowListItem";
+import FollowListItem from "./FollowBizListItem";
 
 import Divider from "@mui/material/Divider";
 
-import "./styles/follow_list.scss";
+import UpcomingMessage from "../components/UpcomingMessage";
 
-function FollowList({ bizRelationships, handleOpenShareModal }) {
+import "./styles/follow_biz_list.scss";
+
+function FollowBizList({ bizRelationships, handleOpenShareModal }) {
     const [businessList, setBusinessList] = useState([]);
     const [prizes, setPrizes] = useState([]);
     const [numPrizes, setNumPrizes] = useState([]);
@@ -91,18 +93,22 @@ function FollowList({ bizRelationships, handleOpenShareModal }) {
 
     return (
         <List className="prize-list-container">
-            {businessList.map((business, i) => (
-                <div key={i}>
-                    <FollowListItem
-                        business={business}
-                        handleOpenShareModal={handleOpenShareModal}
-                        numPrizes={numPrizes[i]}
-                    />
-                    <Divider />
-                </div>
-            ))}
+            {businessList.length > 0 ? (
+                businessList.map((business, i) => (
+                    <div key={i}>
+                        <FollowListItem
+                            business={business}
+                            handleOpenShareModal={handleOpenShareModal}
+                            numPrizes={numPrizes[i]}
+                        />
+                        <Divider />
+                    </div>
+                ))
+            ) : (
+                <UpcomingMessage />
+            )}
         </List>
     );
 }
 
-export default FollowList;
+export default FollowBizList;

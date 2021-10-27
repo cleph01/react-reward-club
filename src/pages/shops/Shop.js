@@ -364,7 +364,7 @@ function Shop() {
                     />
 
                     <div className="shop__comments">
-                        <small>Comments:</small>
+                        <small>Latest Reviews:</small>
                         {comments.map((comment, index) => (
                             <p key={index}>
                                 <strong>{comment.username}</strong>{" "}

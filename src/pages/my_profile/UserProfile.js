@@ -162,6 +162,7 @@ function UserProfile() {
                                 posts={posts}
                                 bizRelationships={bizRelationships}
                                 handleOpenShareModal={handleOpenShareModal}
+                                followingFriends={otherUser.followingFriends}
                             />
                         ) : (
                             <div>...Loading</div>

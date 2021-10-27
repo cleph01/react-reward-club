@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import { useParams } from "react-router";
 import Card from "@mui/material/Card";
@@ -21,10 +22,11 @@ import "./styles/post.scss";
 function Post() {
     const { userState } = useContext(UserContext);
 
-    const { postId } = useParams();
+    const { userId, postId } = useParams();
 
     // function Post(props) {
 
+    const [urlUser, setUrlUser] = useState();
     const [post, setPost] = useState();
     const [comment, setComment] = useState([]);
     const [comments, setComments] = useState([]);
@@ -38,7 +40,7 @@ function Post() {
 
     useEffect(() => {
         db.collection("user")
-            .doc(userState.userId)
+            .doc(userId)
             .collection("posts")
             .doc(postId)
             .get()
@@ -51,11 +53,24 @@ function Post() {
     }, []);
 
     useEffect(() => {
+        db.collection("user")
+            .doc(userId)
+
+            .get()
+            .then((doc) => {
+                setUrlUser(doc.data());
+            })
+            .catch((err) => {
+                console.log("Error geting Url User: ", err);
+            });
+    }, []);
+
+    useEffect(() => {
         let unsubscribe;
 
         unsubscribe = db
             .collection("user")
-            .doc(userState.userId)
+            .doc(userId)
             .collection("posts")
             .doc(postId)
             .collection("comments")
@@ -94,7 +109,10 @@ function Post() {
         setComment("");
     };
 
-    if (!post) {
+    console.log("Post: ", post);
+    console.log("Url User: ", urlUser);
+
+    if (!post || !urlUser) {
         return <div>...Loading</div>;
     }
 
@@ -110,8 +128,8 @@ function Post() {
                     avatar={
                         <Avatar
                             loading="lazy"
-                            alt={userState.displayName}
-                            src={userState.photoURL}
+                            alt={urlUser.displayName}
+                            src={urlUser.avatarUrl}
                         />
                     }
                     action={
@@ -124,10 +142,10 @@ function Post() {
                             </sup>
                         </IconButton>
                     }
-                    title={userState.displayName}
+                    title={urlUser.displayName}
                     subheader={post.businessName}
                 />
-                <CardContent className="youtube-wrapper">
+                <CardContent>
                     {showYouTube ? (
                         <YouTubeEmbed youtubeId={post.youtubeId} />
                     ) : (
@@ -136,14 +154,29 @@ function Post() {
                         </div>
                     )}
 
-                    <h4 className="post__text">
-                        <strong>{userState.displayName} </strong>
-                        {post.caption}
-                    </h4>
+                    <div className="action-btn-wrapper">
+                        <Link to={`/shops/${post.businessId}`}>
+                            <div className="visit-business-btn">
+                                Business Page
+                            </div>
+                        </Link>
+                        <Link to={`/user/${userId}`}>
+                            <div className="visit-user-btn">
+                                Socialiite User
+                            </div>
+                        </Link>
+                    </div>
+                    <div className="post__text">
+                        <p>
+                            <strong>{urlUser.displayName} </strong>
+                            {post.caption}
+                        </p>
+                    </div>
 
                     <Divider />
 
                     <div className="post__comments">
+                        <small>Latest Reviews:</small>
                         {comments.map((comment, index) => (
                             <p key={index}>
                                 <strong>{comment.username}</strong>{" "}

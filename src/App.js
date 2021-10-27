@@ -81,6 +81,8 @@ function App() {
                     created: firebase.firestore.FieldValue.serverTimestamp(),
                     aboutMe: "Tell Us Something About You!! 🙌",
                     socials: {},
+                    followingFriends: [],
+                    followersFriends: [],
                 };
 
                 createNewUser(newUserData, authUser.uid);

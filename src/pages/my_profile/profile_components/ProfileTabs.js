@@ -5,7 +5,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import "../styles/profile_tabs.scss";
 import PostGrid from "../post_grid_component/PostGrid";
-import FollowList from "../follow_list_component/FollowList";
+import FollowBizList from "../follow_business_list/FollowBizList";
+import FollowFriendsList from "../follow_friends_list/FollowFriendsList";
 
 const TabContainer = (props) => {
     return (
@@ -20,6 +21,7 @@ function ProfileTabs({
     posts,
     bizRelationships,
     handleOpenShareModal,
+    followingFriends,
 }) {
     const [tab, setTab] = useState(0);
 
@@ -38,8 +40,8 @@ function ProfileTabs({
                     variant="fullWidth"
                 >
                     <Tab className="tab" label="ShoutOuts" />
-                    <Tab className="tab" label="Following" />
-                    {/* <Tab className="tab" label="Followers" /> */}
+                    <Tab className="tab" label="My Places" />
+                    <Tab className="tab" label="Socialiites" />
                 </Tabs>
             </AppBar>
             {tab === 0 && (
@@ -49,7 +51,7 @@ function ProfileTabs({
             )}
             {tab === 1 && (
                 <TabContainer>
-                    <FollowList
+                    <FollowBizList
                         bizRelationships={bizRelationships}
                         handleOpenShareModal={handleOpenShareModal}
                     />
@@ -57,7 +59,7 @@ function ProfileTabs({
             )}
             {tab === 2 && (
                 <TabContainer>
-                    <FollowList />
+                    <FollowFriendsList followingFriends={followingFriends} />
                 </TabContainer>
             )}
         </div>

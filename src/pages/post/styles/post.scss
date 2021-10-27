@@ -1,100 +1,150 @@
 @import "../../../styles/variables/variables";
 
-.post__container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 100px 0px;
+body {
+    background-image: $background-gradient;
 
-    .post__text {
-        font-weight: normal;
-        padding: 20px;
-    }
-
-    .post__comments {
-        padding: 0px 0px 20px 20px;
-    }
-    .post__commentBox {
+    .post__container {
         display: flex;
-        margin-top: 10px;
-    }
-    .post__input {
-        flex: 1;
-        border: none;
-        padding: 10px;
-        border-top: 1px solid lightgray;
-    }
-    .post__button {
-        flex: 0;
-        border: none;
-        color: #6082a3;
-        background-color: transparent;
-        border-top: 1px solid lightgray;
-    }
-    .glow {
-        -webkit-animation: glowing 1500ms infinite;
-        -moz-animation: glowing 1500ms infinite;
-        -o-animation: glowing 1500ms infinite;
-        animation: glowing 1500ms infinite;
-        margin-top: 50px;
+        flex-direction: column;
+        align-items: center;
+        margin: 100px 0px;
 
-        @-webkit-keyframes glowing {
-            0% {
-                background-color: #15a9dc;
-                -webkit-box-shadow: 0 0 3px #15a9dc;
+        .action-btn-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+
+            a {
+                text-decoration: none;
             }
-            50% {
-                background-color: #15a9dc;
-                -webkit-box-shadow: 0 0 40px #15a9dc;
+
+            .visit-business-btn {
+                display: block;
+                position: relative;
+                width: 150px;
+                height: 40px;
+                border-radius: 25px;
+                background: #1c76d2;
+                box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #f9f9f9;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s ease-out;
             }
-            100% {
-                background-color: #15a9dc;
-                -webkit-box-shadow: 0 0 3px #15a9dc;
+
+            .visit-user-btn {
+                display: block;
+                position: relative;
+                width: 150px;
+                height: 40px;
+                border-radius: 25px;
+                background: #1c76d2;
+                box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #f9f9f9;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s ease-out;
+                margin-left: 15px;
             }
         }
 
-        @-moz-keyframes glowing {
-            0% {
-                background-color: #15a9dc;
-                -moz-box-shadow: 0 0 3px #15a9dc;
-            }
-            50% {
-                background-color: #15a9dc;
-                -moz-box-shadow: 0 0 40px #15a9dc;
-            }
-            100% {
-                background-color: #15a9dc;
-                -moz-box-shadow: 0 0 3px #15a9dc;
-            }
+        .post__text {
+            text-align: justify;
+            margin: 20px 5px;
         }
 
-        @-o-keyframes glowing {
-            0% {
-                background-color: #15a9dc;
-                box-shadow: 0 0 3px #15a9dc;
-            }
-            50% {
-                background-color: #15a9dc;
-                box-shadow: 0 0 40px #15a9dc;
-            }
-            100% {
-                background-color: #15a9dc;
-                box-shadow: 0 0 3px #15a9dc;
-            }
+        .post__comments {
+            padding: 10px 0px 20px 20px;
         }
+        .post__commentBox {
+            display: flex;
+            margin-top: 10px;
+        }
+        .post__input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            border-top: 1px solid lightgray;
+        }
+        .post__button {
+            flex: 0;
+            border: none;
+            color: #6082a3;
+            background-color: transparent;
+            border-top: 1px solid lightgray;
+        }
+        .glow {
+            -webkit-animation: glowing 1500ms infinite;
+            -moz-animation: glowing 1500ms infinite;
+            -o-animation: glowing 1500ms infinite;
+            animation: glowing 1500ms infinite;
+            margin-top: 50px;
 
-        @keyframes glowing {
-            0% {
-                background-color: #15a9dc;
-                box-shadow: 0 0 3px #15a9dc;
+            @-webkit-keyframes glowing {
+                0% {
+                    background-color: #15a9dc;
+                    -webkit-box-shadow: 0 0 3px #15a9dc;
+                }
+                50% {
+                    background-color: #15a9dc;
+                    -webkit-box-shadow: 0 0 40px #15a9dc;
+                }
+                100% {
+                    background-color: #15a9dc;
+                    -webkit-box-shadow: 0 0 3px #15a9dc;
+                }
             }
-            50% {
-                background-color: #15a9dc;
-                box-shadow: 0 0 40px #15a9dc;
+
+            @-moz-keyframes glowing {
+                0% {
+                    background-color: #15a9dc;
+                    -moz-box-shadow: 0 0 3px #15a9dc;
+                }
+                50% {
+                    background-color: #15a9dc;
+                    -moz-box-shadow: 0 0 40px #15a9dc;
+                }
+                100% {
+                    background-color: #15a9dc;
+                    -moz-box-shadow: 0 0 3px #15a9dc;
+                }
             }
-            100% {
-                background-color: #15a9dc;
-                box-shadow: 0 0 3px #15a9dc;
+
+            @-o-keyframes glowing {
+                0% {
+                    background-color: #15a9dc;
+                    box-shadow: 0 0 3px #15a9dc;
+                }
+                50% {
+                    background-color: #15a9dc;
+                    box-shadow: 0 0 40px #15a9dc;
+                }
+                100% {
+                    background-color: #15a9dc;
+                    box-shadow: 0 0 3px #15a9dc;
+                }
+            }
+
+            @keyframes glowing {
+                0% {
+                    background-color: #15a9dc;
+                    box-shadow: 0 0 3px #15a9dc;
+                }
+                50% {
+                    background-color: #15a9dc;
+                    box-shadow: 0 0 40px #15a9dc;
+                }
+                100% {
+                    background-color: #15a9dc;
+                    box-shadow: 0 0 3px #15a9dc;
+                }
             }
         }
     }

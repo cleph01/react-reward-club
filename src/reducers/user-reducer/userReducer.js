@@ -39,8 +39,7 @@ const UserReducer = (state, action) => {
                 isLoading: false,
                 isAuthenticated: true,
                 socials: action.payload.socials,
-                followers: action.payload.followers,
-                followingBusinesses: action.payload.followingBusinesses,
+                followersFriends: action.payload.followersFriends,
                 followingFriends: action.payload.followingFriends,
             };
 

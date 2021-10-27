@@ -8,7 +8,7 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import AddIcon from "@mui/icons-material/Add";
 import ShareIcon from "@mui/icons-material/Share";
 
-function FollowListItem({ business, handleOpenShareModal, numPrizes }) {
+function FollowBizListItem({ business, handleOpenShareModal, numPrizes }) {
     return (
         <ListItem className="prize-list-item">
             <Link to={`/shops/${business.businessId}`}>
@@ -41,4 +41,4 @@ function FollowListItem({ business, handleOpenShareModal, numPrizes }) {
     );
 }
 
-export default FollowListItem;
+export default FollowBizListItem;
