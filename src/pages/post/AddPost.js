@@ -64,14 +64,23 @@ function AddPost({ setOpenUpload }) {
 
     const [values, setValues] = useState({
         caption: "",
-        youtubeId: "lQggSxDGy4Q",
+        youtubeUrl: "",
         imageUrl: "",
     });
 
+    const [youTubeEmbed, setYouTubeEmbed] = useState();
+    // lQggSxDGy4Q
     const handleYouTube = (name) => (e) => {
-        setValues({
-            ...values,
-            [name]: e.target.value,
+        console.log("Nae: ", name, "value: ", e.target.value);
+        setValues((prevState) => {
+            if (name === "youtubeUrl") {
+                setYouTubeEmbed(e.target.value.split("/").slice(-1));
+            }
+
+            return {
+                ...values,
+                [name]: e.target.value,
+            };
         });
     };
 
@@ -157,8 +166,8 @@ function AddPost({ setOpenUpload }) {
                             }
                         />
                         <CardContent className="youtube-wrapper">
-                            {!!values.youtubeId ? (
-                                <YouTubeEmbed youtubeId={values.youtubeId} />
+                            {!!values.youtubeUrl ? (
+                                <YouTubeEmbed youtubeId={youTubeEmbed} />
                             ) : (
                                 <div
                                     style={{
@@ -212,15 +221,15 @@ function AddPost({ setOpenUpload }) {
                                     </Link>
                                 </div>
                             </div>
-                            <Divider />
 
                             <div className="post__text">
                                 <strong>{userState.displayName}</strong>
-                                &nbsp;{values.caption || "Test text"}
+                                &nbsp;
+                                {values.caption ||
+                                    "...Fill In Caption Field Below"}
                             </div>
 
-                            <Divider />
-
+                            <h3>Fill in below to post a shoutout</h3>
                             <Box sx={{ width: "100%", marginTop: "10px" }}>
                                 <FormControl fullWidth>
                                     <InputLabel id="demo-simple-select-label">
@@ -236,6 +245,7 @@ function AddPost({ setOpenUpload }) {
                                         }
                                         label="business"
                                         onChange={handleSelectBusiness}
+                                        required
                                     >
                                         {allBizRelationships.map((business) => (
                                             <MenuItem
@@ -260,10 +270,10 @@ function AddPost({ setOpenUpload }) {
                                 id="handle"
                                 label="Paste YouTube Link Here"
                                 className="textField"
-                                value={values.youTubeLink}
-                                onChange={handleYouTube("youTubeLink")}
+                                value={values.youtubeUrl}
+                                onChange={handleYouTube("youtubeUrl")}
                                 margin="normal"
-                                error={false}
+                                error={values.youtubeUrl === "" ? true : false}
                                 required
                             />
 
@@ -274,7 +284,7 @@ function AddPost({ setOpenUpload }) {
                                 value={values.caption}
                                 onChange={handleYouTube("caption")}
                                 margin="normal"
-                                error={true}
+                                error={values.caption === "" ? true : false}
                                 required
                             />
 
