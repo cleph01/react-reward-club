@@ -9,49 +9,72 @@ body {
         align-items: center;
         margin: 100px 0px;
 
-        .action-btn-wrapper {
+        .actions__bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 30px;
+            margin: 10px 0px;
+            width: 100%;
 
             a {
                 text-decoration: none;
             }
-
-            .visit-business-btn {
-                display: block;
-                position: relative;
-                width: 150px;
-                height: 40px;
-                border-radius: 25px;
-                background: #1c76d2;
-                box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            .actions__wrapper {
                 display: flex;
+                justify-content: space-between;
                 align-items: center;
-                justify-content: center;
-                color: #f9f9f9;
-                font-weight: bold;
-                cursor: pointer;
-                transition: transform 0.2s ease-out;
-            }
+                width: 100%;
 
-            .visit-user-btn {
-                display: block;
-                position: relative;
-                width: 150px;
-                height: 40px;
-                border-radius: 25px;
-                background: #1c76d2;
-                box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #f9f9f9;
-                font-weight: bold;
-                cursor: pointer;
-                transition: transform 0.2s ease-out;
-                margin-left: 15px;
+                .likes-followers__wrapper {
+                    font-size: 14px;
+                    margin: 0px 10px;
+                    font-weight: bold;
+                }
+
+                .visit-business-btn {
+                    display: block;
+                    position: relative;
+                    width: 90px;
+                    height: 40px;
+                    border-radius: 25px;
+                    background: #1c76d2;
+                    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #f9f9f9;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: transform 0.2s ease-out;
+                    font-size: 12px;
+
+                    .newPage-icon {
+                        font-size: 12px;
+                    }
+                }
+
+                .visit-user-btn {
+                    display: block;
+                    position: relative;
+                    width: 90px;
+                    height: 40px;
+                    border-radius: 25px;
+                    background: #1c76d2;
+                    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #f9f9f9;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: transform 0.2s ease-out;
+                    margin-left: 5px;
+                    font-size: 12px;
+
+                    .newPage-icon {
+                        font-size: 12px;
+                    }
+                }
             }
         }
 

@@ -1,6 +1,6 @@
 import UpcomingIcon from "@mui/icons-material/Upcoming";
 
-function UpcomingMessage() {
+function UpcomingMessage({ message, emoji }) {
     return (
         <div
             className="upcoming-container"
@@ -9,11 +9,19 @@ function UpcomingMessage() {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#bdbdbd",
-                fontSize: "27px",
             }}
         >
-            <h3>Upcoming!!</h3>{" "}
+            <div style={{ fontSize: "73px" }}>{emoji}</div>
+            <div
+                style={{
+                    fontSize: "18px",
+                    color: "#888997",
+                    textAlign: "center",
+                    marginBottom: "5px",
+                }}
+            >
+                {message}
+            </div>{" "}
             <UpcomingIcon sx={{ color: "#bdbdbd", fontSize: "73px" }} />
         </div>
     );

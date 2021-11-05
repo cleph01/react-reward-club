@@ -14,6 +14,7 @@ import MuiAlert from "@mui/material/Alert";
 import { UserContext } from "../../contexts/UserContext";
 
 import { db } from "../../firebase/firebase_config";
+import * as FUNCTIONS from "./functions/edit_profile_functions";
 
 import "./styles/profile_edit.scss";
 import { Unsubscribe } from "@mui/icons-material";
@@ -47,64 +48,26 @@ function EditProfile() {
     };
 
     const handleUdate = () => {
-        if (!!!updateObj.displayName && !!!updateObj.aboutMe) {
-            console.log("Cannot Submit Original Details");
-
-            setAlertMsg({
-                message: "Cannot Submit Original Details",
-                severity: "error",
-            });
-
-            setOpenSnackBar(true);
-        } else if (!!updateObj.displayName) {
-            console.log("Update Object: ", updateObj);
-            //Check if Display Name is Available
-            db.collection("user")
-                .where("displayName", "==", updateObj.displayName)
-                .get()
-                .then((querySnapshot) => {
-                    if (querySnapshot.docs.length > 0) {
-                        console.log("Display Name Already Exists");
-
-                        setAlertMsg({
-                            message: "Display Name Already Exists",
-                            severity: "error",
-                        });
-
-                        setOpenSnackBar(true);
-                    } else {
-                        console.log("Display Name is Available");
-
-                        db.collection("user")
-                            .doc(userState.userId)
-                            .update(updateObj)
-                            .then(() => {
-                                setAlertMsg({
-                                    message: "Profile Successfully Updated!",
-                                    severity: "success",
-                                });
-
-                                setOpenSnackBar(true);
-                            })
-                            .catch((error) => {
-                                console.error(
-                                    "Error updating document: ",
-                                    error
-                                );
-                                setAlertMsg({
-                                    message: "Error Updating Profile",
-                                    severity: "error",
-                                });
-
-                                setOpenSnackBar(true);
-                            });
-                    }
-                })
-                .catch((error) => {
-                    console.log("error checking display name: ", error);
-                });
-        } else if (!!!updateObj.displayName && !!updateObj.aboutMe) {
-            //update db directly
+        if (
+            !FUNCTIONS.isUpdateObjEmpty(updateObj, setAlertMsg, setOpenSnackBar)
+        ) {
+            if (!!updateObj.displayName) {
+                FUNCTIONS.updateDisplayNameIfAvailable(
+                    userState.userId,
+                    updateObj,
+                    setAlertMsg,
+                    setOpenSnackBar,
+                    setUpdateObj
+                );
+            } else if (!!!updateObj.displayName && !!updateObj.aboutMe) {
+                FUNCTIONS.updateUserInfo(
+                    userState.userId,
+                    updateObj,
+                    setAlertMsg,
+                    setOpenSnackBar,
+                    setUpdateObj
+                );
+            }
         }
     };
 
@@ -113,6 +76,8 @@ function EditProfile() {
     }
 
     console.log("Edit Profile Reducer State: ", userState);
+    console.log("Edit Profile Object: ", updateObj);
+
     return (
         <>
             <div className="edit-profile-container">
@@ -120,6 +85,7 @@ function EditProfile() {
                     <CardContent className="card-content">
                         <Typography variant="h5">Edit Profile</Typography>
                         <ProfileImageUpload
+                            userId={userState.userId}
                             imgUrl={userState.avatarUrl}
                             altName={userState.displayName}
                         />
@@ -158,7 +124,7 @@ function EditProfile() {
                         <div
                             style={{
                                 color: "#55ab6e",
-                                display: !!!updateObj.displayName
+                                display: !!!updateObj.aboutMe
                                     ? "block"
                                     : "none",
                             }}
@@ -183,7 +149,7 @@ function EditProfile() {
                 >
                     <Alert
                         onClose={handleCloseSnackBar}
-                        severity="success"
+                        severity={alertMsg.severity}
                         sx={{ width: "100%" }}
                     >
                         {alertMsg.message}

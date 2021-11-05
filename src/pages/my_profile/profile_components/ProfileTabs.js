@@ -39,9 +39,9 @@ function ProfileTabs({
                     textColor="inherit"
                     variant="fullWidth"
                 >
-                    <Tab className="tab" label="ShoutOuts" />
-                    <Tab className="tab" label="My Places" />
-                    <Tab className="tab" label="Socialiites" />
+                    <Tab className="tab" label="My Shouts" />
+                    <Tab className="tab" label="My Brands" />
+                    <Tab className="tab" label="My People" />
                 </Tabs>
             </AppBar>
             {tab === 0 && (

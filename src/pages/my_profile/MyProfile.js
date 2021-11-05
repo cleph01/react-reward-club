@@ -138,7 +138,8 @@ function Profile() {
                         <div className="post-shoutout__wrapper">
                             <Link to={`/post/${userState.userId}/new`}>
                                 <div className="post-shoutout-btn">
-                                    Post a Shoutout
+                                    Click to Shoutout Your <br /> Brands and Get
+                                    Paid
                                 </div>
                             </Link>
                         </div>
@@ -148,6 +149,7 @@ function Profile() {
                                 posts={posts}
                                 bizRelationships={bizRelationships}
                                 handleOpenShareModal={handleOpenShareModal}
+                                followingFriends={userState.followingFriends}
                             />
                         ) : (
                             <div>...Loading</div>

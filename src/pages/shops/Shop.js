@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, forwardRef } from "react";
+import { useState, useEffect, useContext, forwardRef, useRef } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import Card from "@mui/material/Card";
@@ -6,17 +6,17 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
+import Divider from "@mui/material/Divider";
 
 import YouTubeEmbed from "./components/YouTubeEmbed.js";
 import AvailablePrizes from "./components/AvailablePrizes";
-
-import { firebase, db } from "../../firebase/firebase_config";
+import LikeAction from "./components/LikeAction";
 
 import IconButton from "@mui/material/IconButton";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import LoginIcon from "@mui/icons-material/Login";
 
 import Box from "@mui/material/Box";
@@ -37,72 +37,36 @@ import encodeurl from "encodeurl";
 
 import "./styles/shop.scss";
 
-// const logoUrl = shop._id
-//           ? `/api/shops/logo/${shop._id}?${new Date().getTime()}`
-//           : '/api/shops/defaultphoto'
+import * as FUNCTIONS from "./functions/shop_functions";
+
+const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+};
 
 function Shop() {
+
+    const commentRef = useRef();
     const history = useHistory();
 
     const { userState } = useContext(UserContext);
-
     const { shopId } = useParams();
-
     const [business, setBusiness] = useState();
-
+    const [allBizRelationships, setAllBizRelationships] = useState();
     const [userBizRelationship, setUserBizRelationship] = useState();
-
     const [prizes, setPrizes] = useState();
-
-    const [walletPrize, setwalletPrize] = useState();
-    const [shop, setShop] = useState("");
-    const [products, setProducts] = useState([]);
-    const [error, setError] = useState("");
-
+    const [walletPrize, setWalletPrize] = useState();
     const [comment, setComment] = useState([]);
     const [comments, setComments] = useState([]);
-
-    useEffect(() => {
-        // Get Business Info
-        db.collection("shops")
-            .doc(shopId)
-            .get()
-            .then((doc) => {
-                setBusiness(doc.data());
-            })
-            .catch((err) => {
-                console.log("Error getting Business Info: ", err);
-            });
-
-        db.collection("shops")
-            .doc(shopId)
-            .collection("loyaltyPrizes")
-            .where("incentive", "==", true)
-            .get()
-            .then((doc) => {
-                setPrizes(
-                    doc.docs.map((doc) => ({
-                        prizeId: doc.id,
-                        prize: doc.data(),
-                    }))
-                );
-            })
-            .catch((err) => {
-                console.log("Error getting Prizes: ", err);
-            });
-    }, []);
-
-    // State to control Add Prize to Wallet Modal
     const [openClaimModal, setOpenClaimModal] = useState(false);
-
-    // State to control Share Modal
     const [openShareModal, setOpenShareModal] = useState(false);
-
-    const [goStatus, setGoStatus] = useState({
-        fetchingDistance: false,
-        gotDistance: false,
-    });
-
     const [alertMsg, setAlertMsg] = useState({
         message: "",
         severity: "success",
@@ -110,73 +74,78 @@ function Shop() {
 
     const [openSnackBar, setOpenSnackBar] = useState(false);
 
+    const Alert = forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+    const handleCommentFocus = () => {
+        commentRef.current.focus();
+    };
+
     const handleOpenClaimModal = (itemObj) => {
         if (!userState.isAuthenticated) {
-            console.log("Open Claim Modal");
-
-            history.push("/login");
-        }
-
-        if (goStatus.gotDistance && userState.isAuthenticated) {
-            setOpenClaimModal(true);
-            setwalletPrize(itemObj);
-        } else {
             setAlertMsg({
-                message: "Please Provide Your Location and Be logged in",
+                message: "Please Login First",
                 severity: "error",
             });
 
             setOpenSnackBar(true);
+        } else if (!!userBizRelationship) {
+            setAlertMsg({
+                message:
+                    "First Time Incentives are for First Time Customers Only",
+                severity: "error",
+            });
+
+            setOpenSnackBar(true);
+        } else {
+            setWalletPrize(itemObj);
+            setOpenClaimModal(true);
         }
     };
     const handleCloseClaimModal = () => setOpenClaimModal(false);
 
     const handleOpenShareModal = () => {
         if (!userState.isAuthenticated) {
-            console.log("Open Claim Modal");
-            history.push("/login");
-        }
+            setAlertMsg({
+                message: "Please Login First",
+                severity: "error",
+            });
 
-        setOpenShareModal(true);
+            setOpenSnackBar(true);
+        } else {
+            setOpenShareModal(true);
+        }
     };
 
     const handleCloseShareModal = () => setOpenShareModal(false);
 
     const handleAddToWallet = () => {
+        // Consider writing this is a batch write
+
         if (
             walletPrize.prizeDetails.pointThreshold <=
             userBizRelationship.relationshipInfo.pointSum
         ) {
-            //Add Prize to Wallet and Update pointsSum in Biz Relationship
-            let walletRef = db
-                .collection("user")
-                .doc(userState.userId)
-                .collection("wallet");
+            const walletItem = {
+                businessId: shopId,
+                businessName: business.businessName,
+                emoji: walletPrize.prizeDetails.emoji,
+                itemDescription: walletPrize.prizeDetails.prizeDescription,
+                itemId: walletPrize.prizeId,
+                redeemed: false,
+                // Timestamping handled in DB Function file
+            };
 
-            walletRef
-                .add({
-                    businessId: shopId,
-                    businessName: business.businessName,
-                    emoji: walletPrize.prizeDetails.emoji,
-                    itemDescription: walletPrize.prizeDetails.prizeDescription,
-                    itemId: walletPrize.prizeId,
-                    redeemed: false,
-                    created: firebase.firestore.FieldValue.serverTimestamp(),
-                })
-                .then((docRef) => {
-                    // Decrement Points Sum from BizRelationship
-                    let userRef = db
-                        .collection("user")
-                        .doc(userState.userId)
-                        .collection("bizRelationship")
-                        .doc(userBizRelationship.realtionshipId);
-
-                    userRef
-                        .update({
-                            pointSum: firebase.firestore.FieldValue.increment(
-                                -walletPrize.prizeDetails.pointThreshold
-                            ),
-                        })
+            // Add Prize to Wallet and Update pointsSum in Biz Relationship
+            FUNCTIONS.addToWallet(userState.userId, walletItem)
+                .then((newWalletItemId) => {
+                    // Decrement Prize Point Threshold from BizRelationship Tally
+                    FUNCTIONS.decrementPoint(
+                        userState.userId,
+                        userBizRelationship.realtionshipId,
+                        walletPrize.prizeDetails.pointThreshold
+                    )
                         .then(() => {
                             console.log("PointSum successfully updated!");
                         })
@@ -191,7 +160,7 @@ function Shop() {
                     });
                 })
                 .catch((error) => {
-                    console.error("Error adding document: ", error);
+                    console.log("Error Adding to Wallet: ", error);
                 });
         } else {
             setAlertMsg({
@@ -203,10 +172,6 @@ function Shop() {
         setOpenClaimModal(false);
         setOpenSnackBar(true);
     };
-
-    const Alert = forwardRef(function Alert(props, ref) {
-        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-    });
 
     const handleCloseSnackBar = (event, reason) => {
         if (reason === "clickaway") {
@@ -230,56 +195,101 @@ function Shop() {
             ? `sms:&body=${encodeMsg}`
             : `sms:?body=${encodeMsg}`;
 
-    const style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        border: "2px solid #000",
-        boxShadow: 24,
-        p: 4,
+    const handlePostComment = (event) => {
+        event.preventDefault();
+
+        FUNCTIONS.postComment(shopId, comment, userState.displayName)
+            .then((newCommentRefId) => {
+                console.log("Comment Successfully Posted: ", newCommentRefId);
+            })
+            .catch((error) => {
+                console.log("Error Posting Comment: ", error);
+            });
+
+        setComment("");
     };
 
-    useEffect(() => {
-        let unsubscribe;
+    const handleFollow = () => {
+        let response = FUNCTIONS.followBusiness(userState.userId, shopId);
 
-        unsubscribe = db
-            .collection("shops")
-            .doc(shopId)
-            .collection("comments")
-            .orderBy("timestamp", "desc")
-            .onSnapshot((snapshot) => {
-                setComments(snapshot.docs.map((doc) => doc.data()));
-            });
+        console.log("Follow Response: ", response);
+    };
+
+    const handleUnFollow = () => {
+        let response = FUNCTIONS.unFollowBusiness(userState.userId, shopId);
+
+        console.log("UnFollow Response: ", response);
+    };
+
+    /**
+     * START UseEffects
+     */
+
+    useEffect(() => {
+        let unsubscribe = FUNCTIONS.getBusinessInfo(shopId, setBusiness);
 
         return () => {
             unsubscribe();
         };
     }, []);
 
-    const postComment = (event) => {
-        event.preventDefault();
+    useEffect(() => {
+        FUNCTIONS.getAllBizRelationships(
+            userState.userId,
+            setAllBizRelationships
+        );
 
-        db.collection("shops").doc(shopId).collection("comments").add({
-            text: comment,
-            username: userState.displayName,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+        FUNCTIONS.getLoyaltyPrizes(shopId)
+            .then((doc) => {
+                setPrizes(
+                    doc.docs.map((doc) => ({
+                        prizeId: doc.id,
+                        prize: doc.data(),
+                    }))
+                );
+            })
+            .catch((err) => {
+                console.log("Error getting Prizes: ", err);
+            });
+    }, []);
 
-        setComment("");
-    };
+    useEffect(() => {
+        let unsubscribe;
 
-    const handleFollow = () => {
-        if (userState.isAuthenticated) {
-            console.log("User is Logged IN");
-        } else {
-            console.log("Push to Login Page");
+        unsubscribe = FUNCTIONS.getComments(shopId, setComments);
+
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
+    useEffect(() => {
+        let unsubscribe;
+
+        if (
+            userState.isAuthenticated &&
+            userState.followingBusinesses.includes(shopId)
+        ) {
+            unsubscribe = FUNCTIONS.getBizRelationship(userState.userId, shopId)
+                .then((doc) => {
+                    setUserBizRelationship(doc.data());
+                })
+                .catch((error) => {
+                    console.log("Error getting BizRelationship: ", error);
+                });
         }
-    };
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
+    /**
+     * END UseEffects
+     */
 
     console.log("Business at Shop page: ", business);
+    console.log("All Business Relationships: ", allBizRelationships);
+    // console.log("UserBizRelationship at shop: ", userBizRelationship);
 
     if (!business) {
         return <div>...Loading</div>;
@@ -304,52 +314,67 @@ function Shop() {
                             }}
                         />
                     }
-                    action={
-                        <IconButton aria-label="add to favorites">
-                            <LocalFireDepartmentIcon />
-                        </IconButton>
-                    }
                     title={business.businessName}
                     subheader={`${business.address}, ${business.city} ${business.state}`}
                 />
                 <CardContent>
                     <YouTubeEmbed youtubeId={business.youtubeId} />
-                    <div className="aboutUs-header">
-                        <div>
-                            <h3>About Us </h3>
-                            <div className="numFollowers">
-                                {business.followers.length} followers
+                    <div className="actions__bar">
+                        <div className="actions__wrapper">
+                            <LikeAction
+                                userId={userState.userId}
+                                shopId={shopId}
+                                likedShop={business.likes.includes(
+                                    userState.userId
+                                )}
+                                totalLikes={business.likes.length}
+                            />
+                            <ChatBubbleOutlineIcon className="chatBubble-btn" onClick={handleCommentFocus} />
+                            <div className="likes-followers__wrapper">
+                                {" "}
+                                {business.followers.length === 1
+                                    ? `${business.followers.length} follower`
+                                    : `${business.followers.length} followers`}{" "}
+                                |{" "}
+                                {business.likes.length === 1
+                                    ? `${business.likes.length} like`
+                                    : `${business.likes.length} likes`}{" "}
                             </div>
                         </div>
-
-                        {userState.isAuthenticated ? (
-                            !userState.followingBusinesses.includes(shopId) ? (
-                                <div
-                                    className="follow-btn"
-                                    onClick={handleFollow}
-                                >
-                                    <AddIcon /> Follow
-                                </div>
+                        <div>
+                            {userState.isAuthenticated ? (
+                                !userState.followingBusinesses.includes(
+                                    shopId
+                                ) ? (
+                                    <div
+                                        className="follow-btn"
+                                        onClick={handleFollow}
+                                    >
+                                        <AddIcon /> Follow
+                                    </div>
+                                ) : (
+                                    <div
+                                        className="follow-btn"
+                                        onClick={handleUnFollow}
+                                    >
+                                        <RemoveIcon /> UnFollow
+                                    </div>
+                                )
                             ) : (
-                                <div
-                                    className="follow-btn"
-                                    onClick={handleFollow}
+                                <Link
+                                    to="/login"
+                                    style={{ textDecoration: "none" }}
                                 >
-                                    <RemoveIcon /> UnFollow
-                                </div>
-                            )
-                        ) : (
-                            <Link
-                                to="/login"
-                                style={{ textDecoration: "none" }}
-                            >
-                                <div className="follow-btn">
-                                    <LoginIcon />
-                                    &nbsp;&nbsp;Login
-                                </div>
-                            </Link>
-                        )}
+                                    <div className="follow-btn">
+                                        <LoginIcon />
+                                        &nbsp;&nbsp;Login
+                                    </div>
+                                </Link>
+                            )}
+                        </div>
                     </div>
+                    <Divider />
+                    <h3>About Us </h3>
 
                     <div className="business-description">
                         {business.description}
@@ -381,13 +406,14 @@ function Shop() {
                                 placeholder="Add a comment..."
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
+                                ref={commentRef}
                             />
 
                             <button
                                 disabled={!comment}
                                 className="post__button"
                                 type="submit"
-                                onClick={postComment}
+                                onClick={handlePostComment}
                             >
                                 Post
                             </button>
@@ -403,34 +429,21 @@ function Shop() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography
-                        id="modal-modal-title"
-                        variant="h6"
-                        component="h2"
-                        sx={{ textAlign: "center", borderColor: "#f0f0f0" }}
-                    >
-                        Sure About Adding To Your Wallet?
-                    </Typography>
-                    <Typography
-                        id="modal-modal-description"
-                        sx={{ mt: 2, textAlign: "center" }}
-                    >
-                        Your Points Will Be Adjusted and Can't be Reversed.
-                    </Typography>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-around",
-                            alignItems: "center",
-                            marginTop: "15px",
-                        }}
-                    >
-                        <Button color="primary" onClick={handleAddToWallet}>
+                    <h4>
+                        Congratulations!! Click Claim Button Below to Add this
+                        Prize to Your Wallet.
+                    </h4>
+
+                    <div className="modal-box__btn-wrapper">
+                        <div className="claim__btn" onClick={handleAddToWallet}>
                             Add to Wallet
-                        </Button>
-                        <Button color="error" onClick={handleCloseClaimModal}>
+                        </div>
+                        <div
+                            className="cancel__btn"
+                            onClick={handleCloseClaimModal}
+                        >
                             Cancel
-                        </Button>
+                        </div>
                     </div>
                 </Box>
             </Modal>

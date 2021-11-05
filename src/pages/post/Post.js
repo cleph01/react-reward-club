@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import { useParams } from "react-router";
@@ -8,10 +8,13 @@ import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import PhotoIcon from "@mui/icons-material/Photo";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
+import LikeAction from "./components/LikeAction";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import YouTubeEmbed from "./components/YouTubeEmbed";
 
@@ -20,6 +23,8 @@ import { firebase, db } from "../../firebase/firebase_config";
 import "./styles/post.scss";
 
 function Post() {
+    const commentRef = useRef();
+
     const { userState } = useContext(UserContext);
 
     const { userId, postId } = useParams();
@@ -38,18 +43,23 @@ function Post() {
         imageUrl: "",
     });
 
+    const handleCommentFocus = () => {
+        commentRef.current.focus();
+    };
+
     useEffect(() => {
         db.collection("user")
             .doc(userId)
             .collection("posts")
             .doc(postId)
-            .get()
-            .then((doc) => {
-                setPost(doc.data());
-            })
-            .catch((err) => {
-                console.log("Error geting Post: ", err);
-            });
+            .onSnapshot(
+                (doc) => {
+                    setPost(doc.data());
+                },
+                (error) => {
+                    console.log("Error geting Post: ", error);
+                }
+            );
     }, []);
 
     useEffect(() => {
@@ -132,16 +142,6 @@ function Post() {
                             src={urlUser.avatarUrl}
                         />
                     }
-                    action={
-                        <IconButton aria-label="add to favorites">
-                            <LocalFireDepartmentIcon
-                                sx={{ color: "#bdbdbd" }}
-                            />
-                            <sup>
-                                <span>3</span>
-                            </sup>
-                        </IconButton>
-                    }
                     title={urlUser.displayName}
                     subheader={post.businessName}
                 />
@@ -153,19 +153,43 @@ function Post() {
                             <img alt="post" src={post.imageUrl} />
                         </div>
                     )}
+                    <div className="actions__bar">
+                        <div className="actions__wrapper">
+                            <LikeAction
+                                userId={userState.userId}
+                                postUserId={userId}
+                                postId={postId}
+                                likedPost={post.likes.includes(
+                                    userState.userId
+                                )}
+                                totalLikes={post.likes.length}
+                            />
+                            <ChatBubbleOutlineIcon
+                                className="chatBubble-btn"
+                                onClick={handleCommentFocus}
+                            />
+                            <div className="likes-followers__wrapper">
+                                {post.likes.length === 1
+                                    ? `${post.likes.length} like`
+                                    : `${post.likes.length} likes`}{" "}
+                            </div>
 
-                    <div className="action-btn-wrapper">
-                        <Link to={`/shops/${post.businessId}`}>
-                            <div className="visit-business-btn">
-                                Business Page
-                            </div>
-                        </Link>
-                        <Link to={`/user/${userId}`}>
-                            <div className="visit-user-btn">
-                                Socialiite User
-                            </div>
-                        </Link>
+                            <Link to={`/shops/${post.businessId}`}>
+                                <div className="visit-business-btn">
+                                    Business{"   "}
+                                    <OpenInNewIcon className="newPage-icon" />
+                                </div>
+                            </Link>
+                            <Link to={`/user/${userId}`}>
+                                <div className="visit-user-btn">
+                                    Socialiite{"   "}
+                                    <OpenInNewIcon className="newPage-icon" />
+                                </div>
+                            </Link>
+                        </div>
                     </div>
+                    <Divider />
+
                     <div className="post__text">
                         <p>
                             <strong>{urlUser.displayName} </strong>
@@ -174,6 +198,7 @@ function Post() {
                     </div>
 
                     <Divider />
+                    
 
                     <div className="post__comments">
                         <small>Latest Reviews:</small>
@@ -193,6 +218,7 @@ function Post() {
                                 placeholder="Add a comment..."
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
+                                ref={commentRef}
                             />
 
                             <button

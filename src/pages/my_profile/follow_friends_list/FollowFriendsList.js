@@ -57,7 +57,10 @@ function FollowList({ followingFriends }) {
                     </div>
                 ))
             ) : (
-                <UpcomingMessage />
+                <UpcomingMessage
+                    message="Surround Yourself With Other Socialiites Making An Impact in Your World!"
+                    emoji="🤜🤛"
+                />
             )}
         </List>
     );

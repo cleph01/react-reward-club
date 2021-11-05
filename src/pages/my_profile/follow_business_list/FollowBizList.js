@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+
 import List from "@mui/material/List";
 
 import { db } from "../../../firebase/firebase_config";
@@ -105,7 +105,10 @@ function FollowBizList({ bizRelationships, handleOpenShareModal }) {
                     </div>
                 ))
             ) : (
-                <UpcomingMessage />
+                <UpcomingMessage
+                    message="Connect With A Business, Show the World Why They're Awesome, And Get Paid!!"
+                    emoji="🚀"
+                />
             )}
         </List>
     );

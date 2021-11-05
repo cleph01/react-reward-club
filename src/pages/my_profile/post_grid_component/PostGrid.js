@@ -40,7 +40,10 @@ function PostGrid({ posts, userId }) {
                     ))}
                 </ImageList>
             ) : (
-                <UpcomingMessage />
+                <UpcomingMessage
+                    message="Post a Shoutout to Get Paid!!"
+                    emoji="💵"
+                />
             )}
         </div>
     );

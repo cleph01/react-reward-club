@@ -7,13 +7,10 @@ import { firebase, db } from "../../firebase/firebase_config";
 
 import WalletItem from "./components/WalletItem";
 
-import Nav from "../../components/nav_bar/Nav";
-
 import Box from "@mui/material/Box";
 
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
 
 import ForumIcon from "@mui/icons-material/Forum";
 import Stack from "@mui/material/Stack";
@@ -184,15 +181,15 @@ const Wallet = (props) => {
                             marginTop: "15px",
                         }}
                     >
-                        <Button className="claim__btn" onClick={handleRedeem}>
+                        <div className="claim__btn" onClick={handleRedeem}>
                             Claim Prize
-                        </Button>
-                        <Button
+                        </div>
+                        <div
                             className="cancel__btn"
                             onClick={handleCloseClaimModal}
                         >
                             Cancel
-                        </Button>
+                        </div>
                     </div>
                 </Box>
             </Modal>

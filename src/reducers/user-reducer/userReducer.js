@@ -41,6 +41,7 @@ const UserReducer = (state, action) => {
                 socials: action.payload.socials,
                 followersFriends: action.payload.followersFriends,
                 followingFriends: action.payload.followingFriends,
+                followingBusinesses: action.payload.followingBusinesses,
             };
 
         case "USER/SET_REFERRER":

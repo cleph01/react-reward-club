@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useState, useReducer, useEffect } from "react";
-
+import { useDocument } from "react-firebase-hooks/firestore";
 import {
     BrowserRouter as Router,
     Route,
@@ -13,6 +13,8 @@ import { auth, db, firebase } from "./firebase/firebase_config";
 import * as ROUTES from "./routing/routes";
 import * as COMPONENTS from "./routing/routeComponents";
 import PrivateRoute from "./routing/PrivateRoute";
+
+import * as FUNCTIONS from "./pages/auth/functions/auth_functions";
 
 const Nav = lazy(() => import("./components/nav_bar/Nav"));
 
@@ -31,10 +33,6 @@ const initialState = {
 function App() {
     const [userState, userDispatch] = useReducer(UserReducer, initialState);
 
-    // Adding this as a auth status flag for protected route condition
-    // prevents infinite re-rendering
-
-    // Authenticate/Signin User
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((authUser) => {
             if (authUser) {
@@ -58,55 +56,67 @@ function App() {
 
     // Update User Object if they exist in the DB
 
-    const userExists = async (authUser) => {
-        try {
-            const result = await db.collection("user").doc(authUser.uid).get();
-
-            if (result.exists) {
-                // If USer exists, update state with db Record
-                userDispatch({
-                    type: "USER/SET_EXISTING_DETAILS",
-                    payload: { ...result.data(), userId: authUser.uid },
-                });
-
-                console.log("User State after Setting: ", userState);
-            } else {
-                // If User does not Exist, Create New User
-                const newUserData = {
-                    displayName: authUser.email,
-                    avatarUrl: authUser.photoURL,
-                    seller: false,
-                    email: authUser.email,
-                    phoneNumber: authUser.phoneNumber,
-                    created: firebase.firestore.FieldValue.serverTimestamp(),
-                    aboutMe: "Tell Us Something About You!! 🙌",
-                    socials: {},
-                    followingFriends: [],
-                    followersFriends: [],
-                };
-
-                createNewUser(newUserData, authUser.uid);
-            }
-        } catch (error) {
-            console.log("Error Checking User Exists: ", error);
-        }
-    };
-
-    const createNewUser = (userData, userId) => {
+    const userExists = (authUser) => {
         db.collection("user")
-            .doc(userId)
-            .set(userData)
-            .then(() => {
-                console.log("New User Created!");
-                userDispatch({
-                    type: "USER/SET_NEW_USER",
-                    payload: { ...userData, userId: userId },
-                });
-            })
-            .catch((error) => {
-                console.error("Error Creating User: ", error);
-            });
+            .doc(authUser.uid)
+            .onSnapshot(
+                (doc) => {
+                    console.log("Doc at App: ", doc.exists);
+                    if (doc.exists) {
+                        // If USer exists, update state with db Record
+                        userDispatch({
+                            type: "USER/SET_EXISTING_DETAILS",
+                            payload: {
+                                ...doc.data(),
+                                userId: authUser.uid,
+                            },
+                        });
+
+                        console.log("User State after Setting: ", userState);
+                    } else {
+                        // If User does not Exist, Create New User
+                        const newUserData = {
+                            displayName: authUser.email,
+                            avatarUrl: authUser.photoURL,
+                            seller: false,
+                            email: authUser.email,
+                            phoneNumber: authUser.phoneNumber,
+                            created:
+                                firebase.firestore.FieldValue.serverTimestamp(),
+                            aboutMe: "Tell Us Something About You!! 🙌",
+                            socials: {},
+                            followingFriends: [],
+                            followersFriends: [],
+                        };
+
+                        FUNCTIONS.createNewUser(
+                            newUserData,
+                            authUser.uid,
+                            userDispatch
+                        );
+                    }
+                },
+                (error) => {
+                    console.log("Error getting User: ", error);
+                }
+            );
     };
+
+    // const createNewUser = (userData, userId) => {
+    //     db.collection("user")
+    //         .doc(userId)
+    //         .set(userData)
+    //         .then(() => {
+    //             console.log("New User Created!");
+    //             userDispatch({
+    //                 type: "USER/SET_NEW_USER",
+    //                 payload: { ...userData, userId: userId },
+    //             });
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error Creating User: ", error);
+    //         });
+    // };
 
     console.log("useReducer User: ", userState);
 

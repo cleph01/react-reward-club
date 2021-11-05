@@ -1,86 +1,173 @@
-.add-post-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 100px 0px;
+@import "../../../styles/variables/variables";
 
-    .youtube-wrapper {
+body {
+    background-image: $background-gradient;
+    .add-post-container {
         display: flex;
         flex-direction: column;
-
         align-items: center;
-        flex: 1;
+        margin: 100px 0px;
+        color: #dadada;
 
-        input {
-            width: 300px;
+        .youtube-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+
+            .actions__bar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 10px 0px;
+                width: 100%;
+
+                a {
+                    text-decoration: none;
+                }
+                .actions__wrapper {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+
+                    .likes-followers__wrapper {
+                        font-size: 14px;
+                        margin: 0px 10px;
+                        font-weight: bold;
+                    }
+
+                    .visit-business-btn {
+                        display: block;
+                        position: relative;
+                        width: 90px;
+                        height: 40px;
+                        border-radius: 25px;
+                        background: #1c76d2;
+                        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #f9f9f9;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: transform 0.2s ease-out;
+                        font-size: 12px;
+
+                        .newPage-icon {
+                            font-size: 12px;
+                        }
+                    }
+
+                    .visit-user-btn {
+                        display: block;
+                        position: relative;
+                        width: 90px;
+                        height: 40px;
+                        border-radius: 25px;
+                        background: #1c76d2;
+                        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #f9f9f9;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: transform 0.2s ease-out;
+                        margin-left: 5px;
+                        font-size: 12px;
+
+                        .newPage-icon {
+                            font-size: 12px;
+                        }
+                    }
+
+                    .disabled {
+                        pointer-events: none;
+                        opacity: 0.7;
+                    }
+                }
+            }
+
+            .post__text {
+                width: 100%;
+                text-align: justify;
+                margin: 20px 5px;
+                border-bottom: 1px solid #b3b1b1;
+                padding-bottom: 20px;
+            }
+
+            input {
+                width: 300px;
+            }
+
+            .submit-youtube-btn {
+                display: block;
+                position: relative;
+                width: 150px;
+                height: auto;
+                padding: 5px;
+                border-radius: 25px;
+                background: #1c76d2;
+                box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #f9f9f9;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s ease-out;
+                margin-top: 15px;
+            }
         }
 
-        .submit-youtube-btn {
+        .imageupload-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+
+            .upload-image-btn {
+                display: block;
+                position: relative;
+                width: 150px;
+                height: auto;
+                padding: 5px;
+                border-radius: 25px;
+                background: #1c76d2;
+                box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #f9f9f9;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s ease-out;
+                margin-top: 15px;
+            }
+        }
+
+        .toggle-youtube-input-btn {
             display: block;
             position: relative;
-            width: 150px;
+            width: 225px;
             height: auto;
-            padding: 5px;
+            padding: 15px;
             border-radius: 25px;
-            background: #1c76d2;
+            background: #f9f9f9;
             box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #f9f9f9;
+            color: #1c76d2;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s ease-out;
             margin-top: 15px;
         }
-    }
 
-    .imageupload-wrapper {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-
-        .upload-image-btn {
-            display: block;
-            position: relative;
-            width: 150px;
-            height: auto;
-            padding: 5px;
-            border-radius: 25px;
-            background: #1c76d2;
-            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #f9f9f9;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s ease-out;
-            margin-top: 15px;
+        .imageupload__progress {
+            width: 100%;
         }
-    }
-
-    .toggle-youtube-input-btn {
-        display: block;
-        position: relative;
-        width: 225px;
-        height: auto;
-        padding: 15px;
-        border-radius: 25px;
-        background: #f9f9f9;
-        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #1c76d2;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform 0.2s ease-out;
-        margin-top: 15px;
-    }
-
-    .imageupload__progress {
-        width: 100%;
     }
 }

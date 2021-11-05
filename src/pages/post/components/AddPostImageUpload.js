@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import CardMedia from "@mui/material/CardMedia";
 import { storage, db } from "../../../firebase/firebase_config";
 import firebase from "firebase";
-import "../styles/profile_image_upload.scss";
+import "../styles/add_post_image_upload.scss";
 
 function ProfileImageUpload({
     imgUrl,
@@ -66,10 +67,11 @@ function ProfileImageUpload({
     };
     return (
         <div className="profile-imageupload">
-            <Avatar
-                src={!!image ? URL.createObjectURL(image) : imgUrl}
+            <CardMedia
+                component="img"
                 alt={altName}
-                sx={{ width: 56, height: 56 }}
+                height="140"
+                src={!!image ? URL.createObjectURL(image) : imgUrl}
             />
 
             <progress

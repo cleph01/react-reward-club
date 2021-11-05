@@ -9,22 +9,30 @@ body {
         align-items: center;
         margin-top: 100px;
 
-        .aboutUs-header {
+        .actions__bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 10px 0px;
 
-            .numFollowers {
-                font-weight: 700;
-                margin-bottom: 10px;
+            .actions__wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .likes-followers__wrapper {
+                    font-size: 14px;
+                    margin: 0px 10px;
+                    font-weight: bold;
+                }
             }
 
             .follow-btn {
                 display: block;
                 position: relative;
-                width: 115px;
-                height: 40px;
+                font-size: 12px;
+                width: 90px;
+                height: 30px;
                 border-radius: 25px;
                 background: $secondary;
                 box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
@@ -67,6 +75,52 @@ body {
             color: #6082a3;
             background-color: transparent;
             border-top: 1px solid lightgray;
+        }
+
+        .modal-box__btn-wrapper {
+            display: "flex";
+            justify-content: "space-around";
+            align-items: "center";
+            margin-top: "15px";
+
+            .claim__btn {
+                display: block;
+                position: relative;
+                width: 115px;
+                height: auto;
+                padding: 5px;
+                border-radius: 25px;
+                background: #1c76d2;
+                box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #f9f9f9;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s ease-out;
+                margin-top: 15px;
+            }
+
+            .cancel__btn {
+                display: block;
+                position: relative;
+                width: 115px;
+                height: auto;
+                padding: 5px;
+                border-radius: 25px;
+                background: #f9f9f9;
+                box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #1c76d2;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.2s ease-out;
+                margin-top: 15px;
+                margin-left: 10px;
+            }
         }
     }
 }
