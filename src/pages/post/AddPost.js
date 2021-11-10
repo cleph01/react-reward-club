@@ -6,10 +6,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import LikeAction from "./components/LikeAction";
+
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import PhotoIcon from "@mui/icons-material/Photo";
 import TextField from "@mui/material/TextField";
@@ -26,10 +23,11 @@ import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
-import { storage, db } from "../../firebase/firebase_config";
+import { firebase } from "../../firebase/firebase_config";
 
 import YouTubeEmbed from "./components/YouTubeEmbed";
 import AddPostImageUpload from "./components/AddPostImageUpload";
+import PostActionBar from "./components/PostActionBar";
 
 import * as FUNCTIONS from "./functions/post_functions";
 
@@ -39,14 +37,14 @@ function AddPost({ setOpenUpload }) {
     const { userState } = useContext(UserContext);
     const history = useHistory();
 
-    const [image, setImage] = useState(null);
-    const [url, setUrl] = useState("");
-    const [progress, setProgress] = useState(0);
-    const [caption, setCaption] = useState("");
     const [allBizRelationships, setAllBizRelationships] = useState();
     const [showYouTube, setShowYouTube] = useState(true);
     const [businessInfo, setBusinessInfo] = useState({});
     const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [alertMsg, setAlertMsg] = useState({
+        message: "",
+        severity: "",
+    });
 
     const handleSelectBusiness = (event, child) => {
         setBusinessInfo({
@@ -70,11 +68,11 @@ function AddPost({ setOpenUpload }) {
 
     const [youTubeEmbed, setYouTubeEmbed] = useState();
     // lQggSxDGy4Q
-    const handleYouTube = (name) => (e) => {
+    const handleInputChange = (name) => (e) => {
         console.log("Nae: ", name, "value: ", e.target.value);
         setValues((prevState) => {
             if (name === "youtubeUrl") {
-                setYouTubeEmbed(e.target.value.split("/").slice(-1));
+                setYouTubeEmbed(e.target.value.split("/").slice(-1)[0]);
             }
 
             return {
@@ -84,14 +82,48 @@ function AddPost({ setOpenUpload }) {
         });
     };
 
-    const handleChange = (e) => {
-        if (e.target.files[0]) {
-            setImage(e.target.files[0]);
-        }
-    };
+    const handleSubmitYouTubePost = () => {
+        if (
+            !!!values.youtubeUrl ||
+            !!!values.caption ||
+            !!!businessInfo.businessName
+        ) {
+            setAlertMsg({
+                message: "YouTube Link, Caption, and Shop Must Be Filled In",
+                severity: "error",
+            });
 
-    const handleSubmitYouTube = () => {
-        console.log("Submit values: ", values);
+            setOpenSnackBar(true);
+        } else {
+            let postData = {
+                youtubeId: youTubeEmbed,
+                caption: values.caption,
+                businessId: businessInfo.businessId,
+                businessName: businessInfo.businessName,
+                likes: [],
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            };
+
+            FUNCTIONS.postShoutout(userState.userId, postData)
+                .then((docRef) => {
+                    setAlertMsg({
+                        message: "Successfully Published Shoutout",
+                        severity: "success",
+                    });
+
+                    setOpenSnackBar(true);
+
+                    history.push(`/post/${userState.userId}/${docRef.id}`);
+                })
+                .catch((error) => {
+                    setAlertMsg({
+                        message: "Error Publishin Shoutout. Try Again",
+                        severity: "error",
+                    });
+
+                    setOpenSnackBar(true);
+                });
+        }
     };
 
     const Alert = forwardRef(function Alert(props, ref) {
@@ -141,6 +173,15 @@ function AddPost({ setOpenUpload }) {
             <div className="add-post-container">
                 <center>
                     <h1>Shoutout Preview</h1>
+
+                    <div
+                        className="toggle-youtube-input-btn"
+                        onClick={() => setShowYouTube(!showYouTube)}
+                    >
+                        {showYouTube
+                            ? "Upload Image Instead"
+                            : "Upload YouTube Video Instead"}
+                    </div>
                 </center>
 
                 {showYouTube ? (
@@ -166,6 +207,7 @@ function AddPost({ setOpenUpload }) {
                             }
                         />
                         <CardContent className="youtube-wrapper">
+                            <Divider />
                             {!!values.youtubeUrl ? (
                                 <YouTubeEmbed youtubeId={youTubeEmbed} />
                             ) : (
@@ -187,47 +229,13 @@ function AddPost({ setOpenUpload }) {
                                     <span style={{ fontSize: "36px" }}>👇</span>
                                 </div>
                             )}
-                            <div className="actions__bar">
-                                <div className="actions__wrapper">
-                                    <IconButton>
-                                        <LocalFireDepartmentIcon
-                                            style={{
-                                                color: "#e93f33",
-                                            }}
-                                        />
-                                    </IconButton>
-                                    <ChatBubbleOutlineIcon className="chatBubble-btn" />
-                                    <div className="likes-followers__wrapper">
-                                        356 Likes
-                                    </div>
-
-                                    <div
-                                        className={
-                                            !!businessInfo.businessId
-                                                ? "visit-user-btn"
-                                                : "visit-user-btn disabled"
-                                        }
-                                        onClick={businessPageRedirect}
-                                    >
-                                        Business{"   "}
-                                        <OpenInNewIcon className="newPage-icon" />
-                                    </div>
-
-                                    <Link to={`/user/${userState.userId}`}>
-                                        <div className="visit-user-btn">
-                                            Socialiite{"   "}
-                                            <OpenInNewIcon className="newPage-icon" />
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-
-                            <div className="post__text">
-                                <strong>{userState.displayName}</strong>
-                                &nbsp;
-                                {values.caption ||
-                                    "...Fill In Caption Field Below"}
-                            </div>
+                            <PostActionBar
+                                userId={userState.userId}
+                                businessId={businessInfo.businessId}
+                                businessPageRedirect={businessPageRedirect}
+                                displayName={userState.displayName}
+                                caption={values.caption}
+                            />
 
                             <h3>Fill in below to post a shoutout</h3>
                             <Box sx={{ width: "100%", marginTop: "10px" }}>
@@ -271,7 +279,7 @@ function AddPost({ setOpenUpload }) {
                                 label="Paste YouTube Link Here"
                                 className="textField"
                                 value={values.youtubeUrl}
-                                onChange={handleYouTube("youtubeUrl")}
+                                onChange={handleInputChange("youtubeUrl")}
                                 margin="normal"
                                 error={values.youtubeUrl === "" ? true : false}
                                 required
@@ -282,17 +290,26 @@ function AddPost({ setOpenUpload }) {
                                 label="Enter a Post Caption..."
                                 className="textField"
                                 value={values.caption}
-                                onChange={handleYouTube("caption")}
+                                onChange={handleInputChange("caption")}
                                 margin="normal"
                                 error={values.caption === "" ? true : false}
+                                multiline
                                 required
                             />
 
                             <div
                                 className="submit-youtube-btn"
-                                onClick={handleSubmitYouTube}
+                                onClick={handleSubmitYouTubePost}
+                                style={{
+                                    display:
+                                        values.youtubeUrl === "" ||
+                                        values.caption === "" ||
+                                        !!!businessInfo.businessName
+                                            ? "none"
+                                            : "flex",
+                                }}
                             >
-                                Upload
+                                Post
                             </div>
                         </CardContent>
                     </Card>
@@ -303,29 +320,83 @@ function AddPost({ setOpenUpload }) {
                             maxWidth: 350,
                         }}
                     >
+                        <CardHeader
+                            avatar={
+                                <Avatar
+                                    loading="lazy"
+                                    alt={userState.displayName}
+                                    src={userState.avatarUrl}
+                                />
+                            }
+                            title={userState.displayName}
+                            subheader={
+                                businessInfo.businessName
+                                    ? businessInfo.businessName
+                                    : "Select Your Shoutout Business Below 👇"
+                            }
+                        />
                         <CardContent className="imageupload-wrapper">
-                            <AddPostImageUpload />
+                            <AddPostImageUpload
+                                userId={userState.userId}
+                                businessInfo={businessInfo}
+                                businessPageRedirect={businessPageRedirect}
+                                displayName={userState.displayName}
+                                inputValues={values}
+                                setAlertMsg={setAlertMsg}
+                                setOpenSnackBar={setOpenSnackBar}
+                            />
+
+                            <h3>Fill in below to post a shoutout</h3>
+                            <Box sx={{ width: "100%", marginTop: "10px" }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">
+                                        Select Brand for Your Shoutout
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={
+                                            businessInfo.businessName
+                                                ? businessInfo.businessName
+                                                : ""
+                                        }
+                                        label="business"
+                                        onChange={handleSelectBusiness}
+                                        required
+                                    >
+                                        {allBizRelationships.map((business) => (
+                                            <MenuItem
+                                                key={business.businessId}
+                                                value={
+                                                    business.businessInfo
+                                                        .businessName
+                                                }
+                                                businessid={business.businessId}
+                                            >
+                                                {
+                                                    business.businessInfo
+                                                        .businessName
+                                                }
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
+
                             <TextField
                                 id="handle"
-                                label="Enter a Caption..."
+                                label="Enter a Post Caption..."
                                 className="textField"
                                 value={values.caption}
-                                onChange={handleYouTube("caption")}
+                                onChange={handleInputChange("caption")}
                                 margin="normal"
+                                error={values.caption === "" ? true : false}
+                                multiline
+                                required
                             />
                         </CardContent>
                     </Card>
                 )}
-                <center>
-                    <div
-                        className="toggle-youtube-input-btn"
-                        onClick={() => setShowYouTube(!showYouTube)}
-                    >
-                        {showYouTube
-                            ? "CLick to Upload Image Instead"
-                            : "Switch To Upload Video Instead"}
-                    </div>
-                </center>
             </div>
 
             <Stack spacing={2} sx={{ width: "100%" }}>
@@ -336,10 +407,10 @@ function AddPost({ setOpenUpload }) {
                 >
                     <Alert
                         onClose={handleCloseSnackBar}
-                        severity="success"
+                        severity={alertMsg.severity}
                         sx={{ width: "100%" }}
                     >
-                        Congratulations! Enjoy Your Prize.
+                        {alertMsg.message}
                     </Alert>
                 </Snackbar>
             </Stack>

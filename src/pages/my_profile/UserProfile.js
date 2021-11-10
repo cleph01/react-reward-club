@@ -108,6 +108,7 @@ function UserProfile() {
         db.collection("user")
             .doc(otherUserId)
             .collection("posts")
+            .orderBy("timestamp", "desc")
             .onSnapshot((snapshot) => {
                 setPosts(
                     snapshot.docs.map((doc) => ({

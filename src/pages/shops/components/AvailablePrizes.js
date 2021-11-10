@@ -11,10 +11,9 @@ import "../styles/available_prize_list.scss";
 function AvailablePrizes({
     prizes,
     handleOpenClaimModal,
-    storeId,
+    shopId,
     handleOpenShareModal,
 }) {
-    
     if (!prizes) {
         return <div>...Loading</div>;
     }
@@ -27,7 +26,7 @@ function AvailablePrizes({
                         prize={prize}
                         handleOpenClaimModal={handleOpenClaimModal}
                         handleOpenShareModal={handleOpenShareModal}
-                        storeId={storeId}
+                        shopId={shopId}
                     />
                     <Divider />
                 </div>

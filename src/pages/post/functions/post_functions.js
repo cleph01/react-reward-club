@@ -1,10 +1,13 @@
 import { firebase, db } from "../../../firebase/firebase_config";
 
-/**
- * Gets the Businesses General Details
- * @param {string} shopId The Business Id as known in Firebase
- * @returns {promise} Firebase Promise to be resolved into Doc holding the
- */
+
+const postShoutout = async (userId, postData) => {
+    return db.collection("user").doc(userId).collection("posts").add({
+        ...postData,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+};
+
 
 const getAllBizRelationships = async (userId, setAllBizRelationships) => {
     return await db
@@ -82,13 +85,7 @@ const getComments = (shopId, setComments) => {
         });
 };
 
-const postComment = async (shopId, comment, displayName) => {
-    return db.collection("shops").doc(shopId).collection("comments").add({
-        text: comment,
-        username: displayName,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-};
+
 
 const followBusiness = async (userId, shopId) => {
     let response = {};
@@ -183,13 +180,13 @@ const unFollowBusiness = async (userId, shopId) => {
 };
 
 export {
+    postShoutout,
     getAllBizRelationships,
     getLoyaltyPrizes,
     getBizRelationship,
     addToWallet,
     decrementPoint,
     getComments,
-    postComment,
     followBusiness,
     unFollowBusiness,
 };

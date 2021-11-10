@@ -52,7 +52,6 @@ const style = {
 };
 
 function Shop() {
-
     const commentRef = useRef();
     const history = useHistory();
 
@@ -90,7 +89,7 @@ function Shop() {
             });
 
             setOpenSnackBar(true);
-        } else if (!!userBizRelationship) {
+        } else if (!!allBizRelationships.includes(shopId)) {
             setAlertMsg({
                 message:
                     "First Time Incentives are for First Time Customers Only",
@@ -263,25 +262,25 @@ function Shop() {
         };
     }, []);
 
-    useEffect(() => {
-        let unsubscribe;
+    // useEffect(() => {
+    //     let unsubscribe;
 
-        if (
-            userState.isAuthenticated &&
-            userState.followingBusinesses.includes(shopId)
-        ) {
-            unsubscribe = FUNCTIONS.getBizRelationship(userState.userId, shopId)
-                .then((doc) => {
-                    setUserBizRelationship(doc.data());
-                })
-                .catch((error) => {
-                    console.log("Error getting BizRelationship: ", error);
-                });
-        }
-        return () => {
-            unsubscribe();
-        };
-    }, []);
+    //     if (
+    //         userState.isAuthenticated &&
+    //         userState.followingBusinesses.includes(shopId)
+    //     ) {
+    //         unsubscribe = FUNCTIONS.getBizRelationship(userState.userId, shopId)
+    //             .then((doc) => {
+    //                 setUserBizRelationship(doc.data());
+    //             })
+    //             .catch((error) => {
+    //                 console.log("Error getting BizRelationship: ", error);
+    //             });
+    //     }
+    //     return () => {
+    //         unsubscribe();
+    //     };
+    // }, []);
 
     /**
      * END UseEffects
@@ -291,7 +290,7 @@ function Shop() {
     console.log("All Business Relationships: ", allBizRelationships);
     // console.log("UserBizRelationship at shop: ", userBizRelationship);
 
-    if (!business) {
+    if (!business || !allBizRelationships) {
         return <div>...Loading</div>;
     }
 
@@ -329,7 +328,10 @@ function Shop() {
                                 )}
                                 totalLikes={business.likes.length}
                             />
-                            <ChatBubbleOutlineIcon className="chatBubble-btn" onClick={handleCommentFocus} />
+                            <ChatBubbleOutlineIcon
+                                className="chatBubble-btn"
+                                onClick={handleCommentFocus}
+                            />
                             <div className="likes-followers__wrapper">
                                 {" "}
                                 {business.followers.length === 1
@@ -384,7 +386,7 @@ function Shop() {
                     <AvailablePrizes
                         prizes={prizes}
                         handleOpenClaimModal={handleOpenClaimModal}
-                        storeId={shopId}
+                        shopId={shopId}
                         handleOpenShareModal={handleOpenShareModal}
                     />
 

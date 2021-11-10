@@ -452,7 +452,9 @@ function Checkin() {
                     }
                     action={
                         <IconButton aria-label="add to favorites">
-                            <LocalFireDepartmentIcon />
+                            <LocalFireDepartmentIcon
+                                sx={{ color: "#e93f33" }}
+                            />
                         </IconButton>
                     }
                     title="Chick Shack"

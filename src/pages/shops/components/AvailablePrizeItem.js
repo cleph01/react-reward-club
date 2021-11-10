@@ -10,7 +10,7 @@ import ShareIcon from "@mui/icons-material/Share";
 function AvailablePrizeItem({
     prize,
     handleOpenClaimModal,
-    storeId,
+    shopId,
     handleOpenShareModal,
 }) {
     return (

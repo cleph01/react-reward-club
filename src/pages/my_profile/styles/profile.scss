@@ -53,10 +53,10 @@ body {
             .post-shoutout-btn {
                 display: block;
                 position: relative;
-                width: 188px;
-                height: 55px;
+                width: 225px;
+                height: 70px;
                 border-radius: 25px;
-                background: #1c76d2;
+                background: #15a9dc;
                 box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
                 display: flex;
                 align-items: center;
@@ -67,6 +67,71 @@ body {
                 transition: transform 0.2s ease-out;
                 margin-top: 15px;
                 text-align: center;
+
+                -webkit-animation: glowing 1500ms infinite;
+                -moz-animation: glowing 1500ms infinite;
+                -o-animation: glowing 1500ms infinite;
+                animation: glowing 1500ms infinite;
+
+                @-webkit-keyframes glowing {
+                    0% {
+                        background-color: #15a9dc;
+                        -webkit-box-shadow: 0 0 3px #15a9dc;
+                    }
+                    50% {
+                        background-color: #15a9dc;
+                        -webkit-box-shadow: 0 0 40px #15a9dc;
+                    }
+                    100% {
+                        background-color: #15a9dc;
+                        -webkit-box-shadow: 0 0 3px #15a9dc;
+                    }
+                }
+
+                @-moz-keyframes glowing {
+                    0% {
+                        background-color: #15a9dc;
+                        -moz-box-shadow: 0 0 3px #15a9dc;
+                    }
+                    50% {
+                        background-color: #15a9dc;
+                        -moz-box-shadow: 0 0 40px #15a9dc;
+                    }
+                    100% {
+                        background-color: #15a9dc;
+                        -moz-box-shadow: 0 0 3px #15a9dc;
+                    }
+                }
+
+                @-o-keyframes glowing {
+                    0% {
+                        background-color: #15a9dc;
+                        box-shadow: 0 0 3px #15a9dc;
+                    }
+                    50% {
+                        background-color: #15a9dc;
+                        box-shadow: 0 0 40px #15a9dc;
+                    }
+                    100% {
+                        background-color: #15a9dc;
+                        box-shadow: 0 0 3px #15a9dc;
+                    }
+                }
+
+                @keyframes glowing {
+                    0% {
+                        background-color: #15a9dc;
+                        box-shadow: 0 0 3px #15a9dc;
+                    }
+                    50% {
+                        background-color: #15a9dc;
+                        box-shadow: 0 0 40px #15a9dc;
+                    }
+                    100% {
+                        background-color: #15a9dc;
+                        box-shadow: 0 0 3px #15a9dc;
+                    }
+                }
             }
         }
     }

@@ -1,0 +1,81 @@
+.actions__bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0px;
+    width: 100%;
+
+    a {
+        text-decoration: none;
+    }
+    .actions__wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        .likes-followers__wrapper {
+            font-size: 14px;
+            margin: 0px 10px;
+            font-weight: bold;
+        }
+
+        .visit-business-btn {
+            display: block;
+            position: relative;
+            width: 90px;
+            height: 40px;
+            border-radius: 25px;
+            background: #1c76d2;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f9f9f9;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
+            font-size: 12px;
+
+            .newPage-icon {
+                font-size: 12px;
+            }
+        }
+
+        .visit-user-btn {
+            display: block;
+            position: relative;
+            width: 90px;
+            height: 40px;
+            border-radius: 25px;
+            background: #1c76d2;
+            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f9f9f9;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease-out;
+            margin-left: 5px;
+            font-size: 12px;
+
+            .newPage-icon {
+                font-size: 12px;
+            }
+        }
+
+        .disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+    }
+    .post__text {
+        width: 100%;
+
+        margin: 20px 5px;
+        border-bottom: 5px double #b3b1b1;
+        padding-bottom: 20px;
+    }
+}

@@ -87,6 +87,7 @@ function App() {
                             socials: {},
                             followingFriends: [],
                             followersFriends: [],
+                            followingBusinesses: [],
                         };
 
                         FUNCTIONS.createNewUser(

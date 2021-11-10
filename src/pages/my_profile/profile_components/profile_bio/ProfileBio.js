@@ -34,6 +34,12 @@ function ProfileBio({ user, handleFollow, handleUnFollow, otherUserId }) {
                                 otherUserId
                             ) ? (
                                 <div
+                                    style={{
+                                        display:
+                                            userState.userId !== otherUserId
+                                                ? "flex"
+                                                : "none",
+                                    }}
                                     className="follow-btn"
                                     onClick={handleFollow}
                                 >
@@ -41,6 +47,12 @@ function ProfileBio({ user, handleFollow, handleUnFollow, otherUserId }) {
                                 </div>
                             ) : (
                                 <div
+                                    style={{
+                                        display:
+                                            userState.userId !== otherUserId
+                                                ? "flex"
+                                                : "none",
+                                    }}
                                     className="follow-btn"
                                     onClick={handleUnFollow}
                                 >
