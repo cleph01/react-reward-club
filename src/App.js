@@ -1,10 +1,5 @@
 import { lazy, Suspense, useReducer } from "react";
-import {
-    BrowserRouter as Router,
-    Route,
-    Switch,
-    useHistory,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { UserContext } from "./contexts/UserContext";
 // Import AuthReducer to manage state change in Context API
@@ -15,8 +10,6 @@ import useAuthListener from "./hooks/use-auth-listener";
 import * as ROUTES from "./routing/routes";
 import * as COMPONENTS from "./routing/routeComponents";
 import PrivateRoute from "./routing/PrivateRoute";
-
-import * as FUNCTIONS from "./pages/auth/functions/auth_functions";
 
 const Nav = lazy(() => import("./components/nav_bar/Nav"));
 
@@ -38,8 +31,6 @@ function App() {
     const [userState, userDispatch] = useReducer(UserReducer, initialState);
 
     const { authUser } = useAuthListener();
-
-    const history = useHistory();
 
     // useEffect(() => {
     //     const unsubscribe = auth.onAuthStateChanged((authUser) => {
