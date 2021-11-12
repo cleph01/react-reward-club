@@ -1,13 +1,15 @@
-import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { useContext } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { UserContext } from "./contexts/UserContext";
 import { firebase, auth } from "./firebase/firebase_config";
+import {
+    doesUserExist,
+    getUserByUserId,
+    createNewUser,
+} from "./firebase/db_functions";
+import { UserContext } from "./contexts/UserContext";
 
-function Auth({ referrerId }) {
-    const { userState, userDispatch } = useContext(UserContext);
-
-    const history = useHistory();
+function Auth({ setAlertMsg, setOpenSnackBar }) {
+    const { authUser, userDispatch } = useContext(UserContext);
 
     const handleSignOut = (e) => {
         e.preventDefault();
@@ -15,9 +17,11 @@ function Auth({ referrerId }) {
         auth.signOut();
     };
 
+    console.log("AuthUser at Auth: ", authUser);
+
     return (
         <>
-            {userState.isAuthenticated ? (
+            {authUser ? (
                 <div>
                     <div>Signed In!</div>
                     <button onClick={handleSignOut}>Sign Out</button>
@@ -31,13 +35,13 @@ function Auth({ referrerId }) {
                             firebase.auth.FacebookAuthProvider.PROVIDER_ID,
                             firebase.auth.TwitterAuthProvider.PROVIDER_ID,
                         ],
+                        signInSuccessUrl: "/profile",
                         callbacks: {
-                            signInSuccessWithAuthResult: (authUser) => {
-                                userDispatch({
-                                    type: "USER/SET_REFERRER",
-                                    payload: { referrerId: referrerId },
-                                });
-                                history.push("/profile");
+                            signInSuccessWithAuthResult: (
+                                authUser,
+                                redirectUrl
+                            ) => {
+                                return true;
                             },
                         },
                     }}

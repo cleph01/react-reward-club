@@ -1,21 +1,23 @@
 import React, { useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-import logo from "../../assets/images/logos/logo_white_text.png";
-import "./styles/nav_bar.scss";
-import HomeIcon from "@mui/icons-material/Home";
-
 import { UserContext } from "../../contexts/UserContext";
 
 import { auth } from "../../firebase/firebase_config";
+import logo from "../../assets/images/logos/logo_white_text.png";
+
+import HomeIcon from "@mui/icons-material/Home";
+import Avatar from "@mui/material/Avatar";
+
+import "./styles/nav_bar.scss";
 
 function Nav({ isAuthenticated }) {
-    const { userState, userDispatch } = useContext(UserContext);
+    const { user, userState, userDispatch } = useContext(UserContext);
 
     let history = useHistory();
 
     const handleSignOut = () => {
         auth.signOut();
-        userDispatch({ type: "AUTH/LOGOUT" });
+
         history.push("/login");
     };
 
@@ -30,36 +32,35 @@ function Nav({ isAuthenticated }) {
                         <HomeIcon />
                     </div>
                 </Link>
-                {/* <Link to="/market">
-                    <div>Market Place</div>
-                </Link>
-                <Link to="/cart">
-                    <div style={{ paddingRight: "15px" }}>
-                        Cart
-                        <Badge
-                            color="primary"
-                            invisible={false}
-                            // badgeContent={cart.itemTotal()}
-                            badgeContent="3"
-                            style={{ marginLeft: "7px" }}
-                        >
-                            <CartIcon />
-                        </Badge>
-                    </div>
-                </Link>
-                <Link to="/shop/:userId">
-                    <div>My Shop</div>
-                </Link> */}
 
                 <Link to="/wallet">
                     <div>Wallet</div>
                 </Link>
-                {isAuthenticated ? (
-                    <span onClick={handleSignOut}>Sign Out</span>
+                {user ? (
+                    <>
+                        <span
+                            onClick={handleSignOut}
+                            onKeyDown={(event) => {
+                                if (event.key === "Enter") {
+                                    handleSignOut();
+                                }
+                            }}
+                        >
+                            Sign Out
+                        </span>
+                        <Link to="/profile">
+                            <Avatar
+                                src="https://pbs.twimg.com/profile_images/1435252656835022851/jen_MSfS_normal.jpg"
+                                loading="lazy"
+                            />
+                        </Link>
+                    </>
                 ) : (
-                    <Link to="/login">
-                        <span>Login</span>
-                    </Link>
+                    <>
+                        <Link to="/login">
+                            <span>Login</span>
+                        </Link>
+                    </>
                 )}
             </div>
         </div>

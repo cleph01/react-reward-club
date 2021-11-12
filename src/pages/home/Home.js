@@ -9,10 +9,10 @@ import "./styles/home.scss";
 import logo from "../../assets/images/logos/logo.png";
 
 function Home() {
-    const { userState } = useContext(UserContext);
+    const { authUser, userState } = useContext(UserContext);
 
-    if (userState.isAuthenticated) {
-        return <Redirect to={`/profile/${userState.userId}`} />;
+    if (authUser) {
+        return <Redirect to="/profile" />;
     }
 
     return (

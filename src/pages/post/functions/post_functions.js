@@ -1,13 +1,15 @@
 import { firebase, db } from "../../../firebase/firebase_config";
 
-
 const postShoutout = async (userId, postData) => {
-    return db.collection("user").doc(userId).collection("posts").add({
-        ...postData,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    return db
+        .collection("user")
+        .doc(userId)
+        .collection("posts")
+        .add({
+            ...postData,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
 };
-
 
 const getAllBizRelationships = async (userId, setAllBizRelationships) => {
     return await db
@@ -52,7 +54,7 @@ const getBizRelationship = async (userId, shopId) => {
 const addToWallet = async (userId, walletItem) => {
     const stampedWalletItem = {
         ...walletItem,
-        created: firebase.firestore.FieldValue.serverTimestamp(),
+        created: Date.now(),
     };
     return await db
         .collection("user")
@@ -84,8 +86,6 @@ const getComments = (shopId, setComments) => {
             setComments(snapshot.docs.map((doc) => doc.data()));
         });
 };
-
-
 
 const followBusiness = async (userId, shopId) => {
     let response = {};

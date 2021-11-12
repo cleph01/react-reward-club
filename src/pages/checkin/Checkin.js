@@ -116,7 +116,7 @@ function Checkin() {
                     itemDescription: walletPrize.prizeDetails.itemDescription,
                     itemId: walletPrize.prizeId,
                     redeemed: false,
-                    created: firebase.firestore.FieldValue.serverTimestamp(),
+                    created: Date.now(),
                 })
                 .then((docRef) => {
                     console.log("Prize Added to Wallet with ID: ", docRef.id);
@@ -374,7 +374,6 @@ function Checkin() {
                     // doc.data() will be undefined in this case
                     console.log("Relationhip Doesn't Exist !");
 
-                    const timeStamp = new Date(Date.now());
                     // Add New Relationship Doc Here
                     db.collection("user")
                         .doc(userState.userId)
@@ -385,7 +384,7 @@ function Checkin() {
                             pointSum: 1,
                             redeemCount: 0,
                             redeemLog: [],
-                            visitLog: [timeStamp],
+                            visitLog: [Date.now()],
                         })
                         .then(() => {
                             console.log("Document successfully written!");

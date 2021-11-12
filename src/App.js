@@ -1,15 +1,17 @@
-import React, { lazy, Suspense, useState, useReducer, useEffect } from "react";
-import { useDocument } from "react-firebase-hooks/firestore";
+import { lazy, Suspense, useReducer } from "react";
 import {
     BrowserRouter as Router,
     Route,
     Switch,
     useHistory,
 } from "react-router-dom";
+
 import { UserContext } from "./contexts/UserContext";
 // Import AuthReducer to manage state change in Context API
 import UserReducer from "./reducers/user-reducer/userReducer.js";
-import { auth, db, firebase } from "./firebase/firebase_config";
+
+import useAuthListener from "./hooks/use-auth-listener";
+
 import * as ROUTES from "./routing/routes";
 import * as COMPONENTS from "./routing/routeComponents";
 import PrivateRoute from "./routing/PrivateRoute";
@@ -19,7 +21,6 @@ import * as FUNCTIONS from "./pages/auth/functions/auth_functions";
 const Nav = lazy(() => import("./components/nav_bar/Nav"));
 
 const initialState = {
-    isAuthenticated: false,
     userId: null,
     displayName: null,
     email: null,
@@ -28,80 +29,88 @@ const initialState = {
     created: null,
     seller: null,
     isLoading: true,
+    followingFriends: [],
+    followingBusinesses: [],
+    followers: [],
 };
 
 function App() {
     const [userState, userDispatch] = useReducer(UserReducer, initialState);
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((authUser) => {
-            if (authUser) {
-                // user has logged in...
-                console.log("Auth User at App: ", authUser);
-                // this state survives a refresh
-                // onAuthStateChanged listener uses cookie tracking
-                // to persist this state (state by default is not persistent)
-                // userDispatch({ type: "AUTH/LOGIN", payload: authUser });
-                userExists(authUser);
-            } else {
-                // user has logged out...
+    const { authUser } = useAuthListener();
 
-                userDispatch({ type: "AUTH/LOGOUT" });
-            }
-        });
-        return () => {
-            unsubscribe();
-        };
-    }, []);
+    const history = useHistory();
 
-    // Update User Object if they exist in the DB
+    // useEffect(() => {
+    //     const unsubscribe = auth.onAuthStateChanged((authUser) => {
+    //         if (authUser) {
+    //             // user has logged in...
+    //             console.log("Auth User at App: ", authUser);
+    //             // this state survives a refresh
+    //             // onAuthStateChanged listener uses cookie tracking
+    //             // to persist this state (state by default is not persistent)
+    //             // userDispatch({ type: "AUTH/LOGIN", payload: authUser });
+    //             userExists(authUser);
+    //         } else {
+    //             // user has logged out...
 
-    const userExists = (authUser) => {
-        db.collection("user")
-            .doc(authUser.uid)
-            .onSnapshot(
-                (doc) => {
-                    console.log("Doc at App: ", doc.exists);
-                    if (doc.exists) {
-                        // If USer exists, update state with db Record
-                        userDispatch({
-                            type: "USER/SET_EXISTING_DETAILS",
-                            payload: {
-                                ...doc.data(),
-                                userId: authUser.uid,
-                            },
-                        });
+    //             userDispatch({ type: "AUTH/LOGOUT" });
+    //         }
+    //     });
+    //     return () => {
+    //         unsubscribe();
+    //     };
+    // }, []);
 
-                        console.log("User State after Setting: ", userState);
-                    } else {
-                        // If User does not Exist, Create New User
-                        const newUserData = {
-                            displayName: authUser.email,
-                            avatarUrl: authUser.photoURL,
-                            seller: false,
-                            email: authUser.email,
-                            phoneNumber: authUser.phoneNumber,
-                            created:
-                                firebase.firestore.FieldValue.serverTimestamp(),
-                            aboutMe: "Tell Us Something About You!! 🙌",
-                            socials: {},
-                            followingFriends: [],
-                            followersFriends: [],
-                            followingBusinesses: [],
-                        };
+    // // Update User Object if they exist in the DB
 
-                        FUNCTIONS.createNewUser(
-                            newUserData,
-                            authUser.uid,
-                            userDispatch
-                        );
-                    }
-                },
-                (error) => {
-                    console.log("Error getting User: ", error);
-                }
-            );
-    };
+    // const userExists = (authUser) => {
+    //     db.collection("user")
+    //         .doc(authUser.uid)
+    //         .onSnapshot(
+    //             (doc) => {
+    //                 console.log("Doc at App: ", doc.exists);
+    //                 if (doc.exists) {
+    //                     // If USer exists, update state with db Record
+    //                     userDispatch({
+    //                         type: "USER/SET_EXISTING_DETAILS",
+    //                         payload: {
+    //                             ...doc.data(),
+    //                             userId: authUser.uid,
+    //                         },
+    //                     });
+
+    //                     history.push("/profile");
+
+    //                     console.log("User State after Setting: ", userState);
+    //                 } else {
+    //                     // If User does not Exist, Create New User
+    //                     const newUserData = {
+    //                         displayName: authUser.email,
+    //                         avatarUrl: authUser.photoURL,
+    //                         seller: false,
+    //                         email: authUser.email,
+    //                         phoneNumber: authUser.phoneNumber,
+    //                         created: Date.now(),
+    //                         aboutMe: "Tell Us Something About You!! 🙌",
+    //                         socials: {},
+    //                         followingFriends: [],
+    //                         followersFriends: [],
+    //                         followingBusinesses: [],
+    //                     };
+
+    //                     FUNCTIONS.createNewUser(
+    //                         newUserData,
+    //                         authUser.uid,
+    //                         userDispatch
+    //                     );
+    //                 }
+    //             },
+    //             (error) => {
+    //                 console.log("Error getting User: ", error);
+    //             }
+    //         );
+    // };
 
     // const createNewUser = (userData, userId) => {
     //     db.collection("user")
@@ -121,12 +130,11 @@ function App() {
 
     console.log("useReducer User: ", userState);
 
-    if (userState.isLoading) {
-        return <div>...Loading</div>;
-    }
+    console.log("Auth User: ", authUser);
+
     return (
         <div className="App">
-            <UserContext.Provider value={{ userState, userDispatch }}>
+            <UserContext.Provider value={{ authUser, userState, userDispatch }}>
                 <Router>
                     <Suspense fallback={<p>Loading...</p>}>
                         {userState.isAuthenticated && (
@@ -153,7 +161,7 @@ function App() {
                              */}
                             <PrivateRoute
                                 path={ROUTES.DASHBOARD}
-                                isAuthenticated={userState.isAuthenticated}
+                                isAuthenticated={!!authUser}
                             >
                                 <COMPONENTS.Dashboard />
                             </PrivateRoute>
@@ -164,7 +172,7 @@ function App() {
                             <PrivateRoute
                                 exact
                                 path={ROUTES.MY_PROFILE}
-                                isAuthenticated={userState.isAuthenticated}
+                                isAuthenticated={!!authUser}
                             >
                                 <COMPONENTS.MyProfile />
                             </PrivateRoute>
@@ -181,7 +189,7 @@ function App() {
                             <PrivateRoute
                                 exact
                                 path={ROUTES.EDIT_PROFILE}
-                                isAuthenticated={userState.isAuthenticated}
+                                isAuthenticated={!!authUser}
                             >
                                 <COMPONENTS.EditProfile />
                             </PrivateRoute>
@@ -192,7 +200,7 @@ function App() {
                             <PrivateRoute
                                 exact
                                 path={ROUTES.NEW_POST}
-                                isAuthenticated={userState.isAuthenticated}
+                                isAuthenticated={!!authUser}
                             >
                                 <COMPONENTS.NewPost />
                             </PrivateRoute>
@@ -209,7 +217,7 @@ function App() {
                             <PrivateRoute
                                 exact
                                 path={ROUTES.USER_POSTS}
-                                isAuthenticated={userState.isAuthenticated}
+                                isAuthenticated={!!authUser}
                             >
                                 <COMPONENTS.UserPosts />
                             </PrivateRoute>
@@ -220,7 +228,7 @@ function App() {
                              */}
                             <PrivateRoute
                                 path={ROUTES.WALLET}
-                                isAuthenticated={userState.isAuthenticated}
+                                isAuthenticated={!!authUser}
                             >
                                 <COMPONENTS.Wallet />
                             </PrivateRoute>
@@ -255,13 +263,13 @@ function App() {
                              */}
                             <PrivateRoute
                                 path={ROUTES.MY_SHOPS}
-                                isAuthenticated={userState.isAuthenticated}
+                                isAuthenticated={!!authUser}
                             >
                                 <COMPONENTS.MyShop />
                             </PrivateRoute>
                             <PrivateRoute
                                 path={ROUTES.NEW_SHOP}
-                                isAuthenticated={userState.isAuthenticated}
+                                isAuthenticated={!!authUser}
                             >
                                 <COMPONENTS.NewShop />
                             </PrivateRoute>
