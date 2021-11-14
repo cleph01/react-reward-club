@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, forwardRef } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import Card from "@mui/material/Card";
@@ -23,7 +23,7 @@ import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
-import { firebase } from "../../firebase/firebase_config";
+import { db, firebase } from "../../firebase/firebase_config";
 
 import YouTubeEmbed from "./components/YouTubeEmbed";
 import AddPostImageUpload from "./components/AddPostImageUpload";
@@ -139,31 +139,34 @@ function AddPost({ setOpenUpload }) {
     };
 
     useEffect(() => {
-        let result = FUNCTIONS.getAllBizRelationships(
-            userState.userId,
-            setAllBizRelationships
-        );
-
-        console.log("Result: ", result);
-
-        result.then((querySnapshot) => {
-            console.log("Snapshot in functions: ", querySnapshot);
-            if (querySnapshot.docs.length > 0) {
-                setAllBizRelationships(
-                    querySnapshot.docs.map((doc) => ({
-                        businessId: doc.id,
-                        businessInfo: doc.data(),
-                    }))
-                );
-            }
-        });
+        db.collection("user")
+            .doc(userState.userId)
+            .collection("bizRelationship")
+            .get()
+            .then((querySnapshot) => {
+                console.log("Snapshot in functions: ", querySnapshot);
+                if (querySnapshot.docs.length > 0) {
+                    setAllBizRelationships(
+                        querySnapshot.docs.map((doc) => ({
+                            businessId: doc.id,
+                            businessInfo: doc.data(),
+                        }))
+                    );
+                } else {
+                    setAllBizRelationships([]);
+                }
+            })
+            .catch((error) => {
+                console.log("Error getting All Biz Relationships: ", error);
+            });
     }, []);
 
+    console.log("User State at ad post: ", userState);
     console.log("All Biz Relationships: ", allBizRelationships);
     console.log("Business Info: ", businessInfo);
 
     if (!allBizRelationships) {
-        return <div>...Loading</div>;
+        return <div>...Loading Add Post</div>;
     }
 
     // console.log("busines onChange: ", businessInfo);
@@ -237,80 +240,107 @@ function AddPost({ setOpenUpload }) {
                                 caption={values.caption}
                             />
 
-                            <h3>Fill in below to post a shoutout</h3>
-                            <Box sx={{ width: "100%", marginTop: "10px" }}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">
-                                        Select Brand for Your Shoutout
-                                    </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={
-                                            businessInfo.businessName
-                                                ? businessInfo.businessName
-                                                : ""
-                                        }
-                                        label="business"
-                                        onChange={handleSelectBusiness}
-                                        required
+                            {allBizRelationships.length > 0 ? (
+                                <>
+                                    <h3>Fill in below to post a shoutout</h3>
+                                    <Box
+                                        sx={{
+                                            width: "100%",
+                                            marginTop: "10px",
+                                        }}
                                     >
-                                        {allBizRelationships.map((business) => (
-                                            <MenuItem
-                                                key={business.businessId}
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">
+                                                Select Brand for Your Shoutout
+                                            </InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
                                                 value={
-                                                    business.businessInfo
-                                                        .businessName
+                                                    businessInfo.businessName
+                                                        ? businessInfo.businessName
+                                                        : ""
                                                 }
-                                                businessid={business.businessId}
+                                                label="business"
+                                                onChange={handleSelectBusiness}
+                                                required
                                             >
-                                                {
-                                                    business.businessInfo
-                                                        .businessName
-                                                }
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
+                                                {allBizRelationships.map(
+                                                    (business) => (
+                                                        <MenuItem
+                                                            key={
+                                                                business.businessId
+                                                            }
+                                                            value={
+                                                                business
+                                                                    .businessInfo
+                                                                    .businessName
+                                                            }
+                                                            businessid={
+                                                                business.businessId
+                                                            }
+                                                        >
+                                                            {
+                                                                business
+                                                                    .businessInfo
+                                                                    .businessName
+                                                            }
+                                                        </MenuItem>
+                                                    )
+                                                )}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
 
-                            <TextField
-                                id="handle"
-                                label="Paste YouTube Link Here"
-                                className="textField"
-                                value={values.youtubeUrl}
-                                onChange={handleInputChange("youtubeUrl")}
-                                margin="normal"
-                                error={values.youtubeUrl === "" ? true : false}
-                                required
-                            />
+                                    <TextField
+                                        id="handle"
+                                        label="Paste YouTube Link Here"
+                                        className="textField"
+                                        value={values.youtubeUrl}
+                                        onChange={handleInputChange(
+                                            "youtubeUrl"
+                                        )}
+                                        margin="normal"
+                                        error={
+                                            values.youtubeUrl === ""
+                                                ? true
+                                                : false
+                                        }
+                                        required
+                                    />
 
-                            <TextField
-                                id="handle"
-                                label="Enter a Post Caption..."
-                                className="textField"
-                                value={values.caption}
-                                onChange={handleInputChange("caption")}
-                                margin="normal"
-                                error={values.caption === "" ? true : false}
-                                multiline
-                                required
-                            />
+                                    <TextField
+                                        id="handle"
+                                        label="Enter a Post Caption..."
+                                        className="textField"
+                                        value={values.caption}
+                                        onChange={handleInputChange("caption")}
+                                        margin="normal"
+                                        error={
+                                            values.caption === "" ? true : false
+                                        }
+                                        multiline
+                                        required
+                                    />
 
-                            <div
-                                className="submit-youtube-btn"
-                                onClick={handleSubmitYouTubePost}
-                                style={{
-                                    display:
-                                        values.youtubeUrl === "" ||
-                                        values.caption === "" ||
-                                        !!!businessInfo.businessName
-                                            ? "none"
-                                            : "flex",
-                                }}
-                            >
-                                Post
-                            </div>
+                                    <div
+                                        className="submit-youtube-btn"
+                                        onClick={handleSubmitYouTubePost}
+                                        style={{
+                                            display:
+                                                values.youtubeUrl === "" ||
+                                                values.caption === "" ||
+                                                !!!businessInfo.businessName
+                                                    ? "none"
+                                                    : "flex",
+                                        }}
+                                    >
+                                        Post
+                                    </div>
+                                </>
+                            ) : (
+                                <div>Connect with a Business</div>
+                            )}
                         </CardContent>
                     </Card>
                 ) : (
@@ -346,54 +376,75 @@ function AddPost({ setOpenUpload }) {
                                 setOpenSnackBar={setOpenSnackBar}
                             />
 
-                            <h3>Fill in below to post a shoutout</h3>
-                            <Box sx={{ width: "100%", marginTop: "10px" }}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">
-                                        Select Brand for Your Shoutout
-                                    </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={
-                                            businessInfo.businessName
-                                                ? businessInfo.businessName
-                                                : ""
-                                        }
-                                        label="business"
-                                        onChange={handleSelectBusiness}
-                                        required
+                            {allBizRelationships.length > 0 ? (
+                                <>
+                                    <h3>Fill in below to post a shoutout</h3>
+                                    <Box
+                                        sx={{
+                                            width: "100%",
+                                            marginTop: "10px",
+                                        }}
                                     >
-                                        {allBizRelationships.map((business) => (
-                                            <MenuItem
-                                                key={business.businessId}
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">
+                                                Select Brand for Your Shoutout
+                                            </InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
                                                 value={
-                                                    business.businessInfo
-                                                        .businessName
+                                                    businessInfo.businessName
+                                                        ? businessInfo.businessName
+                                                        : ""
                                                 }
-                                                businessid={business.businessId}
+                                                label="business"
+                                                onChange={handleSelectBusiness}
+                                                required
                                             >
-                                                {
-                                                    business.businessInfo
-                                                        .businessName
-                                                }
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
+                                                {allBizRelationships.map(
+                                                    (business) => (
+                                                        <MenuItem
+                                                            key={
+                                                                business.businessId
+                                                            }
+                                                            value={
+                                                                business
+                                                                    .businessInfo
+                                                                    .businessName
+                                                            }
+                                                            businessid={
+                                                                business.businessId
+                                                            }
+                                                        >
+                                                            {
+                                                                business
+                                                                    .businessInfo
+                                                                    .businessName
+                                                            }
+                                                        </MenuItem>
+                                                    )
+                                                )}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
 
-                            <TextField
-                                id="handle"
-                                label="Enter a Post Caption..."
-                                className="textField"
-                                value={values.caption}
-                                onChange={handleInputChange("caption")}
-                                margin="normal"
-                                error={values.caption === "" ? true : false}
-                                multiline
-                                required
-                            />
+                                    <TextField
+                                        id="handle"
+                                        label="Enter a Post Caption..."
+                                        className="textField"
+                                        value={values.caption}
+                                        onChange={handleInputChange("caption")}
+                                        margin="normal"
+                                        error={
+                                            values.caption === "" ? true : false
+                                        }
+                                        multiline
+                                        required
+                                    />
+                                </>
+                            ) : (
+                                <div>Connect with a Business</div>
+                            )}
                         </CardContent>
                     </Card>
                 )}

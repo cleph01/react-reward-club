@@ -1,7 +1,19 @@
+import { useState } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { firebase } from "./firebase/firebase_config";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 function Auth() {
+    const [loadingUser, setLoadingUser] = useState(false);
+
+    if (loadingUser) {
+        return (
+            <Box sx={{ display: "flex" }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
     return (
         <StyledFirebaseAuth
             uiConfig={{
@@ -14,7 +26,9 @@ function Auth() {
                 signInSuccessUrl: "/profile",
                 callbacks: {
                     signInSuccessWithAuthResult: (authUser, redirectUrl) => {
-                        return true;
+                        setLoadingUser(true);
+
+                        return false;
                     },
                 },
             }}

@@ -80,7 +80,7 @@ function EditLoyaltyPrize() {
     }, []);
 
     if (!prize) {
-        return <div>...Loading</div>;
+        return <div>...Loading Edit Loyalty Prize</div>;
     }
 
     return (

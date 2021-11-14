@@ -20,7 +20,7 @@ const UserReducer = (state, action) => {
             };
 
         case "USER/SET_EXISTING_USER":
-            console.log("Setting Details: ", action.payload);
+            console.log("Setting Existing Details: ", action.payload);
 
             return {
                 ...state,

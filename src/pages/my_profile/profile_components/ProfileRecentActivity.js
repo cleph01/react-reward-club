@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "../../styles/profile_recent_activity.scss";
+import "../styles/profile_recent_activity.scss";
 
 function ProfileRecentActivity({ userId }) {
     return (

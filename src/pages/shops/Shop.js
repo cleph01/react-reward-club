@@ -39,6 +39,8 @@ import "./styles/shop.scss";
 
 import * as FUNCTIONS from "./functions/shop_functions";
 
+import { firebase, db } from "../../firebase/firebase_config";
+
 const style = {
     position: "absolute",
     top: "50%",
@@ -197,27 +199,100 @@ function Shop() {
     const handlePostComment = (event) => {
         event.preventDefault();
 
-        FUNCTIONS.postComment(shopId, comment, userState.displayName)
-            .then((newCommentRefId) => {
-                console.log("Comment Successfully Posted: ", newCommentRefId);
+        db.collection("shops")
+            .doc(shopId)
+            .update({
+                comments: firebase.firestore.FieldValue.arrayUnion({
+                    comment: comment,
+                    displayName: userState.displayName,
+                }),
+            })
+            .then(() => {
+                console.log("Successfully Adding Comment to Business");
+
+                setComment([]);
             })
             .catch((error) => {
-                console.log("Error Posting Comment: ", error);
+                console.log("Error Adding Comment to Business: ", error);
             });
-
-        setComment("");
     };
 
     const handleFollow = () => {
-        let response = FUNCTIONS.followBusiness(userState.userId, shopId);
+        db.collection("user")
+            .doc(userState.userId)
+            .update({
+                followingBusinesses:
+                    firebase.firestore.FieldValue.arrayUnion(shopId),
+            })
+            .then(() => {
+                console.log(
+                    "Successfully Added Business to User FollowingBusinesses"
+                );
+            })
+            .catch((error) => {
+                console.log(
+                    "Error Adding Business to User FollowingBusinesses: ",
+                    error
+                );
+            });
 
-        console.log("Follow Response: ", response);
+        db.collection("shops")
+            .doc(shopId)
+            .update({
+                followers: firebase.firestore.FieldValue.arrayUnion(
+                    userState.userId
+                ),
+            })
+            .then(() => {
+                console.log(
+                    "Successfully Added User to Business Info Followers Array"
+                );
+            })
+            .catch((error) => {
+                console.log(
+                    "Error Added User to Business Info Followers Array: ",
+                    error
+                );
+            });
     };
 
     const handleUnFollow = () => {
-        let response = FUNCTIONS.unFollowBusiness(userState.userId, shopId);
+        db.collection("user")
+            .doc(userState.userId)
+            .update({
+                followingBusinesses:
+                    firebase.firestore.FieldValue.arrayRemove(shopId),
+            })
+            .then(() => {
+                console.log(
+                    "Successfully Added Business to User FollowingBusinesses"
+                );
+            })
+            .catch((error) => {
+                console.log(
+                    "Error Adding Business to User FollowingBusinesses: ",
+                    error
+                );
+            });
 
-        console.log("UnFollow Response: ", response);
+        db.collection("shops")
+            .doc(shopId)
+            .update({
+                followers: firebase.firestore.FieldValue.arrayRemove(
+                    userState.userId
+                ),
+            })
+            .then(() => {
+                console.log(
+                    "Successfully Added User to Business Info Followers Array"
+                );
+            })
+            .catch((error) => {
+                console.log(
+                    "Error Added User to Business Info Followers Array: ",
+                    error
+                );
+            });
     };
 
     /**
@@ -225,23 +300,29 @@ function Shop() {
      */
 
     useEffect(() => {
-        let unsubscribe = FUNCTIONS.getBusinessInfo(shopId, setBusiness);
-
-        return () => {
-            unsubscribe();
-        };
+        db.collection("shops")
+            .doc(shopId)
+            .get()
+            .then((doc) => {
+                setBusiness({
+                    shopId: shopId,
+                    ...doc.data(),
+                });
+            })
+            .catch((error) => {
+                console.log("Error geting business info: ", error);
+            });
     }, []);
 
     useEffect(() => {
-        FUNCTIONS.getAllBizRelationships(
-            userState.userId,
-            setAllBizRelationships
-        );
-
-        FUNCTIONS.getLoyaltyPrizes(shopId)
-            .then((doc) => {
+        db.collection("shops")
+            .doc(shopId)
+            .collection("prizes")
+            .where("incentive", "==", true)
+            .get()
+            .then((querySnapshot) => {
                 setPrizes(
-                    doc.docs.map((doc) => ({
+                    querySnapshot.docs.map((doc) => ({
                         prizeId: doc.id,
                         prize: doc.data(),
                     }))
@@ -250,37 +331,23 @@ function Shop() {
             .catch((err) => {
                 console.log("Error getting Prizes: ", err);
             });
+
+        // if User is Logged in, Get All Biz relationships
+        if (userState.userId) {
+            db.collection("user")
+                .doc(userState.userId)
+                .collection("bizRelationships")
+                .get()
+                .then((querySnapshot) => {
+                    setAllBizRelationships(
+                        querySnapshot.docs.map((doc) => doc.id)
+                    );
+                })
+                .catch((error) => {
+                    console.log("Error All Business Relationships: ", error);
+                });
+        }
     }, []);
-
-    useEffect(() => {
-        let unsubscribe;
-
-        unsubscribe = FUNCTIONS.getComments(shopId, setComments);
-
-        return () => {
-            unsubscribe();
-        };
-    }, []);
-
-    // useEffect(() => {
-    //     let unsubscribe;
-
-    //     if (
-    //         userState.isAuthenticated &&
-    //         userState.followingBusinesses.includes(shopId)
-    //     ) {
-    //         unsubscribe = FUNCTIONS.getBizRelationship(userState.userId, shopId)
-    //             .then((doc) => {
-    //                 setUserBizRelationship(doc.data());
-    //             })
-    //             .catch((error) => {
-    //                 console.log("Error getting BizRelationship: ", error);
-    //             });
-    //     }
-    //     return () => {
-    //         unsubscribe();
-    //     };
-    // }, []);
 
     /**
      * END UseEffects
@@ -290,8 +357,8 @@ function Shop() {
     console.log("All Business Relationships: ", allBizRelationships);
     // console.log("UserBizRelationship at shop: ", userBizRelationship);
 
-    if (!business || !allBizRelationships) {
-        return <div>...Loading</div>;
+    if (!business) {
+        return <div>...Loading Shop</div>;
     }
 
     return (
@@ -379,7 +446,7 @@ function Shop() {
                     <h3>About Us </h3>
 
                     <div className="business-description">
-                        {business.description}
+                        {business.aboutUs}
                     </div>
 
                     <h3>Free Prizes </h3>
@@ -392,19 +459,19 @@ function Shop() {
 
                     <div className="shop__comments">
                         <small>Latest Reviews:</small>
-                        {comments.map((comment, index) => (
+                        {business.comments.map((comment, index) => (
                             <p key={index}>
                                 <strong>{comment.username}</strong>{" "}
-                                {comment.text}
+                                {comment.comment}
                             </p>
                         ))}
                     </div>
 
-                    {userState.isAuthenticated && (
+                    {userState.userId && (
                         <form className="shop__commentBox">
                             <input
                                 className="shop__input"
-                                type="text"
+                                type="comment"
                                 placeholder="Add a comment..."
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}

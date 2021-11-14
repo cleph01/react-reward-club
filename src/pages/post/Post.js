@@ -103,20 +103,18 @@ function Post() {
             .doc(userId)
             .collection("posts")
             .doc(postId)
-            .onSnapshot(
-                (doc) => {
-                    setPost(doc.data());
-                },
-                (error) => {
-                    console.log("Error geting Post: ", error);
-                }
-            );
+            .get()
+            .then((doc) => {
+                setPost(doc.data());
+            })
+            .catch((error) => {
+                console.log("Error geting Post: ", error);
+            });
     }, []);
 
     useEffect(() => {
         db.collection("user")
             .doc(userId)
-
             .get()
             .then((doc) => {
                 setUrlUser(doc.data());
@@ -174,7 +172,7 @@ function Post() {
     console.log("Url User: ", urlUser);
 
     if (!post || !urlUser) {
-        return <div>...Loading</div>;
+        return <div>...Loading Post</div>;
     }
 
     return (

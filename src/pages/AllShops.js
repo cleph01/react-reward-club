@@ -7,7 +7,7 @@ import Nav from "../components/nav_bar/Nav";
 
 import "../styles/shop/all_shops.scss";
 
-const Shops = lazy(() => import("../components/shop/AllShops"));
+const Shops = lazy(() => import("./shops/AllShops"));
 
 const useStyles = makeStyles((theme) => ({
     card: {

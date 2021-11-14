@@ -427,7 +427,7 @@ function Checkin() {
             : `sms:?body=${encodeMsg}`;
 
     if (!business) {
-        return <div>...Loading</div>;
+        return <div>...Loading Checkin</div>;
     }
 
     return (

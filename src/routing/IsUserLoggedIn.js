@@ -1,20 +1,18 @@
-import React from "react";
 import { Redirect } from "react-router";
 import { Route } from "react-router-dom";
 
-function PrivateRoute({ children, authUser, ...rest }) {
-    console.log("Auth User in Private Route: ", authUser);
+function IsUserLoggedIn({ authUser, loggedInPath, children, ...rest }) {
     return (
         <Route
             exact
             {...rest}
             render={({ location }) => {
-                return !!authUser ? (
-                    React.cloneElement(children, { authUser })
+                return !!!authUser ? (
+                    children
                 ) : (
                     <Redirect
                         to={{
-                            pathname: "/login",
+                            pathname: loggedInPath,
                             state: { from: location },
                         }}
                     />
@@ -24,4 +22,4 @@ function PrivateRoute({ children, authUser, ...rest }) {
     );
 }
 
-export default PrivateRoute;
+export default IsUserLoggedIn;

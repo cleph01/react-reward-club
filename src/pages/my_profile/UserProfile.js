@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import { db } from "../../firebase/firebase_config";
 import ProfileTabs from "./profile_components/ProfileTabs";
 
-import ProfileBodyTop from "./profile_components/profile_body/ProfileBodyTop";
+import AvatarSocials from "./profile_components/AvatarSocials";
 
-import ProfileBio from "./profile_components/profile_bio/ProfileBio";
-import ProfileRecentActivity from "./profile_components/profile_recent_activity/ProfileRecentActivity.js";
+import ProfileBio from "./profile_components/ProfileBio";
+import ProfileRecentActivity from "./profile_components/ProfileRecentActivity.js";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -133,7 +133,7 @@ function UserProfile() {
     }, []);
 
     if (!otherUser) {
-        return <div>...Loading</div>;
+        return <div>...Loading User Profile</div>;
     }
 
     console.log("Other user at User Profile: ", otherUser);
@@ -148,7 +148,7 @@ function UserProfile() {
                 >
                     <CardContent className="card-content">
                         <div className="profile-body-wrapper">
-                            <ProfileBodyTop user={otherUser} />
+                            <AvatarSocials user={otherUser} />
                         </div>
                         <ProfileBio
                             user={otherUser}
@@ -166,7 +166,7 @@ function UserProfile() {
                                 followingFriends={otherUser.followingFriends}
                             />
                         ) : (
-                            <div>...Loading</div>
+                            <div>...Loading Profile Bar</div>
                         )}
                     </CardContent>
                 </Card>

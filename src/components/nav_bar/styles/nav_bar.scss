@@ -4,7 +4,7 @@
     width: 100%;
     height: 75px;
     color: #ffffff;
-    padding: 20px;
+    padding: 10px;
     display: flex;
 
     justify-content: space-between;
@@ -36,20 +36,22 @@
 
     .navbar__body {
         display: flex;
+        width: 175px;
         justify-content: space-between;
         align-items: center;
+
+        .nav__btn {
+            margin-right: 5px;
+            padding: 0px 5px;
+            border-right: 1px solid lightgrey;
+        }
 
         a {
             text-decoration: none;
             color: #ffffff;
         }
-        div {
-            margin: 0px 5px;
-            border-right: 1px solid lightgrey;
-            padding-right: 5px;
-        }
 
-        span {
+        div {
             cursor: pointer;
         }
     }

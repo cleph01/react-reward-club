@@ -88,7 +88,7 @@ function FollowBizList({ bizRelationships, handleOpenShareModal }) {
     }, []);
 
     if (!bizRelationships) {
-        return <div>...Loading</div>;
+        return <div>...Loading Follow Biz List</div>;
     }
 
     return (

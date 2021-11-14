@@ -39,6 +39,9 @@ const EditPrize = lazy(() =>
     import("../pages/loyalty_prize/EditLoyaltyPrize.js")
 );
 
+// Not Found
+const NotFound = lazy(() => import("../pages/NotFound.js"));
+
 // const NewProduct = lazy(() => import("../pages/NewProduct.js"));
 // const Market = lazy(() => import("../pages/Market.js"));
 // const Product = lazy(() => import("../pages/Product.js"));
@@ -67,4 +70,5 @@ export {
     EditShop,
     NewPrize,
     EditPrize,
+    NotFound,
 };

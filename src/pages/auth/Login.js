@@ -39,10 +39,6 @@ function Login() {
         setOpenSnackBar(false);
     };
 
-    if (authUser) {
-        return <Redirect to="/profile" />;
-    }
-
     console.log("ReferrerId: ", referrerId);
 
     return (
@@ -53,15 +49,19 @@ function Login() {
                         <img className="logo" src={logo} alt="logo" />
                     </div>
 
-                    <h3>Win Stuff, Trade Stuff, Share Stuff</h3>
-                    <h3>and Get Paid</h3>
+                    <h3>
+                        <center>
+                            Win Stuff, Trade Stuff, Share Stuff <br />
+                            and
+                            <span style={{ fontSize: "28px" }}> Get Paid</span>
+                        </center>
+                    </h3>
 
                     <Auth
                         referrerId={referrerId}
                         setAlertMsg={setAlertMsg}
                         openSnackBar={openSnackBar}
                     />
-                    
                 </div>
             </div>
             <Stack spacing={2} sx={{ width: "100%" }}>

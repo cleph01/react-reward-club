@@ -37,10 +37,8 @@ function Store() {
             });
     }, []);
 
-
-
     if (!businessInfo) {
-        return <div>...Loading</div>;
+        return <div>...Loading Store</div>;
     }
 
     return (

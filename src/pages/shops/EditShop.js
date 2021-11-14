@@ -130,7 +130,7 @@ function EditShop() {
     };
 
     if (!businessData) {
-        return <div>...Loading</div>;
+        return <div>...Loading Edit Shop</div>;
     }
     return (
         <div>

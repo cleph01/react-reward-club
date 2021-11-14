@@ -9,9 +9,8 @@ import Divider from "@mui/material/Divider";
 import "../styles/available_prize_list.scss";
 
 function EditAvailablePrizes({ prizes, shopId, handleOpenDeleteModal }) {
-    
     if (!prizes) {
-        return <div>...Loading</div>;
+        return <div>...Loading Edit Available Prizes</div>;
     }
 
     return (

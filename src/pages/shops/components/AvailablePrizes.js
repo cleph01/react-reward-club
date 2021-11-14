@@ -15,7 +15,7 @@ function AvailablePrizes({
     handleOpenShareModal,
 }) {
     if (!prizes) {
-        return <div>...Loading</div>;
+        return <div>...Loading Available Prizes</div>;
     }
 
     return (

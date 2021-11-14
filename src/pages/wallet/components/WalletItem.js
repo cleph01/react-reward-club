@@ -44,7 +44,7 @@ const Wallet_Item = ({
     }, []);
 
     if (!business) {
-        return <div>...Loading</div>;
+        return <div>...Loading Wallet Item</div>;
     }
 
     return (

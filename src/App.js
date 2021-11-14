@@ -1,4 +1,4 @@
-import { lazy, Suspense, useReducer } from "react";
+import { lazy, Suspense, useReducer, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { UserContext } from "./contexts/UserContext";
@@ -10,21 +10,25 @@ import useAuthListener from "./hooks/use-auth-listener";
 import * as ROUTES from "./routing/routes";
 import * as COMPONENTS from "./routing/routeComponents";
 import PrivateRoute from "./routing/PrivateRoute";
+import IsUserLoggedIn from "./routing/IsUserLoggedIn";
+
+import { db } from "./firebase/firebase_config";
 
 const Nav = lazy(() => import("./components/nav_bar/Nav"));
 
 const initialState = {
-    userId: null,
     displayName: null,
-    email: null,
-    aboutMe: null,
     avatarUrl: null,
-    created: null,
     seller: null,
-    isLoading: true,
-    followingFriends: [],
-    followingBusinesses: [],
-    followers: [],
+    email: null,
+    phoneNumber: null,
+    timestamp: null,
+    aboutMe: null,
+    socials: {},
+    followingFriends: null,
+    followersFriends: null,
+    followingBusinesses: null,
+    userId: null,
 };
 
 function App() {
@@ -32,105 +36,82 @@ function App() {
 
     const { authUser } = useAuthListener();
 
-    // useEffect(() => {
-    //     const unsubscribe = auth.onAuthStateChanged((authUser) => {
-    //         if (authUser) {
-    //             // user has logged in...
-    //             console.log("Auth User at App: ", authUser);
-    //             // this state survives a refresh
-    //             // onAuthStateChanged listener uses cookie tracking
-    //             // to persist this state (state by default is not persistent)
-    //             // userDispatch({ type: "AUTH/LOGIN", payload: authUser });
-    //             userExists(authUser);
-    //         } else {
-    //             // user has logged out...
+    // const { user } = useUser(authUser);
 
-    //             userDispatch({ type: "AUTH/LOGOUT" });
-    //         }
-    //     });
-    //     return () => {
-    //         unsubscribe();
-    //     };
-    // }, []);
+    useEffect(() => {
+        // Try and Refactor with Async/Await
+        if (authUser) {
+            // Check if User Exists
+            console.log("In Auth Use Effect");
+            db.collection("users")
+                .doc(authUser.uid)
+                .get()
+                .then((user) => {
+                    // If User exists,
+                    //Set User Context with Reducer
+                    console.log("User in Check User: ", user);
+                    if (user.exists) {
+                        console.log("User Exists");
+                        userDispatch({
+                            type: "USER/SET_EXISTING_USER",
+                            payload: { ...user.data(), userId: user.id },
+                        });
+                    } else {
+                        // If doesn't Exist, Create New User and set State with Reducer
+                        console.log("User Doesn't Exists");
+                        const newUserData = {
+                            displayName: authUser.email,
+                            avatarUrl: authUser.photoURL,
+                            seller: false,
+                            email: authUser.email,
+                            phoneNumber: authUser.phoneNumber,
+                            timestamp: Date.now(),
+                            aboutMe: "Tell Us Something About You!! 🙌",
+                            socials: {},
+                            followingFriends: [],
+                            followersFriends: [],
+                            followingBusinesses: [],
+                            userId: authUser.uid,
+                        };
 
-    // // Update User Object if they exist in the DB
+                        db.collection("users")
+                            .doc(authUser.uid)
+                            .set(newUserData)
+                            .then((docRef) => {
+                                userDispatch({
+                                    type: "USER/CREATE_NEW_USER",
+                                    payload: newUserData,
+                                });
 
-    // const userExists = (authUser) => {
-    //     db.collection("user")
-    //         .doc(authUser.uid)
-    //         .onSnapshot(
-    //             (doc) => {
-    //                 console.log("Doc at App: ", doc.exists);
-    //                 if (doc.exists) {
-    //                     // If USer exists, update state with db Record
-    //                     userDispatch({
-    //                         type: "USER/SET_EXISTING_DETAILS",
-    //                         payload: {
-    //                             ...doc.data(),
-    //                             userId: authUser.uid,
-    //                         },
-    //                     });
+                                console.log(
+                                    "Created User with Id: ",
+                                    authUser.uid
+                                );
+                            })
+                            .catch((error) => {
+                                console.log("Error Creating New User: ", error);
+                            });
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error Checking User Exists: ", error);
+                });
+        }
+    }, [authUser]);
 
-    //                     history.push("/profile");
+    console.log("Auth User at App: ", authUser);
+    console.log("User State at App: ", userState);
 
-    //                     console.log("User State after Setting: ", userState);
-    //                 } else {
-    //                     // If User does not Exist, Create New User
-    //                     const newUserData = {
-    //                         displayName: authUser.email,
-    //                         avatarUrl: authUser.photoURL,
-    //                         seller: false,
-    //                         email: authUser.email,
-    //                         phoneNumber: authUser.phoneNumber,
-    //                         created: Date.now(),
-    //                         aboutMe: "Tell Us Something About You!! 🙌",
-    //                         socials: {},
-    //                         followingFriends: [],
-    //                         followersFriends: [],
-    //                         followingBusinesses: [],
-    //                     };
-
-    //                     FUNCTIONS.createNewUser(
-    //                         newUserData,
-    //                         authUser.uid,
-    //                         userDispatch
-    //                     );
-    //                 }
-    //             },
-    //             (error) => {
-    //                 console.log("Error getting User: ", error);
-    //             }
-    //         );
-    // };
-
-    // const createNewUser = (userData, userId) => {
-    //     db.collection("user")
-    //         .doc(userId)
-    //         .set(userData)
-    //         .then(() => {
-    //             console.log("New User Created!");
-    //             userDispatch({
-    //                 type: "USER/SET_NEW_USER",
-    //                 payload: { ...userData, userId: userId },
-    //             });
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error Creating User: ", error);
-    //         });
-    // };
-
-    console.log("useReducer User: ", userState);
-
-    console.log("Auth User: ", authUser);
+    // if (!userState.userId) {
+    //     return <div>...Loading App</div>;
+    // }
 
     return (
         <div className="App">
             <UserContext.Provider value={{ authUser, userState, userDispatch }}>
                 <Router>
-                    <Suspense fallback={<p>Loading...</p>}>
-                        {userState.isAuthenticated && (
-                            <Nav isAuthenticated={userState.isAuthenticated} />
-                        )}
+                    <Suspense fallback={<p>Loading Fallback...</p>}>
+                        {authUser && <Nav authUser={authUser} />}
                         <Switch>
                             {/**
                              *  Auth Routes
@@ -141,18 +122,20 @@ function App() {
                                 path={ROUTES.HOME}
                                 component={COMPONENTS.Home}
                             />
-                            <Route
-                                exact
+                            <IsUserLoggedIn
+                                authUser={authUser}
                                 path={ROUTES.LOGIN}
-                                component={COMPONENTS.Login}
-                            />
+                                loggedInPath={ROUTES.MY_PROFILE}
+                            >
+                                <COMPONENTS.Login />
+                            </IsUserLoggedIn>
                             {/**
                              * Dashboard Routes
                              * Private
                              */}
                             <PrivateRoute
                                 path={ROUTES.DASHBOARD}
-                                isAuthenticated={!!authUser}
+                                authUser={authUser}
                             >
                                 <COMPONENTS.Dashboard />
                             </PrivateRoute>
@@ -163,7 +146,7 @@ function App() {
                             <PrivateRoute
                                 exact
                                 path={ROUTES.MY_PROFILE}
-                                isAuthenticated={!!authUser}
+                                authUser={authUser}
                             >
                                 <COMPONENTS.MyProfile />
                             </PrivateRoute>
@@ -180,7 +163,7 @@ function App() {
                             <PrivateRoute
                                 exact
                                 path={ROUTES.EDIT_PROFILE}
-                                isAuthenticated={!!authUser}
+                                authUser={authUser}
                             >
                                 <COMPONENTS.EditProfile />
                             </PrivateRoute>
@@ -191,7 +174,7 @@ function App() {
                             <PrivateRoute
                                 exact
                                 path={ROUTES.NEW_POST}
-                                isAuthenticated={!!authUser}
+                                authUser={authUser}
                             >
                                 <COMPONENTS.NewPost />
                             </PrivateRoute>
@@ -208,7 +191,7 @@ function App() {
                             <PrivateRoute
                                 exact
                                 path={ROUTES.USER_POSTS}
-                                isAuthenticated={!!authUser}
+                                authUser={authUser}
                             >
                                 <COMPONENTS.UserPosts />
                             </PrivateRoute>
@@ -219,7 +202,7 @@ function App() {
                              */}
                             <PrivateRoute
                                 path={ROUTES.WALLET}
-                                isAuthenticated={!!authUser}
+                                authUser={authUser}
                             >
                                 <COMPONENTS.Wallet />
                             </PrivateRoute>
@@ -254,13 +237,13 @@ function App() {
                              */}
                             <PrivateRoute
                                 path={ROUTES.MY_SHOPS}
-                                isAuthenticated={!!authUser}
+                                authUser={authUser}
                             >
                                 <COMPONENTS.MyShop />
                             </PrivateRoute>
                             <PrivateRoute
                                 path={ROUTES.NEW_SHOP}
-                                isAuthenticated={!!authUser}
+                                authUser={authUser}
                             >
                                 <COMPONENTS.NewShop />
                             </PrivateRoute>
@@ -282,6 +265,7 @@ function App() {
                             >
                                 <COMPONENTS.EditPrize />
                             </PrivateRoute>
+                            <Route component={COMPONENTS.NotFound} />
                         </Switch>
                     </Suspense>
                 </Router>

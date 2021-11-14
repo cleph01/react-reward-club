@@ -71,10 +71,6 @@ function EditProfile() {
         }
     };
 
-    if (!userState.isAuthenticated) {
-        return <div>...Loading</div>;
-    }
-
     console.log("Edit Profile Reducer State: ", userState);
     console.log("Edit Profile Object: ", updateObj);
 

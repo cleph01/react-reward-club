@@ -43,7 +43,7 @@ function FollowList({ followingFriends }) {
     }, []);
 
     if (!friendsList) {
-        return <div>...Loading</div>;
+        return <div>...Loading Follow Friends List</div>;
     }
 
     console.log("FriendList: ", friendsList);

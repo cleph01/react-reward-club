@@ -1,32 +1,30 @@
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
+// import { UserContext } from "../contexts/UserContext";
 import {
     doesUserExist,
     getUserByUserId,
     createNewUser,
 } from "../firebase/db_functions";
 
-function useUser() {
-    // const [activeUser, setActiveUser] = useState({});
+function useUser(authUser) {
+    const [activeUser, setActiveUser] = useState({});
 
-    const { authUser, userDispatch, userState } = useContext(UserContext);
+    // const { userDispatch } = useContext(UserContext);
 
     useEffect(() => {
         const getUserObjectByUserId = async (authUser) => {
             const userExists = await doesUserExist(authUser.uid);
 
-            console.log("Auth User Exists: ", userExists);
-
             try {
                 if (userExists) {
                     const user = await getUserByUserId(authUser.uid);
 
-                    userDispatch({
-                        type: "USER/SET_EXISTING_USER",
-                        payload: user,
-                    });
+                    // userDispatch({
+                    //     type: "USER/SET_EXISTING_USER",
+                    //     payload: user,
+                    // });
 
-                    // setActiveUser(user);
+                    setActiveUser(user);
                 } else {
                     const newUserData = {
                         displayName: authUser.email,
@@ -43,14 +41,14 @@ function useUser() {
                         userId: authUser.uid,
                     };
 
-                    createNewUser(authUser.uid, newUserData);
+                    await createNewUser(authUser.uid, newUserData);
 
-                    userDispatch({
-                        type: "USER/CREATE_NEW_USER",
-                        payload: newUserData,
-                    });
+                    // userDispatch({
+                    //     type: "USER/CREATE_NEW_USER",
+                    //     payload: newUserData,
+                    // });
 
-                    // setActiveUser(newUserData);
+                    setActiveUser(newUserData);
                 }
             } catch (error) {
                 console.log("Error in Auth Component: ", error);
@@ -62,7 +60,7 @@ function useUser() {
         };
     }, [authUser]);
 
-    return userState;
+    return { user: activeUser };
 }
 
 export default useUser;

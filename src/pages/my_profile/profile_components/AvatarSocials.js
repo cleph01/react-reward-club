@@ -1,5 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import Skeleton from "react-loading-skeleton";
+import { UserContext } from "../../../contexts/UserContext";
+
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
@@ -12,10 +14,15 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import WebIcon from "@mui/icons-material/Web";
 
-import "../../styles/profile_body_top.scss";
+import "../styles/profile_body_top.scss";
 
-function ProfileBodyTop({ user }) {
-    console.log("User at Body Top: ", user);
+function AvatarSocials({ user }) {
+    console.log("User at Avatar Socials: ", user);
+
+    if (!user) {
+        return <Skeleton count={1} height={61} />;
+    }
+
     return (
         <div className="profile-body__top">
             <Avatar
@@ -120,4 +127,4 @@ function ProfileBodyTop({ user }) {
     );
 }
 
-export default ProfileBodyTop;
+export default AvatarSocials;

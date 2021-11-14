@@ -1,27 +1,30 @@
 import { useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 
-import "../../styles/profile_bio.scss";
-
-import { UserContext } from "../../../../contexts/UserContext";
+import "../styles/profile_bio.scss";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import LoginIcon from "@mui/icons-material/Login";
 
-function ProfileBio({ user, handleFollow, handleUnFollow, otherUserId }) {
-    const { userState } = useContext(UserContext);
+import Skeleton from "react-loading-skeleton";
 
+function ProfileBio({
+    user,
+    authUser,
+    handleFollow,
+    handleUnFollow,
+    otherUserId,
+}) {
     const history = useHistory();
 
-    console.log("Other User at Bio: ", user);
-    console.log("Path at Bio: ", history.location.pathname);
-
-    const dateJoined = user.created.toDate().toDateString();
+    console.log("User at Bio: ", user);
 
     const ownProfile = history.location.pathname === "/profile";
 
-    console.log("User State at Bio: ", userState);
+    if (!user.userId) {
+        return <Skeleton count={1} height={61} />;
+    }
 
     return (
         <div className="profile__bio">
@@ -29,14 +32,12 @@ function ProfileBio({ user, handleFollow, handleUnFollow, otherUserId }) {
                 <div className="aboutMe-header">
                     <h5>About Me</h5>
                     <div style={{ display: ownProfile ? "none" : "block" }}>
-                        {userState.isAuthenticated ? (
-                            !userState.followingFriends.includes(
-                                otherUserId
-                            ) ? (
+                        {authUser ? (
+                            !user.followingFriends.includes(otherUserId) ? (
                                 <div
                                     style={{
                                         display:
-                                            userState.userId !== otherUserId
+                                            user.userId !== otherUserId
                                                 ? "flex"
                                                 : "none",
                                     }}
@@ -49,7 +50,7 @@ function ProfileBio({ user, handleFollow, handleUnFollow, otherUserId }) {
                                 <div
                                     style={{
                                         display:
-                                            userState.userId !== otherUserId
+                                            user.userId !== otherUserId
                                                 ? "flex"
                                                 : "none",
                                     }}
@@ -74,7 +75,9 @@ function ProfileBio({ user, handleFollow, handleUnFollow, otherUserId }) {
                 </div>
                 <p>{user.aboutMe || "Tell Us Something About You"}</p>
             </div>
-            <div className="profile__bio-joined">Joined: {dateJoined}</div>
+            <div className="profile__bio-joined">
+                Joined: {new Date(user.timestamp).toDateString()}
+            </div>
         </div>
     );
 }
