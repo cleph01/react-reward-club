@@ -38,66 +38,66 @@ function App() {
 
     // const { user } = useUser(authUser);
 
-    useEffect(() => {
-        // Try and Refactor with Async/Await
-        if (authUser) {
-            // Check if User Exists
-            console.log("In Auth Use Effect");
-            db.collection("users")
-                .doc(authUser.uid)
-                .get()
-                .then((user) => {
-                    // If User exists,
-                    //Set User Context with Reducer
-                    console.log("User in Check User: ", user);
-                    if (user.exists) {
-                        console.log("User Exists");
-                        userDispatch({
-                            type: "USER/SET_EXISTING_USER",
-                            payload: { ...user.data(), userId: user.id },
-                        });
-                    } else {
-                        // If doesn't Exist, Create New User and set State with Reducer
-                        console.log("User Doesn't Exists");
-                        const newUserData = {
-                            displayName: authUser.email,
-                            avatarUrl: authUser.photoURL,
-                            seller: false,
-                            email: authUser.email,
-                            phoneNumber: authUser.phoneNumber,
-                            timestamp: Date.now(),
-                            aboutMe: "Tell Us Something About You!! 🙌",
-                            socials: {},
-                            followingFriends: [],
-                            followersFriends: [],
-                            followingBusinesses: [],
-                            userId: authUser.uid,
-                        };
+    // useEffect(() => {
+    //     // Try and Refactor with Async/Await
+    //     if (authUser) {
+    //         // Check if User Exists
+    //         console.log("In Auth Use Effect");
+    //         db.collection("users")
+    //             .doc(authUser.uid)
+    //             .get()
+    //             .then((user) => {
+    //                 // If User exists,
+    //                 //Set User Context with Reducer
+    //                 console.log("User in Check User: ", user);
+    //                 if (user.exists) {
+    //                     console.log("User Exists");
+    //                     userDispatch({
+    //                         type: "USER/SET_EXISTING_USER",
+    //                         payload: { ...user.data(), userId: user.id },
+    //                     });
+    //                 } else {
+    //                     // If doesn't Exist, Create New User and set State with Reducer
+    //                     console.log("User Doesn't Exists");
+    //                     const newUserData = {
+    //                         displayName: authUser.email,
+    //                         avatarUrl: authUser.photoURL,
+    //                         seller: false,
+    //                         email: authUser.email,
+    //                         phoneNumber: authUser.phoneNumber,
+    //                         timestamp: Date.now(),
+    //                         aboutMe: "Tell Us Something About You!! 🙌",
+    //                         socials: {},
+    //                         followingFriends: [],
+    //                         followersFriends: [],
+    //                         followingBusinesses: [],
+    //                         userId: authUser.uid,
+    //                     };
 
-                        db.collection("users")
-                            .doc(authUser.uid)
-                            .set(newUserData)
-                            .then((docRef) => {
-                                userDispatch({
-                                    type: "USER/CREATE_NEW_USER",
-                                    payload: newUserData,
-                                });
+    //                     db.collection("users")
+    //                         .doc(authUser.uid)
+    //                         .set(newUserData)
+    //                         .then((docRef) => {
+    //                             userDispatch({
+    //                                 type: "USER/CREATE_NEW_USER",
+    //                                 payload: newUserData,
+    //                             });
 
-                                console.log(
-                                    "Created User with Id: ",
-                                    authUser.uid
-                                );
-                            })
-                            .catch((error) => {
-                                console.log("Error Creating New User: ", error);
-                            });
-                    }
-                })
-                .catch((error) => {
-                    console.log("Error Checking User Exists: ", error);
-                });
-        }
-    }, [authUser]);
+    //                             console.log(
+    //                                 "Created User with Id: ",
+    //                                 authUser.uid
+    //                             );
+    //                         })
+    //                         .catch((error) => {
+    //                             console.log("Error Creating New User: ", error);
+    //                         });
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.log("Error Checking User Exists: ", error);
+    //             });
+    //     }
+    // }, [authUser]);
 
     console.log("Auth User at App: ", authUser);
     console.log("User State at App: ", userState);

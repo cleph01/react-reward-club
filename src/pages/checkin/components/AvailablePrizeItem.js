@@ -20,8 +20,8 @@ function AvailablePrizeItem({
             </ListItemAvatar>
             <div>
                 <ListItemText
-                    primary={prize.prize.prizeDescription}
-                    secondary={`Points Needed: ${prize.prize.pointThreshold}`}
+                    primary={prize.prize.description}
+                    secondary={`Points Needed: ${prize.prize.pointCost}`}
                 />
             </div>
             <ListItemSecondaryAction className="list-icons-wrapper">
@@ -31,7 +31,7 @@ function AvailablePrizeItem({
                     onClick={() =>
                         handleOpenClaimModal({
                             prizeId: prize.prizeId,
-                            prizeDetails: prize.prize,
+                            ...prize.prize,
                         })
                     }
                 />

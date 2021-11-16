@@ -7,7 +7,9 @@ function GetLocation({ handleGeoLocation, goStatus }) {
     return (
         <div className="geolocation-container">
             <h3 className="geolocation-header">
-                Please Confirm Your Location To Check-In
+                <center>
+                    Please Confirm Your Location <br /> To Check-In
+                </center>
             </h3>
             <div
                 className="geolocation-button"

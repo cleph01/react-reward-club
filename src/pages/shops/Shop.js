@@ -411,7 +411,7 @@ function Shop() {
                             </div>
                         </div>
                         <div>
-                            {userState.isAuthenticated ? (
+                            {userState.userId ? (
                                 !userState.followingBusinesses.includes(
                                     shopId
                                 ) ? (
@@ -449,7 +449,7 @@ function Shop() {
                         {business.aboutUs}
                     </div>
 
-                    <h3>Free Prizes </h3>
+                    <h3>Free Prizes 4 First Timers </h3>
                     <AvailablePrizes
                         prizes={prizes}
                         handleOpenClaimModal={handleOpenClaimModal}
